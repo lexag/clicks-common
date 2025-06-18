@@ -2,13 +2,13 @@ use crate::cue::Cue;
 use serde::{Deserialize, Serialize};
 use std::fs::{read_to_string, write};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct ShowMetadata {
     name: String,
     date: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Show {
     metadata: ShowMetadata,
     pub cues: Vec<Cue>,
