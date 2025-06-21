@@ -17,7 +17,7 @@ pub enum StatusMessageKind {
 pub enum ControlMessageKind {
     ControlCommand(ControlCommand),
     SubscribeRequest(SubscriberInfo),
-    UnsubscribeRequest(SubscriberInfo),
+    UnsubscribeRequest(ConnectionInfo),
     Ping,
 }
 
