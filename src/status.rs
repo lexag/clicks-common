@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::cue::Cue;
+use crate::{cue::Cue, network::NetworkStatus, show::Show};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BeatStatus {
@@ -34,5 +34,13 @@ pub struct ProcessStatus {
     pub h: usize,
     pub m: usize,
     pub s: usize,
+    pub cue_idx: usize,
+}
+
+#[derive(Default)]
+pub struct CombinedStatus {
+    pub process_status: ProcessStatus,
     pub cue: Cue,
+    pub show: Show,
+    pub network_status: NetworkStatus,
 }
