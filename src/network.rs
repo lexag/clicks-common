@@ -9,6 +9,7 @@ pub enum StatusMessageKind {
     CueStatus(Option<Cue>),
     ShowStatus(Option<Show>),
     NetworkStatus(Option<NetworkStatus>),
+    Shutdown,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]

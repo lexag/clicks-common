@@ -12,6 +12,7 @@ pub enum ControlCommand {
     TransportZero,
     NotifySubscribers,
     LoadCue(Cue),
+    Shutdown,
 }
 
 impl fmt::Debug for ControlCommand {
@@ -22,6 +23,7 @@ impl fmt::Debug for ControlCommand {
             ControlCommand::TransportStop => write!(f, "TransportStop"),
             ControlCommand::NotifySubscribers => write!(f, "NotifySubscribers"),
             ControlCommand::LoadCue(_cue) => write!(f, "LoadCue"),
+            ControlCommand::Shutdown => write!(f, "Shutdown"),
         }
     }
 }
