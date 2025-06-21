@@ -51,9 +51,9 @@ pub enum BeatEvent {
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Cue {
-    name: String,
-    human_ident: String,
-    beats: Vec<Beat>,
+    pub name: String,
+    pub human_ident: String,
+    pub beats: Vec<Beat>,
 }
 
 impl Default for Cue {
