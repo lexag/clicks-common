@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::cue::Cue;
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize, Debug)]
 pub enum ControlCommand {
     TransportStart,
     TransportStop,
@@ -13,19 +13,10 @@ pub enum ControlCommand {
     NotifySubscribers,
     LoadCue(Cue),
     Shutdown,
-}
-
-impl fmt::Debug for ControlCommand {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ControlCommand::TransportZero => write!(f, "TransportZero"),
-            ControlCommand::TransportStart => write!(f, "TransportStart"),
-            ControlCommand::TransportStop => write!(f, "TransportStop"),
-            ControlCommand::NotifySubscribers => write!(f, "NotifySubscribers"),
-            ControlCommand::LoadCue(_cue) => write!(f, "LoadCue"),
-            ControlCommand::Shutdown => write!(f, "Shutdown"),
-        }
-    }
+    LoadCueByIndex(usize),
+    LoadCueFromSelfIndex,
+    LoadNextCue,
+    LoadPreviousCue,
 }
 
 #[derive(Debug)]
