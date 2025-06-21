@@ -9,6 +9,7 @@ pub enum StatusMessageKind {
     CueStatus(Option<Cue>),
     ShowStatus(Option<Show>),
     NetworkStatus(Option<NetworkStatus>),
+    JACKStatus(Option<JACKStatus>),
     Shutdown,
 }
 
@@ -46,7 +47,44 @@ impl SubscriberInfo {
     }
 }
 
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct JACKStatus {
+    pub buffer_size: usize,
+    pub sample_rate: usize,
+    pub frame_size: usize,
+    pub connections: Vec<(String, String)>,
+    pub client_name: String,
+    pub output_name: String,
+}
+
 #[derive(Deserialize, Serialize, Debug, Default, Clone)]
 pub struct NetworkStatus {
     pub subscribers: Vec<SubscriberInfo>,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub enum ConnectionEnd {
+    Server,
+    Client,
+    Local,
+    Remote,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct ConnectionInfo {
+    pub identifier: String,
+    pub end: ConnectionEnd,
+    pub address: String,
+    pub port: String,
+}
+
+impl Default for ConnectionInfo {
+    fn default() -> Self {
+        ConnectionInfo {
+            end: ConnectionEnd::Local,
+            identifier: String::new(),
+            address: "127.0.0.1".to_owned(),
+            port: "0".to_owned(),
+        }
+    }
 }
