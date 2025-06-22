@@ -3,7 +3,7 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::cue::Cue;
+use crate::{cue::Cue, show::Show};
 
 #[derive(Clone, Deserialize, Serialize, Debug)]
 pub enum ControlCommand {
@@ -12,6 +12,7 @@ pub enum ControlCommand {
     TransportZero,
     NotifySubscribers,
     LoadCue(Cue),
+    LoadShow(Show),
     Shutdown,
     LoadCueByIndex(usize),
     LoadCueFromSelfIndex,

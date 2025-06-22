@@ -3,14 +3,14 @@ use serde::{Deserialize, Serialize};
 use std::fs::{read_to_string, write};
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone)]
-struct ShowMetadata {
-    name: String,
-    date: String,
+pub struct ShowMetadata {
+    pub name: String,
+    pub date: String,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone)]
 pub struct Show {
-    metadata: ShowMetadata,
+    pub metadata: ShowMetadata,
     pub cues: Vec<Cue>,
 }
 

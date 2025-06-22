@@ -49,6 +49,17 @@ pub enum BeatEvent {
     },
 }
 
+impl BeatEvent {
+    pub fn get_name(&self) -> &str {
+        match self {
+            BeatEvent::JumpEvent { .. } => return "Jump Event",
+            BeatEvent::VampEvent { .. } => return "Vamp Event",
+            BeatEvent::PlaybackEvent { .. } => return "Playback Event",
+            BeatEvent::TimecodeEvent { .. } => return "Timecode Event",
+        }
+    }
+}
+
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Cue {
     pub name: String,
