@@ -10,14 +10,13 @@ pub enum ControlCommand {
     TransportStart,
     TransportStop,
     TransportZero,
-    NotifySubscribers,
     LoadCue(Cue),
-    LoadShow(Show),
-    Shutdown,
     LoadCueByIndex(usize),
     LoadCueFromSelfIndex,
     LoadNextCue,
     LoadPreviousCue,
+    LoadShow(Show),
+    DumpStatus,
 }
 
 #[derive(Debug)]

@@ -15,6 +15,9 @@ pub enum StatusMessageKind {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub enum ControlMessageKind {
+    NotifySubscribers,
+    Shutdown,
+    RoutingChangeRequest(usize, usize, bool),
     ControlCommand(ControlCommand),
     SubscribeRequest(SubscriberInfo),
     UnsubscribeRequest(ConnectionInfo),
@@ -49,10 +52,11 @@ impl SubscriberInfo {
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct JACKStatus {
+    pub io_size: (usize, usize),
     pub buffer_size: usize,
     pub sample_rate: usize,
     pub frame_size: usize,
-    pub connections: Vec<(String, String)>,
+    pub connections: Vec<(usize, usize)>,
     pub client_name: String,
     pub output_name: String,
 }
