@@ -1,9 +1,9 @@
-use std::{net::Ipv4Addr, str::FromStr};
+use std::{fmt::Debug, net::Ipv4Addr, str::FromStr};
 
 use crate::{command::ControlCommand, cue::Cue, show::Show, status::ProcessStatus};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Clone)]
 pub enum StatusMessageKind {
     ProcessStatus(Option<ProcessStatus>),
     CueStatus(Option<Cue>),
@@ -11,6 +11,21 @@ pub enum StatusMessageKind {
     NetworkStatus(Option<NetworkStatus>),
     JACKStatus(Option<JACKStatus>),
     Shutdown,
+}
+
+impl Debug for StatusMessageKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+        match self {
+            StatusMessageKind::ProcessStatus(None) => write!(f, "ProcessStatus"),
+            StatusMessageKind::CueStatus(None) => write!(f, "CueStatus"),
+            StatusMessageKind::ShowStatus(None) => write!(f, "ShowStatus"),
+            StatusMessageKind::NetworkStatus(None) => write!(f, "NetworkStatus"),
+            StatusMessageKind::JACKStatus(None) => write!(f, "JACKStatus"),
+            StatusMessageKind::Shutdown => write!(f, "Shutdown"),
+            // TODO: This mf.
+            _ => write!(f, "<representation todo>"),
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]

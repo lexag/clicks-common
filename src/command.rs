@@ -1,5 +1,5 @@
-use std::error::Error;
 use std::fmt;
+use std::{error::Error, fmt::Display};
 
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +17,23 @@ pub enum ControlCommand {
     LoadPreviousCue,
     LoadShow(Show),
     DumpStatus,
+}
+
+impl Display for ControlCommand {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+        match self {
+            ControlCommand::TransportStart => write!(f, "TransportStart"),
+            ControlCommand::TransportStop => write!(f, "TransportStop"),
+            ControlCommand::TransportZero => write!(f, "TransportZero"),
+            ControlCommand::LoadCue(..) => write!(f, "LoadCue"),
+            ControlCommand::LoadCueByIndex(..) => write!(f, "LoadCueByIndex"),
+            ControlCommand::LoadCueFromSelfIndex => write!(f, "LoadCueFromSelfIndex"),
+            ControlCommand::LoadNextCue => write!(f, "LoadNextCue"),
+            ControlCommand::LoadPreviousCue => write!(f, "LoadPreviousCue"),
+            ControlCommand::LoadShow(..) => write!(f, "LoadShow"),
+            ControlCommand::DumpStatus => write!(f, "DumpStatus"),
+        }
+    }
 }
 
 #[derive(Debug)]
