@@ -38,6 +38,7 @@ impl Display for TimeStatus {
 pub enum AudioSourceStatus {
     BeatStatus(BeatStatus),
     TimeStatus(TimeStatus),
+    None,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]

@@ -39,7 +39,12 @@ pub enum BeatEvent {
         length: usize,
     },
     PlaybackEvent {
-        sample: u64,
+        channel_idx: usize,
+        clip_idx: usize,
+        sample: i32,
+    },
+    PlaybackStopEvent {
+        channel_idx: usize,
     },
     TimecodeEvent {
         h: usize,
@@ -55,6 +60,7 @@ impl BeatEvent {
             BeatEvent::JumpEvent { .. } => "Jump Event",
             BeatEvent::VampEvent { .. } => "Vamp Event",
             BeatEvent::PlaybackEvent { .. } => "Playback Event",
+            BeatEvent::PlaybackStopEvent { .. } => "Playback Stop Event",
             BeatEvent::TimecodeEvent { .. } => "Timecode Event",
         }
     }
@@ -99,9 +105,11 @@ impl Cue {
                 events: vec![],
             });
         }
-        br.beats[0]
-            .events
-            .push(BeatEvent::PlaybackEvent { sample: 0 });
+        br.beats[0].events.push(BeatEvent::PlaybackEvent {
+            channel_idx: 0,
+            clip_idx: 0,
+            sample: 0,
+        });
         return br;
     }
 
@@ -123,9 +131,11 @@ impl Cue {
                 },
             });
         }
-        br.beats[0]
-            .events
-            .push(BeatEvent::PlaybackEvent { sample: 0 });
+        br.beats[0].events.push(BeatEvent::PlaybackEvent {
+            channel_idx: 0,
+            clip_idx: 0,
+            sample: 0,
+        });
         return br;
     }
 
