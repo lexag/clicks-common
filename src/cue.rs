@@ -52,10 +52,10 @@ pub enum BeatEvent {
 impl BeatEvent {
     pub fn get_name(&self) -> &str {
         match self {
-            BeatEvent::JumpEvent { .. } => return "Jump Event",
-            BeatEvent::VampEvent { .. } => return "Vamp Event",
-            BeatEvent::PlaybackEvent { .. } => return "Playback Event",
-            BeatEvent::TimecodeEvent { .. } => return "Timecode Event",
+            BeatEvent::JumpEvent { .. } => "Jump Event",
+            BeatEvent::VampEvent { .. } => "Vamp Event",
+            BeatEvent::PlaybackEvent { .. } => "Playback Event",
+            BeatEvent::TimecodeEvent { .. } => "Timecode Event",
         }
     }
 }
@@ -130,7 +130,7 @@ impl Cue {
     }
 
     pub fn get_beat(&self, idx: usize) -> Result<Beat, ()> {
-        if self.beats.len() == 0 {
+        if self.beats.is_empty() {
             return Err(());
         }
         if self.beats.len() <= idx {

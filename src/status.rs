@@ -64,7 +64,7 @@ pub struct TimecodeInstant {
 
 impl PartialEq for TimecodeInstant {
     fn eq(&self, other: &TimecodeInstant) -> bool {
-        return self.f == other.f && self.s == other.s && self.m == other.m && self.h == other.h;
+        self.f == other.f && self.s == other.s && self.m == other.m && self.h == other.h
     }
 }
 

@@ -35,18 +35,16 @@ pub struct SubscriberInfo {
 
 impl SubscriberInfo {
     pub fn get_ipv4_object(&self) -> Ipv4Addr {
-        return Ipv4Addr::from_str(&format!("{}:{}", &self.address, &self.port).to_string())
-            .unwrap();
+        Ipv4Addr::from_str(&format!("{}:{}", &self.address, &self.port).to_string()).unwrap()
     }
 
     // lol function name
     pub fn strstreq(&self, address: String, port: String) -> bool {
-        return self.address == address && self.port == port;
+        self.address == address && self.port == port
     }
 
     pub fn streq(&self, ipv4: String) -> bool {
-        println!("{}:{}", self.address, self.port);
-        return format!("{}:{}", self.address, self.port) == ipv4;
+        format!("{}:{}", self.address, self.port) == ipv4
     }
 }
 
