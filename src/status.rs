@@ -9,6 +9,14 @@ use crate::{
 };
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct PlaybackStatus {
+    pub clip_idx: usize,
+    pub current_sample: i32,
+    pub playing: bool,
+    pub clips: Vec<usize>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BeatStatus {
     pub beat_idx: usize,
     pub next_beat_idx: usize,
@@ -38,6 +46,7 @@ impl Display for TimeStatus {
 pub enum AudioSourceStatus {
     BeatStatus(BeatStatus),
     TimeStatus(TimeStatus),
+    PlaybackStatus(PlaybackStatus),
     None,
 }
 
