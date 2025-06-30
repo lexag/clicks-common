@@ -44,5 +44,4 @@ pub struct JACKServerConfiguration {
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct JACKClientConfiguration {
     pub name: String,
-    pub num_channels: usize,
 }
