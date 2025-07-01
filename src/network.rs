@@ -13,6 +13,30 @@ pub enum StatusMessageKind {
     Shutdown,
 }
 
+impl StatusMessageKind {
+    pub fn to_int(&self) -> usize {
+        match self {
+            StatusMessageKind::ProcessStatus(..) => 0,
+            StatusMessageKind::CueStatus(..) => 1,
+            StatusMessageKind::ShowStatus(..) => 2,
+            StatusMessageKind::NetworkStatus(..) => 3,
+            StatusMessageKind::JACKStatus(..) => 4,
+            StatusMessageKind::Shutdown => 5,
+        }
+    }
+
+    pub fn from_int(int: usize) -> Self {
+        match int {
+            0 => StatusMessageKind::ProcessStatus(None),
+            1 => StatusMessageKind::CueStatus(None),
+            2 => StatusMessageKind::ShowStatus(None),
+            3 => StatusMessageKind::NetworkStatus(None),
+            4 => StatusMessageKind::JACKStatus(None),
+            _ => StatusMessageKind::Shutdown,
+        }
+    }
+}
+
 impl Debug for StatusMessageKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         match self {
@@ -37,6 +61,32 @@ pub enum ControlMessageKind {
     SubscribeRequest(SubscriberInfo),
     UnsubscribeRequest(ConnectionInfo),
     Ping,
+}
+
+impl ControlMessageKind {
+    pub fn to_int(&self) -> usize {
+        match self {
+            ControlMessageKind::NotifySubscribers => 0,
+            ControlMessageKind::Shutdown => 1,
+            ControlMessageKind::RoutingChangeRequest(..) => 2,
+            ControlMessageKind::ControlCommand(..) => 3,
+            ControlMessageKind::SubscribeRequest(..) => 4,
+            ControlMessageKind::UnsubscribeRequest(..) => 5,
+            ControlMessageKind::Ping => 6,
+        }
+    }
+
+    pub fn name_from_int(int: usize) -> String {
+        match int {
+            0 => "NotifySubscribers".to_string(),
+            1 => "Shutdown".to_string(),
+            2 => "RoutingChangeRequest".to_string(),
+            3 => "ControlCommand".to_string(),
+            4 => "SubscribeRequest".to_string(),
+            5 => "UnsubscribeRequest".to_string(),
+            _ => "Ping".to_string(),
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
