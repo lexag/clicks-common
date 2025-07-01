@@ -58,7 +58,7 @@ pub struct ProcessStatus {
     pub next_beat_idx: usize,
     pub us_to_next_beat: usize,
     pub time: TimeStatus,
-    pub system_time: String,
+    pub system_time_us: u64,
     pub cue_idx: usize,
 }
 
