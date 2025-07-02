@@ -53,6 +53,7 @@ pub enum AudioSourceStatus {
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProcessStatus {
     pub sources: Vec<AudioSourceStatus>,
+    pub gains: Vec<f32>,
     pub running: bool,
     pub beat_idx: usize,
     pub next_beat_idx: usize,
@@ -60,6 +61,7 @@ pub struct ProcessStatus {
     pub time: TimeStatus,
     pub system_time_us: u64,
     pub cue_idx: usize,
+    pub cpu_use: f32,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]

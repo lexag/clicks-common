@@ -19,6 +19,7 @@ pub enum ControlCommand {
     LoadPreviousCue,
     LoadShow(Show),
     DumpStatus,
+    SetChannelGain(usize, f32),
 }
 
 impl Display for ControlCommand {
@@ -36,6 +37,7 @@ impl Display for ControlCommand {
             ControlCommand::LoadPreviousCue => write!(f, "LoadPreviousCue"),
             ControlCommand::LoadShow(..) => write!(f, "LoadShow"),
             ControlCommand::DumpStatus => write!(f, "DumpStatus"),
+            ControlCommand::SetChannelGain(..) => write!(f, "SetChannelGain"),
         }
     }
 }
