@@ -35,6 +35,13 @@ pub enum BeatEvent {
     JumpEvent {
         destination: usize,
     },
+    VoltaEvent {
+        destination: usize,
+    },
+    RepeatStartEvent,
+    TempoChangeEvent {
+        tempo: usize,
+    },
     VampEvent {
         length: usize,
     },
@@ -52,25 +59,37 @@ pub enum BeatEvent {
         s: usize,
         f: usize,
     },
+    RehearsalMarkEvent {
+        label: String,
+    },
 }
 
 impl BeatEvent {
     pub fn get_name(&self) -> &str {
         match self {
             BeatEvent::JumpEvent { .. } => "Jump Event",
+            BeatEvent::VoltaEvent { .. } => "Volta Event",
+            BeatEvent::RepeatStartEvent => "Repeat Start Event",
+            BeatEvent::TempoChangeEvent { .. } => "Tempo Change Event",
             BeatEvent::VampEvent { .. } => "Vamp Event",
             BeatEvent::PlaybackEvent { .. } => "Playback Event",
             BeatEvent::PlaybackStopEvent { .. } => "Playback Stop Event",
             BeatEvent::TimecodeEvent { .. } => "Timecode Event",
+            BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark Event",
         }
     }
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Cue {
+    pub metadata: CueMetadata,
+    pub beats: Vec<Beat>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, Default)]
+pub struct CueMetadata {
     pub name: String,
     pub human_ident: String,
-    pub beats: Vec<Beat>,
 }
 
 impl Default for Cue {
@@ -87,15 +106,13 @@ impl Cue {
     pub fn empty() -> Cue {
         Cue {
             beats: vec![],
-            name: String::new(),
-            human_ident: String::new(),
+            metadata: CueMetadata::default(),
         }
     }
     pub fn example() -> Cue {
         let mut br = Cue {
             beats: vec![],
-            name: "example cue".to_string(),
-            human_ident: "1.2.3".to_string(),
+            metadata: CueMetadata::default(),
         };
         for i in 0..100 {
             br.beats.push(Beat {
@@ -116,8 +133,7 @@ impl Cue {
     pub fn example_loop() -> Cue {
         let mut br = Cue {
             beats: vec![],
-            name: "looping cue".to_string(),
-            human_ident: "4.5.6".to_string(),
+            metadata: CueMetadata::default(),
         };
         for i in 0..8 {
             br.beats.push(Beat {

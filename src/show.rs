@@ -27,18 +27,17 @@ pub struct Show {
 }
 
 impl Show {
-    //    pub fn from_file(path: &str) -> Result<Show, ()> {
-    //        if let Ok(json_str) = read_to_string(path) {
-    //            let parser: Show =
-    //                serde_json::from_str(&json_str.to_string()).expect("bad json parsing");
-    //            return Ok(parser);
-    //        } else {
-    //            println!("Showfile {path} not found");
-    //            return Err(());
-    //        }
-    //    }
-    //
-    //    pub fn to_file(&self, path: &str) {
-    //        let _ = write(path, serde_json::to_string_pretty(self).unwrap());
-    //    }
+    pub fn lightweight(&self) -> Self {
+        Self {
+            metadata: self.metadata.clone(),
+            cues: self
+                .cues
+                .iter()
+                .map(|c| Cue {
+                    metadata: c.metadata.clone(),
+                    beats: vec![],
+                })
+                .collect(),
+        }
+    }
 }
