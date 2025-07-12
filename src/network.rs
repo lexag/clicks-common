@@ -1,6 +1,9 @@
 use std::{fmt::Debug, net::Ipv4Addr, str::FromStr};
 
-use crate::{command::ControlCommand, cue::Cue, show::Show, status::ProcessStatus};
+use crate::{
+    command::ControlCommand, config::SystemConfiguration, cue::Cue, show::Show,
+    status::ProcessStatus,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Clone)]
@@ -10,10 +13,12 @@ pub enum StatusMessageKind {
     ShowStatus(Option<Show>),
     NetworkStatus(Option<NetworkStatus>),
     JACKStatus(Option<JACKStatus>),
+    ConfigurationStatus(Option<SystemConfiguration>),
     Shutdown,
 }
 
 impl StatusMessageKind {
+    //FIXME: ew.
     pub fn to_int(&self) -> usize {
         match self {
             StatusMessageKind::ProcessStatus(..) => 0,
@@ -22,6 +27,7 @@ impl StatusMessageKind {
             StatusMessageKind::NetworkStatus(..) => 3,
             StatusMessageKind::JACKStatus(..) => 4,
             StatusMessageKind::Shutdown => 5,
+            StatusMessageKind::ConfigurationStatus(..) => 6,
         }
     }
 
@@ -56,14 +62,18 @@ impl Debug for StatusMessageKind {
 pub enum ControlMessageKind {
     NotifySubscribers,
     Shutdown,
+    Initialize,
     RoutingChangeRequest(usize, usize, bool),
     ControlCommand(ControlCommand),
     SubscribeRequest(SubscriberInfo),
     UnsubscribeRequest(ConnectionInfo),
+    SetConfigurationRequest(SystemConfiguration),
     Ping,
 }
 
 impl ControlMessageKind {
+    // FIXME: wtf is this really
+    // ew
     pub fn to_int(&self) -> usize {
         match self {
             ControlMessageKind::NotifySubscribers => 0,
@@ -73,6 +83,7 @@ impl ControlMessageKind {
             ControlMessageKind::SubscribeRequest(..) => 4,
             ControlMessageKind::UnsubscribeRequest(..) => 5,
             ControlMessageKind::Ping => 6,
+            _ => 7,
         }
     }
 

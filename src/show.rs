@@ -1,5 +1,6 @@
 use crate::cue::Cue;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone)]
 pub struct ShowMetadata {
@@ -39,5 +40,9 @@ impl Show {
                 })
                 .collect(),
         }
+    }
+
+    pub fn from_file(path: PathBuf) -> Result<Show, serde_json::Error> {
+        serde_json::from_str::<Show>(std::str::from_utf8(&std::fs::read(path).unwrap()).unwrap())
     }
 }

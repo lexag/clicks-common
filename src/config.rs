@@ -1,4 +1,3 @@
-use crate::show::Show;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -10,21 +9,9 @@ pub enum BootProgramOrder {
     ExtractLogs,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BootConfig {
-    pub boot_order: BootProgramOrder,
-    pub audio: Option<AudioConfiguration>,
-    pub show: Option<Show>,
-}
-
-impl Default for BootConfig {
-    fn default() -> Self {
-        Self {
-            boot_order: BootProgramOrder::Run,
-            audio: Some(AudioConfiguration::default()),
-            show: Some(Show::default()),
-        }
-    }
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct SystemConfiguration {
+    pub audio: AudioConfiguration,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
