@@ -46,14 +46,29 @@ impl StatusMessageKind {
 impl Debug for StatusMessageKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         match self {
-            StatusMessageKind::ProcessStatus(None) => write!(f, "ProcessStatus"),
-            StatusMessageKind::CueStatus(None) => write!(f, "CueStatus"),
-            StatusMessageKind::ShowStatus(None) => write!(f, "ShowStatus"),
-            StatusMessageKind::NetworkStatus(None) => write!(f, "NetworkStatus"),
-            StatusMessageKind::JACKStatus(None) => write!(f, "JACKStatus"),
-            StatusMessageKind::Shutdown => write!(f, "Shutdown"),
-            // TODO: This mf.
-            _ => write!(f, "<representation todo>"),
+            StatusMessageKind::ProcessStatus(None) => write!(f, "Anonymous ProcessStatus"),
+            StatusMessageKind::CueStatus(None) => write!(f, "Anonymous CueStatus"),
+            StatusMessageKind::ShowStatus(None) => write!(f, "Anonymous ShowStatus"),
+            StatusMessageKind::NetworkStatus(None) => write!(f, "Anonymous NetworkStatus"),
+            StatusMessageKind::JACKStatus(None) => write!(f, "Anonymous JACKStatus"),
+            StatusMessageKind::ConfigurationStatus(None) => {
+                write!(f, "Anonymous ConfigurationStatus")
+            }
+            StatusMessageKind::Shutdown => write!(f, "Anonymous Shutdown"),
+
+            StatusMessageKind::ProcessStatus(Some(status)) => {
+                write!(f, "ProcessStatus: {status:?}")
+            }
+            StatusMessageKind::CueStatus(Some(status)) => write!(f, "CueStatus: {status:?}"),
+            StatusMessageKind::ConfigurationStatus(Some(status)) => {
+                write!(f, "ConfigurationStatus: {status:?}")
+            }
+            StatusMessageKind::ShowStatus(Some(status)) => write!(f, "ShowStatus: {status:?}"),
+            StatusMessageKind::NetworkStatus(Some(status)) => {
+                write!(f, "NetworkStatus: {status:?}")
+            }
+            StatusMessageKind::JACKStatus(Some(status)) => write!(f, "JACKStatus: {status:?}"),
+            _ => write!(f, "Unimplemented representation."),
         }
     }
 }
@@ -125,7 +140,29 @@ impl SubscriberInfo {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct AudioDevice {
+    pub id: String,
+    pub name: String,
+    pub io_size: (usize, usize),
+}
+
+impl AudioDevice {
+    pub fn from_aplay_str(str: String) -> Option<AudioDevice> {
+        //card 1: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
+        let card_idx = &str[str.find("card")? + 5..str.find(':')?];
+        let _device_idx = &str[(str.find("device")? + 7)..(str[8..].find(':')? + 8)];
+        let id = format!("hw:{card_idx}");
+        Some(Self {
+            id,
+            io_size: (0, 0),
+            name: str,
+        })
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
 pub struct JACKStatus {
+    pub available_devices: Vec<AudioDevice>,
     pub io_size: (usize, usize),
     pub buffer_size: usize,
     pub sample_rate: usize,
@@ -133,6 +170,7 @@ pub struct JACKStatus {
     pub connections: Vec<(usize, usize)>,
     pub client_name: String,
     pub output_name: String,
+    pub running: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug, Default, Clone)]
