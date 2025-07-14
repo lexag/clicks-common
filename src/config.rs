@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fmt::Display};
+use std::{collections::HashMap, default, fmt::Display};
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub enum BootProgramOrder {
@@ -15,8 +15,37 @@ pub enum BootProgramOrder {
 pub struct SystemConfiguration {
     pub audio: AudioConfiguration,
     pub logger: LoggerConfiguration,
+    pub channels: ChannelsConfiguration,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ChannelsConfiguration {
+    pub channels: Vec<ChannelConfiguration>,
 }
 
+impl Default for ChannelsConfiguration {
+    fn default() -> Self {
+        Self {
+            channels: vec![
+                ChannelConfiguration {
+                    name: "Metronome".to_string(),
+                    ..ChannelConfiguration::default()
+                },
+                ChannelConfiguration {
+                    name: "Timecode".to_string(),
+                    ..ChannelConfiguration::default()
+                },
+            ]
+            .into_iter()
+            .chain(
+                (0..30)
+                    .map(|i| ChannelConfiguration::new(i))
+                    .collect::<Vec<ChannelConfiguration>>(),
+            )
+            .collect(),
+        }
+    }
+}
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct AudioConfiguration {
@@ -121,6 +150,34 @@ impl Default for LoggerConfiguration {
                 (LogKind::Command, false),
                 (LogKind::Debug, false),
             ]),
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum ChannelAssignment {
+    L,
+    R,
+    #[default]
+    Mono,
+}
+
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ChannelConfiguration {
+    pub name: String,
+    pub description: String,
+    pub channel_assignment: ChannelAssignment,
+    pub gain: f32,
+}
+
+impl ChannelConfiguration {
+    pub fn new(idx: usize) -> Self {
+        Self {
+            name: format!("Ch. {idx}"),
+            description: "".to_string(),
+            channel_assignment: ChannelAssignment::Mono,
+            gain: 0.0f32,
         }
     }
 }
