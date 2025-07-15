@@ -38,7 +38,7 @@ impl Default for ChannelsConfiguration {
             ]
             .into_iter()
             .chain(
-                (0..30)
+                (3..33)
                     .map(|i| ChannelConfiguration::new(i))
                     .collect::<Vec<ChannelConfiguration>>(),
             )
