@@ -57,56 +57,56 @@ pub struct CombinedStatus {
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum StatusMessageKind {
-    ProcessStatus,
-    CueStatus,
-    ShowStatus,
-    NetworkStatus,
-    JACKStatus,
-    ConfigurationStatus,
-    Shutdown,
+pub enum NotificationKind {
+    TransportChanged,
+    CueChanged,
+    ShowChanged,
+    NetworkChanged,
+    JACKStateChanged,
+    ConfigurationChanged,
+    ShutdownOccured,
 }
 
 #[derive(Deserialize, Serialize, Clone)]
-pub enum StatusMessage {
-    ProcessStatus(ProcessStatus),
-    CueStatus(Cue),
-    ShowStatus(Show),
-    NetworkStatus(NetworkStatus),
-    JACKStatus(JACKStatus),
-    ConfigurationStatus(SystemConfiguration),
-    Shutdown,
+pub enum Notification {
+    TransportChanged(ProcessStatus),
+    CueChanged(Cue),
+    ShowChanged(Show),
+    NetworkChanged(NetworkStatus),
+    JACKStateChanged(JACKStatus),
+    ConfigurationChanged(SystemConfiguration),
+    ShutdownOccured,
 }
 
-impl StatusMessage {
-    pub fn to_kind(&self) -> StatusMessageKind {
+impl Notification {
+    pub fn to_kind(&self) -> NotificationKind {
         match self {
-            Self::ProcessStatus(..) => StatusMessageKind::ProcessStatus,
-            Self::JACKStatus(..) => StatusMessageKind::JACKStatus,
-            Self::CueStatus(..) => StatusMessageKind::CueStatus,
-            Self::ShowStatus(..) => StatusMessageKind::ShowStatus,
-            Self::NetworkStatus(..) => StatusMessageKind::NetworkStatus,
-            Self::Shutdown => StatusMessageKind::Shutdown,
-            Self::ConfigurationStatus(..) => StatusMessageKind::ConfigurationStatus,
+            Self::TransportChanged(..) => NotificationKind::TransportChanged,
+            Self::CueChanged(..) => NotificationKind::JACKStateChanged,
+            Self::ShowChanged(..) => NotificationKind::CueChanged,
+            Self::NetworkChanged(..) => NotificationKind::ShowChanged,
+            Self::JACKStateChanged(..) => NotificationKind::NetworkChanged,
+            Self::ConfigurationChanged(..) => NotificationKind::ConfigurationChanged,
+            Self::ShutdownOccured => NotificationKind::ShutdownOccured,
         }
     }
 }
 
-impl Debug for StatusMessage {
+impl Debug for Notification {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         match self {
-            StatusMessage::ProcessStatus(status) => {
+            Notification::TransportChanged(status) => {
                 write!(f, "{status:?}")
             }
-            StatusMessage::CueStatus(status) => write!(f, "{status:?}"),
-            StatusMessage::ConfigurationStatus(status) => {
+            Notification::CueChanged(status) => write!(f, "{status:?}"),
+            Notification::ConfigurationChanged(status) => {
                 write!(f, "{status:?}")
             }
-            StatusMessage::ShowStatus(status) => write!(f, "{status:?}"),
-            StatusMessage::NetworkStatus(status) => {
+            Notification::ShowChanged(status) => write!(f, "{status:?}"),
+            Notification::NetworkChanged(status) => {
                 write!(f, "{status:?}")
             }
-            StatusMessage::JACKStatus(status) => write!(f, "{status:?}"),
+            Notification::JACKStateChanged(status) => write!(f, "{status:?}"),
             _ => write!(f, "Unimplemented representation."),
         }
     }

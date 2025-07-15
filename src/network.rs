@@ -1,6 +1,6 @@
 use std::{fmt::Debug, net::Ipv4Addr, str::FromStr};
 
-use crate::status::StatusMessageKind;
+use crate::status::NotificationKind;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -8,7 +8,7 @@ pub struct SubscriberInfo {
     pub identifier: String,
     pub address: String,
     pub port: String,
-    pub message_kinds: Vec<StatusMessageKind>,
+    pub message_kinds: Vec<NotificationKind>,
     pub last_contact: String,
 }
 
