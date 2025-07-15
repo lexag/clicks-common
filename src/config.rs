@@ -59,7 +59,7 @@ pub struct JACKServerConfiguration {
     pub device_id: String,
     pub system_name: String,
     pub sample_rate: usize,
-    pub num_channels: usize,
+    pub period_size: usize,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
