@@ -127,7 +127,7 @@ impl Cue {
             clip_idx: 0,
             sample: 0,
         });
-        return br;
+        br
     }
 
     pub fn example_loop() -> Cue {
@@ -152,20 +152,17 @@ impl Cue {
             clip_idx: 0,
             sample: 0,
         });
-        return br;
+        br
     }
 
-    pub fn get_beat(&self, idx: usize) -> Result<Beat, ()> {
-        if self.beats.is_empty() {
-            return Err(());
+    pub fn get_beat(&self, idx: usize) -> Option<Beat> {
+        if self.beats.is_empty() || self.beats.len() <= idx {
+            return None;
         }
-        if self.beats.len() <= idx {
-            return Err(());
-        }
-        return Ok(self.beats[idx].clone());
+        Some(self.beats[idx].clone())
     }
 
     pub fn get_beats(&self) -> Vec<Beat> {
-        return self.beats.clone();
+        self.beats.clone()
     }
 }
