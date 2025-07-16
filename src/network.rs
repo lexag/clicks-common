@@ -92,3 +92,6 @@ impl Default for ConnectionInfo {
         }
     }
 }
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct Heartbeat {}

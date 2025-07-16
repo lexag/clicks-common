@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 use crate::{
     command::ControlCommand,
     config::SystemConfiguration,
-    cue::Cue,
-    network::{ConnectionInfo, JACKStatus, NetworkStatus, SubscriberInfo},
+    cue::{Beat, Cue},
+    network::{ConnectionInfo, Heartbeat, JACKStatus, NetworkStatus, SubscriberInfo},
     show::Show,
     timecode::TimecodeInstant,
 };
@@ -59,35 +59,44 @@ pub struct CombinedStatus {
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum NotificationKind {
     TransportChanged,
+    BeatChanged,
+    PlaystateChanged,
     CueChanged,
     ShowChanged,
     NetworkChanged,
     JACKStateChanged,
     ConfigurationChanged,
     ShutdownOccured,
+    Heartbeat,
 }
 
 #[derive(Deserialize, Serialize, Clone)]
 pub enum Notification {
     TransportChanged(ProcessStatus),
-    CueChanged(Cue),
+    BeatChanged(usize, Beat),
+    PlaystateChanged(bool),
+    CueChanged(usize, Cue),
     ShowChanged(Show),
     NetworkChanged(NetworkStatus),
     JACKStateChanged(JACKStatus),
     ConfigurationChanged(SystemConfiguration),
     ShutdownOccured,
+    Heartbeat(Heartbeat),
 }
 
 impl Notification {
     pub fn to_kind(&self) -> NotificationKind {
         match self {
             Self::TransportChanged(..) => NotificationKind::TransportChanged,
+            Self::BeatChanged(..) => NotificationKind::BeatChanged,
+            Self::PlaystateChanged(..) => NotificationKind::PlaystateChanged,
             Self::CueChanged(..) => NotificationKind::JACKStateChanged,
             Self::ShowChanged(..) => NotificationKind::CueChanged,
             Self::NetworkChanged(..) => NotificationKind::ShowChanged,
             Self::JACKStateChanged(..) => NotificationKind::NetworkChanged,
             Self::ConfigurationChanged(..) => NotificationKind::ConfigurationChanged,
             Self::ShutdownOccured => NotificationKind::ShutdownOccured,
+            Self::Heartbeat(..) => NotificationKind::Heartbeat,
         }
     }
 }
@@ -98,7 +107,7 @@ impl Debug for Notification {
             Notification::TransportChanged(status) => {
                 write!(f, "{status:?}")
             }
-            Notification::CueChanged(status) => write!(f, "{status:?}"),
+            Notification::CueChanged(idx, cue) => write!(f, "{cue:?}"),
             Notification::ConfigurationChanged(status) => {
                 write!(f, "{status:?}")
             }
