@@ -20,6 +20,7 @@ pub enum ControlCommand {
     LoadShow(Show),
     DumpStatus,
     SetChannelGain(usize, f32),
+    SetChannelMute(usize, bool),
 }
 
 impl Display for ControlCommand {
@@ -38,6 +39,7 @@ impl Display for ControlCommand {
             ControlCommand::LoadShow(..) => write!(f, "LoadShow"),
             ControlCommand::DumpStatus => write!(f, "DumpStatus"),
             ControlCommand::SetChannelGain(..) => write!(f, "SetChannelGain"),
+            ControlCommand::SetChannelMute(..) => write!(f, "SetChannelMute"),
         }
     }
 }
