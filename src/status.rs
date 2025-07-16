@@ -42,9 +42,7 @@ pub struct ProcessStatus {
     pub next_beat_idx: usize,
     pub us_to_next_beat: usize,
     pub time: TimecodeInstant,
-    pub system_time_us: u64,
     pub cue_idx: usize,
-    pub cpu_use: f32,
 }
 
 #[derive(Default)]
@@ -116,6 +114,7 @@ impl Debug for Notification {
                 write!(f, "{status:?}")
             }
             Notification::JACKStateChanged(status) => write!(f, "{status:?}"),
+            Notification::Heartbeat(heartbeat) => write!(f, "{heartbeat:?}"),
             _ => write!(f, "Unimplemented representation."),
         }
     }

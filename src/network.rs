@@ -93,5 +93,9 @@ impl Default for ConnectionInfo {
     }
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct Heartbeat {}
+#[derive(Deserialize, Serialize, Clone, Debug, Default)]
+pub struct Heartbeat {
+    pub system_time: u64,
+    pub cpu_use_audio: f32,
+    pub process_freq_main: usize,
+}
