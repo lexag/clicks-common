@@ -10,14 +10,14 @@ pub enum BootProgramOrder {
     ExtractLogs,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 #[serde(default)]
 pub struct SystemConfiguration {
     pub audio: AudioConfiguration,
     pub logger: LoggerConfiguration,
     pub channels: ChannelsConfiguration,
 }
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct ChannelsConfiguration {
     pub channels: Vec<ChannelConfiguration>,
@@ -46,14 +46,14 @@ impl Default for ChannelsConfiguration {
         }
     }
 }
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct AudioConfiguration {
     pub server: JACKServerConfiguration,
     pub client: JACKClientConfiguration,
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct JACKServerConfiguration {
     pub device_id: String,
@@ -62,7 +62,7 @@ pub struct JACKServerConfiguration {
     pub period_size: usize,
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct JACKClientConfiguration {
     pub name: String,
@@ -125,7 +125,7 @@ impl LogContext {
         }
     }
 }
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct LoggerConfiguration {
     pub toggle_kinds: HashMap<LogKind, bool>,
@@ -162,7 +162,7 @@ pub enum ChannelAssignment {
     Mono,
 }
 
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct ChannelConfiguration {
     pub name: String,

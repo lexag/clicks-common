@@ -18,7 +18,7 @@ pub enum ControlMessageKind {
     Ping,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub enum ControlMessage {
     NotifySubscribers,
     Shutdown,

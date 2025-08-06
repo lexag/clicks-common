@@ -3,7 +3,7 @@ use std::{fmt::Debug, net::Ipv4Addr, str::FromStr};
 use crate::status::NotificationKind;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct SubscriberInfo {
     pub identifier: String,
     pub address: String,
@@ -66,7 +66,7 @@ pub struct NetworkStatus {
     pub subscribers: Vec<SubscriberInfo>,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
 pub enum ConnectionEnd {
     Server,
     Client,
@@ -74,7 +74,7 @@ pub enum ConnectionEnd {
     Remote,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
 pub struct ConnectionInfo {
     pub identifier: String,
     pub end: ConnectionEnd,

@@ -2,7 +2,7 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Serialize, Deserialize, Default)]
+#[derive(Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct Beat {
     pub count: u8,
     pub bar_number: usize,
@@ -30,7 +30,7 @@ impl Beat {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum BeatEvent {
     JumpEvent {
         destination: usize,
@@ -80,13 +80,13 @@ impl BeatEvent {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Cue {
     pub metadata: CueMetadata,
     pub beats: Vec<Beat>,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug, Default)]
+#[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct CueMetadata {
     pub name: String,
     pub human_ident: String,

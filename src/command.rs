@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{cue::Cue, show::Show};
 
-#[derive(Clone, Deserialize, Serialize, Debug)]
+#[derive(Clone, Deserialize, Serialize, Debug, PartialEq)]
 pub enum ControlCommand {
     TransportStart,
     TransportStop,

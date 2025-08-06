@@ -1,27 +1,27 @@
 use crate::cue::Cue;
-use serde::{Deserialize, Serialize};
+use serde::{de::Error, Deserialize, Serialize};
 use std::path::PathBuf;
 
-#[derive(Default, Serialize, Deserialize, Debug, Clone)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ShowMetadata {
     pub name: String,
     pub date: String,
     pub credits: Vec<ShowCreditGroup>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug, Clone)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ShowCreditGroup {
     name: String,
     members: Vec<ShowCredit>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug, Clone)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ShowCredit {
     name: String,
     role: String,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug, Clone)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Show {
     pub metadata: ShowMetadata,
     pub cues: Vec<Cue>,
