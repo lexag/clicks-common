@@ -14,7 +14,8 @@ pub struct SubscriberInfo {
 
 impl SubscriberInfo {
     pub fn get_ipv4_object(&self) -> Ipv4Addr {
-        Ipv4Addr::from_str(&format!("{}:{}", &self.address, &self.port).to_string()).unwrap()
+        Ipv4Addr::from_str(&format!("{}:{}", &self.address, &self.port).to_string())
+            .unwrap_or(Ipv4Addr::new(0, 0, 0, 0))
     }
 
     // lol function name
