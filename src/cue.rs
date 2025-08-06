@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, slice::Iter};
 
 use serde::{Deserialize, Serialize};
 
@@ -27,6 +27,13 @@ impl Beat {
             length: 0,
             events: vec![],
         }
+    }
+
+    pub fn events_filter<F>(&self, filter: F) -> Vec<BeatEvent>
+    where
+        F: Fn(&BeatEvent) -> bool,
+    {
+        self.events.iter().filter(|e| filter(e)).cloned().collect()
     }
 }
 
