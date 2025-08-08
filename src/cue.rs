@@ -172,4 +172,39 @@ impl Cue {
     pub fn get_beats(&self) -> Vec<Beat> {
         self.beats.clone()
     }
+
+    pub fn reorder_numbers(&mut self) {
+        if self.beats.is_empty() {
+            return;
+        }
+        let mut bar = if self.beats[0].bar_number == 0 { 0 } else { 1 };
+        let mut count = 1;
+        let mut prev_bar = bar;
+        for beat in &mut self.beats {
+            if prev_bar != beat.bar_number || (beat.count == 1 && prev_bar > 1) {
+                count = 1;
+                bar += 1;
+            }
+
+            prev_bar = beat.bar_number;
+
+            beat.bar_number = bar;
+            beat.count = count;
+
+            count += 1;
+        }
+    }
+
+    pub fn recalculate_tempo_changes(&mut self) {
+        let mut beat_length = 1000000 * 60 / 120;
+        for beat in &mut self.beats {
+            if let Some(BeatEvent::TempoChangeEvent { tempo }) = beat
+                .events_filter(|f| matches!(f, BeatEvent::TempoChangeEvent { .. }))
+                .get(0)
+            {
+                beat_length = 1000000 * 60 / tempo;
+            }
+            beat.length = beat_length;
+        }
+    }
 }
