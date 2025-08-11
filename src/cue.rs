@@ -74,15 +74,15 @@ pub enum BeatEvent {
 impl BeatEvent {
     pub fn get_name(&self) -> &str {
         match self {
-            BeatEvent::JumpEvent { .. } => "Jump Event",
-            BeatEvent::VoltaEvent { .. } => "Volta Event",
-            BeatEvent::RepeatStartEvent => "Repeat Start Event",
-            BeatEvent::TempoChangeEvent { .. } => "Tempo Change Event",
-            BeatEvent::VampEvent { .. } => "Vamp Event",
-            BeatEvent::PlaybackEvent { .. } => "Playback Event",
-            BeatEvent::PlaybackStopEvent { .. } => "Playback Stop Event",
-            BeatEvent::TimecodeEvent { .. } => "Timecode Event",
-            BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark Event",
+            BeatEvent::JumpEvent { .. } => "Jump",
+            BeatEvent::VoltaEvent { .. } => "Volta",
+            BeatEvent::RepeatStartEvent => "Repeat Start",
+            BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
+            BeatEvent::VampEvent { .. } => "Vamp",
+            BeatEvent::PlaybackEvent { .. } => "Playback",
+            BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
+            BeatEvent::TimecodeEvent { .. } => "Timecode",
+            BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark",
         }
     }
 }
