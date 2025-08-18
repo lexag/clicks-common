@@ -1,4 +1,7 @@
-use std::{fmt, slice::Iter};
+use std::{
+    fmt::{self, Display},
+    slice::Iter,
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -42,12 +45,48 @@ impl Beat {
 }
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
+pub enum JumpRequirement {
+    JumpModeOn,
+    JumpModeOff,
+    None,
+}
+
+impl Display for JumpRequirement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            JumpRequirement::JumpModeOn => write!(f, "VLT On"),
+            JumpRequirement::JumpModeOff => write!(f, "VLT Off"),
+            JumpRequirement::None => write!(f, "None"),
+        }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
+pub enum JumpModeChange {
+    SetOn,
+    SetOff,
+    Toggle,
+    None,
+}
+
+impl Display for JumpModeChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            JumpModeChange::SetOn => write!(f, "Set VLT"),
+            JumpModeChange::SetOff => write!(f, "Trip VLT"),
+            JumpModeChange::Toggle => write!(f, "Toggle VLT"),
+            JumpModeChange::None => write!(f, "None"),
+        }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 pub enum BeatEvent {
     JumpEvent {
         destination: usize,
-    },
-    VoltaEvent {
-        destination: usize,
+        requirement: JumpRequirement,
+        when_jumped: JumpModeChange,
+        when_passed: JumpModeChange,
     },
     RepeatStartEvent,
     TempoChangeEvent {
@@ -84,7 +123,6 @@ impl BeatEvent {
     pub fn get_name(&self) -> &str {
         match self {
             BeatEvent::JumpEvent { .. } => "Jump",
-            BeatEvent::VoltaEvent { .. } => "Volta",
             BeatEvent::RepeatStartEvent => "Repeat Start",
             BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
             BeatEvent::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
@@ -229,9 +267,7 @@ impl Cue {
                 accelerator = (60000000.0 / *end_tempo as f32 - 60000000.0 / *start_tempo as f32)
                     / *length as f32;
                 beats_left_in_change = *length;
-                println!("Found grad change. Accelerator = {accelerator}");
             }
-            println!("len: {beat_length}");
             beat.length = beat_length;
             beat_length = (beat_length as f32 + accelerator).round() as usize;
             beats_left_in_change = beats_left_in_change.saturating_sub(1);
