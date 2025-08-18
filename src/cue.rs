@@ -35,6 +35,10 @@ impl Beat {
     {
         self.events.iter().filter(|e| filter(e)).cloned().collect()
     }
+
+    pub fn tempo(&self) -> usize {
+        (60000000.0 / self.length as f32).round() as usize
+    }
 }
 
 #[derive(Clone, Serialize, Deserialize, PartialEq)]
@@ -48,6 +52,11 @@ pub enum BeatEvent {
     RepeatStartEvent,
     TempoChangeEvent {
         tempo: usize,
+    },
+    GradualTempoChangeEvent {
+        start_tempo: usize,
+        end_tempo: usize,
+        length: usize,
     },
     VampEvent {
         length: usize,
@@ -78,6 +87,7 @@ impl BeatEvent {
             BeatEvent::VoltaEvent { .. } => "Volta",
             BeatEvent::RepeatStartEvent => "Repeat Start",
             BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
+            BeatEvent::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
             BeatEvent::VampEvent { .. } => "Vamp",
             BeatEvent::PlaybackEvent { .. } => "Playback",
             BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
@@ -197,14 +207,37 @@ impl Cue {
 
     pub fn recalculate_tempo_changes(&mut self) {
         let mut beat_length = 1000000 * 60 / 120;
+        let mut beats_left_in_change = 0;
+        let mut accelerator: f32 = 0.0;
         for beat in &mut self.beats {
             if let Some(BeatEvent::TempoChangeEvent { tempo }) = beat
                 .events_filter(|f| matches!(f, BeatEvent::TempoChangeEvent { .. }))
                 .get(0)
             {
                 beat_length = 1000000 * 60 / tempo;
+                accelerator = 0.0;
             }
+            if let Some(BeatEvent::GradualTempoChangeEvent {
+                start_tempo,
+                end_tempo,
+                length,
+            }) = beat
+                .events_filter(|f| matches!(f, BeatEvent::GradualTempoChangeEvent { .. }))
+                .get(0)
+            {
+                beat_length = 1000000 * 60 / start_tempo;
+                accelerator = (60000000.0 / *end_tempo as f32 - 60000000.0 / *start_tempo as f32)
+                    / *length as f32;
+                beats_left_in_change = *length;
+                println!("Found grad change. Accelerator = {accelerator}");
+            }
+            println!("len: {beat_length}");
             beat.length = beat_length;
+            beat_length = (beat_length as f32 + accelerator).round() as usize;
+            beats_left_in_change = beats_left_in_change.saturating_sub(1);
+            if beats_left_in_change == 0 {
+                accelerator = 0.0;
+            }
         }
     }
 }
