@@ -88,16 +88,12 @@ pub enum BeatEvent {
         when_jumped: JumpModeChange,
         when_passed: JumpModeChange,
     },
-    RepeatStartEvent,
     TempoChangeEvent {
         tempo: usize,
     },
     GradualTempoChangeEvent {
         start_tempo: usize,
         end_tempo: usize,
-        length: usize,
-    },
-    VampEvent {
         length: usize,
     },
     PlaybackEvent {
@@ -123,10 +119,8 @@ impl BeatEvent {
     pub fn get_name(&self) -> &str {
         match self {
             BeatEvent::JumpEvent { .. } => "Jump",
-            BeatEvent::RepeatStartEvent => "Repeat Start",
             BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
             BeatEvent::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
-            BeatEvent::VampEvent { .. } => "Vamp",
             BeatEvent::PlaybackEvent { .. } => "Playback",
             BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
             BeatEvent::TimecodeEvent { .. } => "Timecode",
@@ -196,7 +190,12 @@ impl Cue {
                 bar_number: i as usize / 4 + 1,
                 length: 500,
                 events: if i == 3 {
-                    vec![BeatEvent::VampEvent { length: 4 }]
+                    vec![BeatEvent::JumpEvent {
+                        destination: 0,
+                        requirement: JumpRequirement::None,
+                        when_jumped: JumpModeChange::None,
+                        when_passed: JumpModeChange::None,
+                    }]
                 } else {
                     vec![]
                 },
