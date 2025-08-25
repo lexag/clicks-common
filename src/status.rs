@@ -66,6 +66,9 @@ pub struct CombinedStatus {
 
 impl CombinedStatus {
     pub fn beat_state(&self) -> BeatState {
+        if self.sources.is_empty() {
+            return BeatState::default();
+        }
         if let AudioSourceState::BeatStatus(state) = &self.sources[0] {
             state.clone()
         } else {
@@ -73,6 +76,9 @@ impl CombinedStatus {
         }
     }
     pub fn time_state(&self) -> TimecodeInstant {
+        if self.sources.is_empty() {
+            return TimecodeInstant::default();
+        }
         if let AudioSourceState::TimeStatus(state) = &self.sources[1] {
             state.clone()
         } else {
