@@ -34,7 +34,6 @@ pub enum AudioSourceState {
     BeatStatus(BeatState),
     TimeStatus(TimecodeInstant),
     PlaybackStatus(PlaybackState),
-    None,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
@@ -72,7 +71,10 @@ impl CombinedStatus {
         if let AudioSourceState::BeatStatus(state) = &self.sources[0] {
             state.clone()
         } else {
-            panic!("Metronome is not in slot 0")
+            panic!(
+                "Metronome is not in slot 0. Slot 0 contains {:?}",
+                &self.sources[0]
+            )
         }
     }
     pub fn time_state(&self) -> TimecodeInstant {
@@ -82,7 +84,10 @@ impl CombinedStatus {
         if let AudioSourceState::TimeStatus(state) = &self.sources[1] {
             state.clone()
         } else {
-            panic!("Timecode is not in slot 1")
+            panic!(
+                "Metronome is not in slot 1. Slot 1 contains {:?}",
+                &self.sources[1]
+            )
         }
     }
 }
