@@ -61,11 +61,12 @@ impl Display for JumpRequirement {
     }
 }
 
-#[derive(Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug, Default)]
 pub enum JumpModeChange {
     SetOn,
     SetOff,
     Toggle,
+    #[default]
     None,
 }
 
@@ -76,6 +77,47 @@ impl Display for JumpModeChange {
             JumpModeChange::SetOff => write!(f, "Trip VLT"),
             JumpModeChange::Toggle => write!(f, "Toggle VLT"),
             JumpModeChange::None => write!(f, "None"),
+        }
+    }
+}
+impl JumpModeChange {
+    pub fn vlt(&self, vlt: bool) -> bool {
+        match self {
+            JumpModeChange::SetOn => true,
+            JumpModeChange::SetOff => false,
+            JumpModeChange::Toggle => !vlt,
+            JumpModeChange::None => vlt,
+        }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
+pub enum PauseEventBehaviour {
+    Hold,
+    RestartBeat,
+    RestartCue,
+    NextCue,
+    Jump { destination: usize },
+}
+
+impl Display for PauseEventBehaviour {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            PauseEventBehaviour::Hold => {
+                write!(f, "Hold")
+            }
+            PauseEventBehaviour::RestartBeat => {
+                write!(f, "Restart beat")
+            }
+            PauseEventBehaviour::RestartCue => {
+                write!(f, "Restart cue")
+            }
+            PauseEventBehaviour::NextCue => {
+                write!(f, "Next cue")
+            }
+            PauseEventBehaviour::Jump { .. } => {
+                write!(f, "Jump to beat")
+            }
         }
     }
 }
@@ -113,6 +155,9 @@ pub enum BeatEvent {
     RehearsalMarkEvent {
         label: String,
     },
+    PauseEvent {
+        behaviour: PauseEventBehaviour,
+    },
 }
 
 impl BeatEvent {
@@ -125,6 +170,7 @@ impl BeatEvent {
             BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
             BeatEvent::TimecodeEvent { .. } => "Timecode",
             BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark",
+            BeatEvent::PauseEvent { .. } => "Pause Event",
         }
     }
 }

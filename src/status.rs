@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     config::SystemConfiguration,
-    cue::{Beat, Cue},
+    cue::{Beat, Cue, JumpModeChange},
     network::{Heartbeat, JACKStatus, NetworkStatus},
     show::Show,
     timecode::TimecodeInstant,
@@ -21,6 +21,7 @@ pub struct BeatState {
     pub beat_idx: usize,
     pub next_beat_idx: usize,
     pub beat: Beat,
+    pub requested_vlt_action: JumpModeChange,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
@@ -40,6 +41,8 @@ pub enum AudioSourceState {
 pub struct TransportState {
     pub us_to_next_beat: usize,
     pub running: bool,
+    pub vlt: bool,
+    pub ltc: TimecodeInstant,
 }
 
 //#[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -53,7 +56,7 @@ pub struct TransportState {
 //    pub cue_idx: usize,
 //}
 
-#[derive(Default, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub struct CombinedStatus {
     pub sources: Vec<AudioSourceState>,
     pub transport: TransportState,
@@ -61,6 +64,22 @@ pub struct CombinedStatus {
     pub show: Show,
     pub network_status: NetworkStatus,
     pub jack_status: JACKStatus,
+}
+
+impl Default for CombinedStatus {
+    fn default() -> Self {
+        Self {
+            sources: vec![
+                AudioSourceState::BeatStatus(BeatState::default()),
+                AudioSourceState::TimeStatus(TimecodeInstant::default()),
+            ],
+            transport: TransportState::default(),
+            cue: CueState::default(),
+            show: Show::default(),
+            network_status: NetworkStatus::default(),
+            jack_status: JACKStatus::default(),
+        }
+    }
 }
 
 impl CombinedStatus {

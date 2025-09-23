@@ -3,6 +3,7 @@ use std::{error::Error, fmt::Display};
 
 use serde::{Deserialize, Serialize};
 
+use crate::cue::JumpModeChange;
 use crate::{cue::Cue, show::Show};
 
 #[derive(Clone, Deserialize, Serialize, Debug, PartialEq)]
@@ -21,6 +22,7 @@ pub enum ControlCommand {
     DumpStatus,
     SetChannelGain(usize, f32),
     SetChannelMute(usize, bool),
+    ChangeJumpMode(JumpModeChange),
 }
 
 impl Display for ControlCommand {
@@ -40,6 +42,7 @@ impl Display for ControlCommand {
             ControlCommand::DumpStatus => write!(f, "DumpStatus"),
             ControlCommand::SetChannelGain(..) => write!(f, "SetChannelGain"),
             ControlCommand::SetChannelMute(..) => write!(f, "SetChannelMute"),
+            ControlCommand::ChangeJumpMode(..) => write!(f, "ChangeJumpMode"),
         }
     }
 }
