@@ -23,6 +23,7 @@ pub enum ControlCommand {
     SetChannelGain(usize, f32),
     SetChannelMute(usize, bool),
     ChangeJumpMode(JumpModeChange),
+    ChangePlayrate(usize),
 }
 
 impl Display for ControlCommand {
@@ -43,6 +44,7 @@ impl Display for ControlCommand {
             ControlCommand::SetChannelGain(..) => write!(f, "SetChannelGain"),
             ControlCommand::SetChannelMute(..) => write!(f, "SetChannelMute"),
             ControlCommand::ChangeJumpMode(..) => write!(f, "ChangeJumpMode"),
+            ControlCommand::ChangePlayrate(..) => write!(f, "ChangePlayrate"),
         }
     }
 }
