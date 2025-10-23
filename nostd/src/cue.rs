@@ -1,4 +1,4 @@
-use crate::str::String32;
+use crate::str::{String32, String8};
 use core::fmt;
 use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
@@ -7,7 +7,7 @@ use serde_big_array::BigArray;
 pub struct Beat {
     pub count: u8,
     pub bar_number: u8,
-    pub length: u16,
+    pub length: u32,
 }
 
 impl fmt::Debug for Beat {
@@ -127,10 +127,10 @@ pub struct BeatEventContainer {
     event: Option<BeatEvent>,
 }
 
-impl BeatEventContainer {
-    fn null() -> Self {
+impl Default for BeatEventContainer {
+    fn default() -> Self {
         Self {
-            location: 0,
+            location: u16::MAX,
             event: None,
         }
     }
@@ -167,7 +167,7 @@ pub enum BeatEvent {
         f: u8,
     },
     RehearsalMarkEvent {
-        label: String32,
+        label: String8,
     },
     PauseEvent {
         behaviour: PauseEventBehaviour,
@@ -190,6 +190,7 @@ impl BeatEvent {
 }
 
 const CUE_LENGTH: usize = 512;
+const EVENT_SLOTS: usize = 64;
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Cue {
@@ -197,7 +198,14 @@ pub struct Cue {
     #[serde(with = "BigArray")]
     pub beats: [Beat; CUE_LENGTH],
     #[serde(with = "BigArray")]
-    pub events: [BeatEventContainer; 64],
+    pub events: [BeatEventContainer; EVENT_SLOTS],
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+pub struct CueSkeleton {
+    pub metadata: CueMetadata,
+    #[serde(with = "BigArray")]
+    pub events: [BeatEventContainer; EVENT_SLOTS],
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq)]
@@ -213,13 +221,9 @@ impl Default for Cue {
 }
 
 impl Cue {
-    //    pub fn from_file(path: &str) -> Cue {
-    //        return Cue::example();
-    //    }
-
     pub fn empty() -> Cue {
         Cue {
-            events: [BeatEventContainer::null(); 64],
+            events: [BeatEventContainer::default(); EVENT_SLOTS],
             beats: [Beat::empty(); CUE_LENGTH],
             metadata: CueMetadata::default(),
         }
@@ -277,11 +281,11 @@ impl Cue {
         if self.beats[idx as usize].length == 0 || CUE_LENGTH <= idx as usize {
             return None;
         }
-        Some(self.beats[idx as usize].clone())
+        Some(self.beats[idx as usize])
     }
 
     pub fn get_beats(&self) -> [Beat; CUE_LENGTH] {
-        self.beats.clone()
+        self.beats
     }
 
     pub fn reorder_numbers(&mut self) {
@@ -306,37 +310,82 @@ impl Cue {
         }
     }
 
-    //pub fn recalculate_tempo_changes(&mut self) {
-    //    let mut beat_length = 1000000 * 60 / 120;
-    //    let mut beats_left_in_change = 0;
-    //    let mut accelerator: f32 = 0.0;
-    //    for beat in &mut self.beats {
-    //        if let Some(BeatEvent::TempoChangeEvent { tempo }) = beat
-    //            .events_filter(|f| matches!(f, BeatEvent::TempoChangeEvent { .. }))
-    //            .get(0)
-    //        {
-    //            beat_length = 1000000 * 60 / tempo;
-    //            accelerator = 0.0;
-    //        }
-    //        if let Some(BeatEvent::GradualTempoChangeEvent {
-    //            start_tempo,
-    //            end_tempo,
-    //            length,
-    //        }) = beat
-    //            .events_filter(|f| matches!(f, BeatEvent::GradualTempoChangeEvent { .. }))
-    //            .get(0)
-    //        {
-    //            beat_length = 1000000 * 60 / start_tempo;
-    //            accelerator = (60000000.0 / *end_tempo as f32 - 60000000.0 / *start_tempo as f32)
-    //                / *length as f32;
-    //            beats_left_in_change = *length;
-    //        }
-    //        beat.length = beat_length;
-    //        beat_length = (beat_length as f32 + accelerator).round() as u16;
-    //        beats_left_in_change = beats_left_in_change.saturating_sub(1);
-    //        if beats_left_in_change == 0 {
-    //            accelerator = 0.0;
-    //        }
-    //    }
-    //}
+    pub fn sort_events(&mut self) {
+        self.events.sort_by_key(|o| o.location);
+    }
+
+    pub fn get_cursor(&mut self) -> EventCursor<'_> {
+        self.sort_events();
+        EventCursor::new(self)
+    }
+
+    pub fn recalculate_tempo_changes(&mut self) {
+        let mut beat_length: u32 = 1000000 * 60 / 120;
+        let mut beats_left_in_change = 0;
+        let mut accelerator: f32 = 0.0;
+
+        let mut new_beats = self.beats;
+        let mut cursor = self.get_cursor();
+
+        for beat in &mut new_beats {
+            if let Some(BeatEvent::TempoChangeEvent { tempo }) = cursor.get().event {
+                cursor.step();
+                beat_length = 1000000 * 60 / tempo as u32;
+                accelerator = 0.0;
+            }
+            if let Some(BeatEvent::GradualTempoChangeEvent {
+                start_tempo,
+                end_tempo,
+                length,
+            }) = cursor.get().event
+            {
+                cursor.step();
+                beat_length = 1000000 * 60 / start_tempo as u32;
+                accelerator = (60000000.0 / end_tempo as f32 - 60000000.0 / start_tempo as f32)
+                    / length as f32;
+                beats_left_in_change = length;
+            }
+            beat.length = beat_length;
+            beat_length = (beat_length as f32 + accelerator).round() as u32;
+            beats_left_in_change = beats_left_in_change.saturating_sub(1);
+            if beats_left_in_change == 0 {
+                accelerator = 0.0;
+            }
+        }
+
+        drop(cursor);
+        self.beats = new_beats;
+    }
+}
+
+pub struct EventCursor<'a> {
+    cursor: u8,
+    cue: &'a Cue,
+}
+
+impl<'a> EventCursor<'a> {
+    fn new(cue: &'a Cue) -> EventCursor<'a> {
+        Self { cursor: 0, cue }
+    }
+
+    fn seek(&mut self, location: u16) {
+        if self.location() > location {
+            self.cursor = 0;
+        }
+        while self.location() < location && self.cursor < EVENT_SLOTS as u8 {
+            self.cursor += 1;
+        }
+    }
+
+    fn location(&self) -> u16 {
+        self.cue.events[self.cursor as usize].location
+    }
+
+    fn get(&mut self) -> BeatEventContainer {
+        self.cue.events[self.cursor as usize]
+    }
+
+    fn step(&mut self) {
+        self.cursor += (self.cursor + 1).min(EVENT_SLOTS as u8);
+    }
 }
