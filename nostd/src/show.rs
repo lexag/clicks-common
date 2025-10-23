@@ -1,5 +1,5 @@
 use crate::{cue::Cue, str::String32};
-use serde::{de::Error, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ShowMetadata {

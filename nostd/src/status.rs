@@ -8,25 +8,25 @@ use crate::{
     timecode::TimecodeInstant,
 };
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct PlaybackState {
-    pub clip_idx: usize,
+    pub clip_idx: u16,
     pub current_sample: i32,
     pub playing: bool,
-    pub clips: Vec<usize>,
+    pub clips: [u16; 16],
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct BeatState {
-    pub beat_idx: usize,
-    pub next_beat_idx: usize,
+    pub beat_idx: u16,
+    pub next_beat_idx: u16,
     pub beat: Beat,
     pub requested_vlt_action: JumpModeChange,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct CueState {
-    pub cue_idx: usize,
+    pub cue_idx: u16,
     pub cue: Cue,
 }
 
@@ -39,11 +39,11 @@ pub enum AudioSourceState {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TransportState {
-    pub us_to_next_beat: usize,
+    pub us_to_next_beat: u16,
     pub running: bool,
     pub vlt: bool,
     pub ltc: TimecodeInstant,
-    pub playrate_percent: usize,
+    pub playrate_percent: u16,
 }
 
 impl Default for TransportState {
@@ -62,16 +62,16 @@ impl Default for TransportState {
 //pub struct ProcessStatus {
 //    pub sources: Vec<AudioSourceState>,
 //    pub running: bool,
-//    pub beat_idx: usize,
-//    pub next_beat_idx: usize,
-//    pub us_to_next_beat: usize,
+//    pub beat_idx: u16,
+//    pub next_beat_idx: u16,
+//    pub us_to_next_beat: u16,
 //    pub time: TimecodeInstant,
-//    pub cue_idx: usize,
+//    pub cue_idx: u16,
 //}
 
 #[derive(Clone, Debug)]
 pub struct CombinedStatus {
-    pub sources: Vec<AudioSourceState>,
+    pub sources: [AudioSourceState; 32],
     pub transport: TransportState,
     pub cue: CueState,
     pub show: Show,
@@ -82,9 +82,40 @@ pub struct CombinedStatus {
 impl Default for CombinedStatus {
     fn default() -> Self {
         Self {
-            sources: vec![
+            // FIXME: uglyyyyyyyyyyyyyyyy
+            sources: [
                 AudioSourceState::BeatStatus(BeatState::default()),
                 AudioSourceState::TimeStatus(TimecodeInstant::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
+                AudioSourceState::PlaybackStatus(PlaybackState::default()),
             ],
             transport: TransportState::default(),
             cue: CueState::default(),
@@ -124,17 +155,19 @@ impl CombinedStatus {
     }
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum NotificationKind {
-    TransportChanged,
-    BeatChanged,
-    CueChanged,
-    ShowChanged,
-    NetworkChanged,
-    JACKStateChanged,
-    ConfigurationChanged,
-    ShutdownOccured,
-    Heartbeat,
+bitflags::bitflags! {
+    #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+    pub struct NotificationKind: u8 {
+        const TransportChanged = 0x01;
+        const BeatChanged = 0x01;
+        const CueChanged = 0x02;
+        const ShowChanged = 0x04;
+        const NetworkChanged = 0x08;
+        const JACKStateChanged = 0x10;
+        const ConfigurationChanged = 0x20;
+        const ShutdownOccured = 0x40;
+        const Heartbeat = 0x80;
+    }
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]

@@ -1,5 +1,5 @@
+use core::fmt::{Display, Formatter, Result};
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimecodeInstant {
@@ -18,7 +18,7 @@ impl PartialEq for TimecodeInstant {
 }
 
 impl Display for TimecodeInstant {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(
             f,
             "{:0>2}:{:0>2}:{:0>2}:{:0>2}",

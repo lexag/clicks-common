@@ -1,10 +1,8 @@
-use std::fmt;
-use std::{error::Error, fmt::Display};
-
+use core::fmt;
+use core::{error::Error, result};
 use serde::{Deserialize, Serialize};
 
 use crate::cue::JumpModeChange;
-use crate::{cue::Cue, show::Show};
 
 #[derive(Clone, Deserialize, Serialize, Debug, PartialEq)]
 pub enum ControlCommand {
@@ -13,12 +11,10 @@ pub enum ControlCommand {
     TransportZero,
     TransportSeekBeat(usize),
     TransportJumpBeat(usize),
-    LoadCue(Cue),
     LoadCueByIndex(usize),
     LoadCueFromSelfIndex,
     LoadNextCue,
     LoadPreviousCue,
-    LoadShow(Show),
     DumpStatus,
     SetChannelGain(usize, f32),
     SetChannelMute(usize, bool),
@@ -26,20 +22,18 @@ pub enum ControlCommand {
     ChangePlayrate(usize),
 }
 
-impl Display for ControlCommand {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+impl fmt::Display for ControlCommand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> result::Result<(), fmt::Error> {
         match self {
             ControlCommand::TransportStart => write!(f, "TransportStart"),
             ControlCommand::TransportStop => write!(f, "TransportStop"),
             ControlCommand::TransportZero => write!(f, "TransportZero"),
             ControlCommand::TransportSeekBeat(..) => write!(f, "TransportSeekBeat"),
             ControlCommand::TransportJumpBeat(..) => write!(f, "TransportJumpBeat"),
-            ControlCommand::LoadCue(..) => write!(f, "LoadCue"),
             ControlCommand::LoadCueByIndex(..) => write!(f, "LoadCueByIndex"),
             ControlCommand::LoadCueFromSelfIndex => write!(f, "LoadCueFromSelfIndex"),
             ControlCommand::LoadNextCue => write!(f, "LoadNextCue"),
             ControlCommand::LoadPreviousCue => write!(f, "LoadPreviousCue"),
-            ControlCommand::LoadShow(..) => write!(f, "LoadShow"),
             ControlCommand::DumpStatus => write!(f, "DumpStatus"),
             ControlCommand::SetChannelGain(..) => write!(f, "SetChannelGain"),
             ControlCommand::SetChannelMute(..) => write!(f, "SetChannelMute"),
