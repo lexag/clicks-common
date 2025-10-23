@@ -1,4 +1,7 @@
-use crate::{cue::Cue, str::String32};
+use crate::{
+    cue::{Cue, CueSkeleton},
+    str::String32,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -17,34 +20,8 @@ pub struct Show {
                          //Also, not serde is maybe an alternative. JSON do be kinda ugly
 }
 
-impl Show {
-    // TODO: lightweight show and cue objects should be separate objects, since const-size
-    // revolution
-    //pub fn lightweight(&self) -> Self {
-    //    Self {
-    //        metadata: self.metadata.clone(),
-    //        cues: self
-    //            .cues
-    //            .iter()
-    //            .map(|c| Cue {
-    //                metadata: c.metadata.clone(),
-    //                beats: ,
-    //            })
-    //            .collect(),
-    //    }
-    //}
-
-    // TODO: from_file belongs in ShowBuilder, which does not exist yet
-    //pub fn from_file(path: PathBuf) -> Result<Show, serde_json::Error> {
-    //    let file = match std::fs::read(path) {
-    //        Ok(val) => val,
-    //        Err(err) => return Err(serde_json::Error::custom("could not read file")),
-    //    };
-
-    //    let file_str = match std::str::from_utf8(&file) {
-    //        Ok(val) => val,
-    //        Err(err) => return Err(serde_json::Error::custom("invalid utf8")),
-    //    };
-    //    serde_json::from_str::<Show>(file_str)
-    //}
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ShowSkeleton {
+    pub metadata: ShowMetadata,
+    pub cues: [CueSkeleton; 32],
 }
