@@ -148,7 +148,7 @@ impl CombinedStatus {
             state.clone()
         } else {
             panic!(
-                "Metronome is not in slot 1. Slot 1 contains {:?}",
+                "Timecode is not in slot 1. Slot 1 contains {:?}",
                 &self.sources[1]
             )
         }
@@ -175,7 +175,6 @@ pub enum Notification {
     TransportChanged(TransportState),
     BeatChanged(BeatState),
     CueChanged(CueState),
-    ShowChanged(Show),
     NetworkChanged(NetworkStatus),
     JACKStateChanged(JACKStatus),
     ConfigurationChanged(SystemConfiguration),
@@ -189,7 +188,6 @@ impl Notification {
             Self::TransportChanged(..) => NotificationKind::TransportChanged,
             Self::BeatChanged(..) => NotificationKind::BeatChanged,
             Self::CueChanged(..) => NotificationKind::JACKStateChanged,
-            Self::ShowChanged(..) => NotificationKind::CueChanged,
             Self::NetworkChanged(..) => NotificationKind::ShowChanged,
             Self::JACKStateChanged(..) => NotificationKind::NetworkChanged,
             Self::ConfigurationChanged(..) => NotificationKind::ConfigurationChanged,
