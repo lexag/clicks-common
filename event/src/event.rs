@@ -1,5 +1,5 @@
-use crate::str::String8;
 use core::fmt;
+use mem::str::String8;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
@@ -81,12 +81,12 @@ impl fmt::Display for PauseEventBehaviour {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy)]
-pub struct BeatEventContainer {
+pub struct Event {
     pub location: u16,
-    pub event: Option<BeatEvent>,
+    pub event: Option<EventDescription>,
 }
 
-impl Default for BeatEventContainer {
+impl Default for Event {
     fn default() -> Self {
         Self {
             location: u16::MAX,
@@ -96,7 +96,7 @@ impl Default for BeatEventContainer {
 }
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Debug, Ord, PartialOrd, Eq, Copy)]
-pub enum BeatEvent {
+pub enum EventDescription {
     JumpEvent {
         destination: u16,
         requirement: JumpRequirement,
@@ -133,17 +133,17 @@ pub enum BeatEvent {
     },
 }
 
-impl BeatEvent {
+impl EventDescription {
     pub fn get_name(&self) -> &str {
         match self {
-            BeatEvent::JumpEvent { .. } => "Jump",
-            BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
-            BeatEvent::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
-            BeatEvent::PlaybackEvent { .. } => "Playback",
-            BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
-            BeatEvent::TimecodeEvent { .. } => "Timecode",
-            BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark",
-            BeatEvent::PauseEvent { .. } => "Pause Event",
+            EventDescription::JumpEvent { .. } => "Jump",
+            EventDescription::TempoChangeEvent { .. } => "Tempo Change",
+            EventDescription::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
+            EventDescription::PlaybackEvent { .. } => "Playback",
+            EventDescription::PlaybackStopEvent { .. } => "Playback Stop",
+            EventDescription::TimecodeEvent { .. } => "Timecode",
+            EventDescription::RehearsalMarkEvent { .. } => "Rehearsal Mark",
+            EventDescription::PauseEvent { .. } => "Pause Event",
         }
     }
 }

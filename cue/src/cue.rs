@@ -1,9 +1,10 @@
-use crate::{
-    beat::Beat,
-    event::{BeatEvent, BeatEventContainer, JumpModeChange, JumpRequirement},
+use beat::beat::Beat;
+use event::{
+    event::{Event, EventDescription},
     eventcursor::EventCursor,
-    str::String32,
+    table::EventTable,
 };
+use mem::str::String32;
 use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
 
@@ -12,15 +13,13 @@ pub struct Cue {
     pub metadata: CueMetadata,
     #[serde(with = "BigArray")]
     pub beats: [Beat; Cue::CUE_LENGTH],
-    #[serde(with = "BigArray")]
-    pub events: [BeatEventContainer; Self::EVENT_SLOTS],
+    pub events: EventTable,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CueSkeleton {
     pub metadata: CueMetadata,
-    #[serde(with = "BigArray")]
-    pub events: [BeatEventContainer; Cue::EVENT_SLOTS],
+    pub events: EventTable,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq)]
@@ -41,7 +40,7 @@ impl Cue {
 
     pub fn empty() -> Cue {
         Cue {
-            events: [BeatEventContainer::default(); Self::EVENT_SLOTS],
+            events: EventTable::empty(),
             beats: [Beat::empty(); Self::CUE_LENGTH],
             metadata: CueMetadata::default(),
         }
@@ -55,14 +54,17 @@ impl Cue {
                 length: 500,
             };
         }
-        br.events[0] = BeatEventContainer {
-            location: 0,
-            event: Some(BeatEvent::PlaybackEvent {
-                channel_idx: 0,
-                clip_idx: 0,
-                sample: 0,
-            }),
-        };
+        br.events.set(
+            0,
+            Event {
+                location: 0,
+                event: Some(EventDescription::PlaybackEvent {
+                    channel_idx: 0,
+                    clip_idx: 0,
+                    sample: 0,
+                }),
+            },
+        );
         br
     }
 
@@ -75,23 +77,29 @@ impl Cue {
                 length: 500,
             };
         }
-        br.events[0] = BeatEventContainer {
-            location: 0,
-            event: Some(BeatEvent::PlaybackEvent {
-                channel_idx: 0,
-                clip_idx: 0,
-                sample: 0,
-            }),
-        };
-        br.events[1] = BeatEventContainer {
-            location: 3,
-            event: Some(BeatEvent::JumpEvent {
-                destination: 0,
-                requirement: JumpRequirement::None,
-                when_jumped: JumpModeChange::None,
-                when_passed: JumpModeChange::None,
-            }),
-        };
+        br.events.set(
+            0,
+            Event {
+                location: 0,
+                event: Some(EventDescription::PlaybackEvent {
+                    channel_idx: 0,
+                    clip_idx: 0,
+                    sample: 0,
+                }),
+            },
+        );
+        br.events.set(
+            1,
+            Event {
+                location: 3,
+                event: Some(EventDescription::JumpEvent {
+                    destination: 0,
+                    requirement: event::event::JumpRequirement::None,
+                    when_jumped: event::event::JumpModeChange::None,
+                    when_passed: event::event::JumpModeChange::None,
+                }),
+            },
+        );
         br
     }
 
@@ -128,30 +136,21 @@ impl Cue {
         }
     }
 
-    pub fn sort_events(&mut self) {
-        self.events.sort_by_key(|o| o.location);
-    }
-
-    pub fn get_cursor(&mut self) -> EventCursor<'_> {
-        self.sort_events();
-        EventCursor::new(self)
-    }
-
     pub fn recalculate_tempo_changes(&mut self) {
         let mut beat_length: u32 = 1000000 * 60 / 120;
         let mut beats_left_in_change = 0;
         let mut accelerator: f32 = 0.0;
 
         let mut new_beats = self.beats;
-        let mut cursor = self.get_cursor();
+        let mut cursor = EventCursor::new(&self.events);
 
         for beat in &mut new_beats {
-            if let Some(BeatEvent::TempoChangeEvent { tempo }) = cursor.get().event {
+            if let Some(EventDescription::TempoChangeEvent { tempo }) = cursor.get().event {
                 cursor.step();
                 beat_length = 1000000 * 60 / tempo as u32;
                 accelerator = 0.0;
             }
-            if let Some(BeatEvent::GradualTempoChangeEvent {
+            if let Some(EventDescription::GradualTempoChangeEvent {
                 start_tempo,
                 end_tempo,
                 length,

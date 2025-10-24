@@ -1,0 +1,14 @@
+[package]
+name = "common"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cue = { path = "../cue" }
+beat = { path = "../beat" }
+time = { path = "../time" }
+control = { path = "../control" }
+notification = { path = "../notification" }
+mem = { path = "../mem" }
+config = { path = "../config" }
+event = { path = "../event" }

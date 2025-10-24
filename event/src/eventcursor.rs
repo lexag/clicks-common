@@ -1,0 +1,127 @@
+use crate::event::Event;
+use crate::table::EventTable;
+
+pub struct EventCursor<'a> {
+    cursor: u8,
+    table: &'a EventTable,
+}
+
+impl<'a> EventCursor<'a> {
+    pub fn new(events: &'a EventTable) -> EventCursor<'a> {
+        Self {
+            cursor: 0,
+            table: events,
+        }
+    }
+
+    /// Move cursor to point to the next event after or on the location index.
+    ///
+    /// Ex:
+    /// Table [0, 2, 4, 6, 8]
+    /// seek(0) -> cursor 0 (loc 0)
+    /// seek(1) -> cursor 1 (loc 2)
+    /// seek(2) -> cursor 1 (loc 2)
+    pub fn seek(&mut self, location: u16) {
+        if self.location() > location {
+            self.cursor = 0;
+        }
+        while self.location() < location && self.cursor < EventTable::SIZE as u8 {
+            self.cursor += 1;
+        }
+    }
+
+    pub fn location(&self) -> u16 {
+        self.table.get(self.cursor).location
+    }
+
+    pub fn get(&mut self) -> Event {
+        self.table.get(self.cursor)
+    }
+
+    pub fn get_next(&mut self) -> Event {
+        let e = self.get();
+        self.step();
+        e
+    }
+
+    pub fn at_or_before(&self, location: u16) -> bool {
+        self.location() <= location
+    }
+
+    pub fn step(&mut self) {
+        if self.cursor == u8::MAX {
+            return;
+        }
+        self.cursor += 1;
+    }
+
+    pub fn goto(&mut self, idx: u8) {
+        self.cursor = idx;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn make_dummy_table() -> EventTable {
+        let mut c = EventTable::empty();
+        for i in 0..EventTable::SIZE as u8 {
+            c.set(
+                i,
+                Event {
+                    location: i as u16 * 2,
+                    event: Some(crate::event::EventDescription::TimecodeEvent {
+                        h: 0,
+                        m: 0,
+                        s: 0,
+                        f: 0,
+                    }),
+                },
+            );
+        }
+        c
+    }
+
+    #[test]
+    fn test_seek() {
+        let table = make_dummy_table();
+        let mut cursor = EventCursor::new(&table);
+        cursor.seek(0);
+        assert_eq!(cursor.cursor, 0);
+
+        cursor.seek(16);
+        assert_eq!(cursor.cursor, 8);
+        cursor.seek(16);
+        assert_eq!(cursor.cursor, 8);
+
+        cursor.seek(2);
+        assert_eq!(cursor.cursor, 1);
+
+        cursor.seek(15);
+        assert_eq!(cursor.cursor, 8);
+
+        let table = EventTable::empty();
+        cursor = EventCursor::new(&table);
+        cursor.seek(37);
+        assert_eq!(cursor.cursor, 0);
+    }
+
+    #[test]
+    fn test_step() {
+        let table = make_dummy_table();
+        let mut cursor = EventCursor::new(&table);
+        cursor.seek(0);
+        assert_eq!(cursor.cursor, 0);
+
+        cursor.step();
+        assert_eq!(cursor.cursor, 1);
+        cursor.step();
+        cursor.step();
+        assert_eq!(cursor.cursor, 3);
+        cursor.goto(255);
+        assert_eq!(cursor.cursor, 255);
+        cursor.step();
+        assert_eq!(cursor.cursor, 255);
+    }
+}

@@ -22,7 +22,7 @@ mod tests {
         print_size_of!(nostd::status::NotificationKind);
         print_size_of!(nostd::network::SubscriberInfo);
         print_size_of!(nostd::network::ConnectionInfo);
-        print_size_of!(nostd::cue::BeatEventContainer);
+        print_size_of!(nostd::event::BeatEventContainer);
         print_size_of!(nostd::status::TransportState);
         print_size_of!(nostd::network::NetworkStatus);
         print_size_of!(nostd::status::CombinedStatus);
@@ -38,7 +38,7 @@ mod tests {
         print_size_of!(nostd::cue::CueMetadata);
         print_size_of!(nostd::config::LogKind);
         print_size_of!(nostd::show::Show);
-        print_size_of!(nostd::cue::Beat);
+        print_size_of!(nostd::beat::Beat);
         print_size_of!(nostd::cue::Cue);
         print_size_of!(nostd::cue::CueSkeleton);
         print_size_of!(nostd::show::ShowSkeleton);

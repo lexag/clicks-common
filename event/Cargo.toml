@@ -1,0 +1,10 @@
+[package]
+name = "event"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["serde_derive"] }
+serde_json = "1.0.145"
+mem = { path = "../mem" }
+serde-big-array = "0.5.1"

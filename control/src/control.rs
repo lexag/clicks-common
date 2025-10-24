@@ -1,5 +1,5 @@
-use crate::{
-    command::ControlCommand,
+use crate::command::ControlCommand;
+use config::{
     config::SystemConfiguration,
     network::{ConnectionInfo, SubscriberInfo},
 };

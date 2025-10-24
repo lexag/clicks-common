@@ -1,14 +1,10 @@
+use crate::{heartbeat::Heartbeat, jackstatus::JACKStatus, networkstatus::NetworkStatus};
+use beat::beat::Beat;
+use config::{config::SystemConfiguration, notificationkind::NotificationKind};
+use cue::{cue::Cue, show::Show};
+use event::event::JumpModeChange;
 use serde::{Deserialize, Serialize};
-
-use crate::{
-    beat::Beat,
-    config::SystemConfiguration,
-    cue::Cue,
-    event::JumpModeChange,
-    network::{Heartbeat, JACKStatus, NetworkStatus},
-    show::Show,
-    timecode::TimecodeInstant,
-};
+use time::timecode::TimecodeInstant;
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]
 pub struct PlaybackState {
@@ -154,21 +150,6 @@ impl CombinedStatus {
                 &self.sources[1]
             )
         }
-    }
-}
-
-bitflags::bitflags! {
-    #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-    pub struct NotificationKind: u8 {
-        const TransportChanged = 0x01;
-        const BeatChanged = 0x01;
-        const CueChanged = 0x02;
-        const ShowChanged = 0x04;
-        const NetworkChanged = 0x08;
-        const JACKStateChanged = 0x10;
-        const ConfigurationChanged = 0x20;
-        const ShutdownOccured = 0x40;
-        const Heartbeat = 0x80;
     }
 }
 

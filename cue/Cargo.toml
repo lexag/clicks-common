@@ -1,0 +1,12 @@
+[package]
+name = "cue"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["serde_derive"] }
+serde-big-array = "0.5.1"
+serde_json = "1.0.145"
+beat = { path = "../beat" }
+event = { path = "../event" }
+mem = { path = "../mem" }

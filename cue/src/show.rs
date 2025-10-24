@@ -1,7 +1,5 @@
-use crate::{
-    cue::{Cue, CueSkeleton},
-    str::String32,
-};
+use crate::cue::{Cue, CueSkeleton};
+use mem::str::String32;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]

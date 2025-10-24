@@ -1,5 +1,5 @@
-use crate::str::String32;
 use core::fmt;
+use mem::str::String32;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
