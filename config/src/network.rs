@@ -1,5 +1,4 @@
-use crate::notificationkind::NotificationKind;
-use mem::str::String32;
+use mem::{message::NotificationKind, str::String32};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq)]

@@ -1,4 +1,4 @@
-use crate::command::ControlCommand;
+use crate::request::command::ControlCommand;
 use config::{
     config::SystemConfiguration,
     network::{ConnectionInfo, SubscriberInfo},

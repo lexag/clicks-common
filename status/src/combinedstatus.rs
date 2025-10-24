@@ -1,71 +1,10 @@
-use crate::{heartbeat::Heartbeat, jackstatus::JACKStatus, networkstatus::NetworkStatus};
-use beat::Beat;
-use config::{config::SystemConfiguration, notificationkind::NotificationKind};
-use cue::{Cue, Show};
-use event::event::JumpModeChange;
-use serde::{Deserialize, Serialize};
+use crate::{
+    audiosource::AudioSourceState, beatstate::BeatState, cuestate::CueState,
+    jackstatus::JACKStatus, networkstatus::NetworkStatus, playbackstate::PlaybackState,
+    transportstate::TransportState,
+};
+use cue::Show;
 use time::timecode::TimecodeInstant;
-
-#[derive(Clone, Debug, Serialize, Deserialize, Default)]
-pub struct PlaybackState {
-    pub clip_idx: u16,
-    pub current_sample: i32,
-    pub playing: bool,
-    pub clips: [u16; 16],
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, Default)]
-pub struct BeatState {
-    pub beat_idx: u16,
-    pub next_beat_idx: u16,
-    pub beat: Beat,
-    pub requested_vlt_action: JumpModeChange,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize, Default)]
-pub struct CueState {
-    pub cue_idx: u16,
-    pub cue: Cue,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub enum AudioSourceState {
-    BeatStatus(BeatState),
-    TimeStatus(TimecodeInstant),
-    PlaybackStatus(PlaybackState),
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TransportState {
-    pub us_to_next_beat: u16,
-    pub running: bool,
-    pub vlt: bool,
-    pub ltc: TimecodeInstant,
-    pub playrate_percent: u16,
-}
-
-impl Default for TransportState {
-    fn default() -> Self {
-        Self {
-            us_to_next_beat: 0,
-            running: false,
-            vlt: false,
-            ltc: TimecodeInstant::default(),
-            playrate_percent: 100,
-        }
-    }
-}
-
-//#[derive(Default, Debug, Clone, Serialize, Deserialize)]
-//pub struct ProcessStatus {
-//    pub sources: Vec<AudioSourceState>,
-//    pub running: bool,
-//    pub beat_idx: u16,
-//    pub next_beat_idx: u16,
-//    pub us_to_next_beat: u16,
-//    pub time: TimecodeInstant,
-//    pub cue_idx: u16,
-//}
 
 #[derive(Clone, Debug)]
 pub struct CombinedStatus {
@@ -149,33 +88,6 @@ impl CombinedStatus {
                 "Timecode is not in slot 1. Slot 1 contains {:?}",
                 &self.sources[1]
             )
-        }
-    }
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub enum Notification {
-    TransportChanged(TransportState),
-    BeatChanged(BeatState),
-    CueChanged(CueState),
-    NetworkChanged(NetworkStatus),
-    JACKStateChanged(JACKStatus),
-    ConfigurationChanged(SystemConfiguration),
-    ShutdownOccured,
-    Heartbeat(Heartbeat),
-}
-
-impl Notification {
-    pub fn to_kind(&self) -> NotificationKind {
-        match self {
-            Self::TransportChanged(..) => NotificationKind::TransportChanged,
-            Self::BeatChanged(..) => NotificationKind::BeatChanged,
-            Self::CueChanged(..) => NotificationKind::JACKStateChanged,
-            Self::NetworkChanged(..) => NotificationKind::ShowChanged,
-            Self::JACKStateChanged(..) => NotificationKind::NetworkChanged,
-            Self::ConfigurationChanged(..) => NotificationKind::ConfigurationChanged,
-            Self::ShutdownOccured => NotificationKind::ShutdownOccured,
-            Self::Heartbeat(..) => NotificationKind::Heartbeat,
         }
     }
 }

@@ -25,11 +25,10 @@ version = "0.1.0"
 dependencies = [
  "beat",
  "config",
- "control",
  "cue",
  "event",
  "mem",
- "notification",
+ "protocol",
  "time",
 ]
 
@@ -38,20 +37,6 @@ name = "config"
 version = "0.1.0"
 dependencies = [
  "bitflags",
- "mem",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "control"
-version = "0.1.0"
-dependencies = [
- "beat",
- "bitflags",
- "config",
- "cue",
- "event",
  "mem",
  "serde",
  "serde_json",
@@ -89,6 +74,7 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 name = "mem"
 version = "0.1.0"
 dependencies = [
+ "bitflags",
  "serde",
  "serde_json",
 ]
@@ -100,7 +86,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
 
 [[package]]
-name = "notification"
+name = "proc-macro2"
+version = "1.0.103"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ee95bc4ef87b8d5ba32e8b7714ccc834865276eab0aed5c9958d00ec45f49e8"
+dependencies = [
+ "unicode-ident",
+]
+
+[[package]]
+name = "protocol"
 version = "0.1.0"
 dependencies = [
  "beat",
@@ -111,16 +106,8 @@ dependencies = [
  "mem",
  "serde",
  "serde_json",
+ "status",
  "time",
-]
-
-[[package]]
-name = "proc-macro2"
-version = "1.0.103"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ee95bc4ef87b8d5ba32e8b7714ccc834865276eab0aed5c9958d00ec45f49e8"
-dependencies = [
- "unicode-ident",
 ]
 
 [[package]]
@@ -188,6 +175,21 @@ dependencies = [
  "ryu",
  "serde",
  "serde_core",
+]
+
+[[package]]
+name = "status"
+version = "0.1.0"
+dependencies = [
+ "beat",
+ "bitflags",
+ "config",
+ "cue",
+ "event",
+ "mem",
+ "serde",
+ "serde_json",
+ "time",
 ]
 
 [[package]]
