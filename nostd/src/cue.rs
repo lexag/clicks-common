@@ -1,211 +1,26 @@
-use crate::str::{String32, String8};
-use core::fmt;
+use crate::{
+    beat::Beat,
+    event::{BeatEvent, BeatEventContainer, JumpModeChange, JumpRequirement},
+    eventcursor::EventCursor,
+    str::String32,
+};
 use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
-
-#[derive(Clone, Serialize, Deserialize, Default, PartialEq, Copy)]
-pub struct Beat {
-    pub count: u8,
-    pub bar_number: u8,
-    pub length: u32,
-}
-
-impl fmt::Debug for Beat {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Beat")
-            .field("count", &self.count)
-            .field("length", &self.length)
-            .finish()
-    }
-}
-
-impl Beat {
-    pub fn empty() -> Beat {
-        Beat {
-            count: 0,
-            bar_number: 0,
-            length: 0,
-        }
-    }
-
-    //pub fn events_filter<F>(&self, filter: F) -> Vec<BeatEvent>
-    //where
-    //    F: Fn(&BeatEvent) -> bool,
-    //{
-    //    self.events.iter().filter(|e| filter(e)).cloned().collect()
-    //}
-
-    pub fn tempo(&self) -> u16 {
-        if self.length == 0 {
-            return 0;
-        }
-        (60000000.0 / self.length as f32).round() as u16
-    }
-}
-
-#[derive(Clone, Serialize, Deserialize, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
-pub enum JumpRequirement {
-    JumpModeOn,
-    JumpModeOff,
-    None,
-}
-
-impl fmt::Display for JumpRequirement {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            JumpRequirement::JumpModeOn => write!(f, "VLT On"),
-            JumpRequirement::JumpModeOff => write!(f, "VLT Off"),
-            JumpRequirement::None => write!(f, "None"),
-        }
-    }
-}
-
-#[derive(Clone, Serialize, Deserialize, PartialEq, Debug, Default, PartialOrd, Ord, Eq, Copy)]
-pub enum JumpModeChange {
-    SetOn,
-    SetOff,
-    Toggle,
-    #[default]
-    None,
-}
-
-impl fmt::Display for JumpModeChange {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            JumpModeChange::SetOn => write!(f, "Set VLT"),
-            JumpModeChange::SetOff => write!(f, "Trip VLT"),
-            JumpModeChange::Toggle => write!(f, "Toggle VLT"),
-            JumpModeChange::None => write!(f, "None"),
-        }
-    }
-}
-impl JumpModeChange {
-    pub fn vlt(&self, vlt: bool) -> bool {
-        match self {
-            JumpModeChange::SetOn => true,
-            JumpModeChange::SetOff => false,
-            JumpModeChange::Toggle => !vlt,
-            JumpModeChange::None => vlt,
-        }
-    }
-}
-
-#[derive(Clone, Serialize, Deserialize, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
-pub enum PauseEventBehaviour {
-    Hold,
-    RestartBeat,
-    RestartCue,
-    NextCue,
-    Jump { destination: u16 },
-}
-
-impl fmt::Display for PauseEventBehaviour {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            PauseEventBehaviour::Hold => {
-                write!(f, "Hold")
-            }
-            PauseEventBehaviour::RestartBeat => {
-                write!(f, "Restart beat")
-            }
-            PauseEventBehaviour::RestartCue => {
-                write!(f, "Restart cue")
-            }
-            PauseEventBehaviour::NextCue => {
-                write!(f, "Next cue")
-            }
-            PauseEventBehaviour::Jump { .. } => {
-                write!(f, "Jump to beat")
-            }
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy)]
-pub struct BeatEventContainer {
-    location: u16,
-    event: Option<BeatEvent>,
-}
-
-impl Default for BeatEventContainer {
-    fn default() -> Self {
-        Self {
-            location: u16::MAX,
-            event: None,
-        }
-    }
-}
-
-#[derive(Clone, Serialize, Deserialize, PartialEq, Debug, Ord, PartialOrd, Eq, Copy)]
-pub enum BeatEvent {
-    JumpEvent {
-        destination: u16,
-        requirement: JumpRequirement,
-        when_jumped: JumpModeChange,
-        when_passed: JumpModeChange,
-    },
-    TempoChangeEvent {
-        tempo: u16,
-    },
-    GradualTempoChangeEvent {
-        start_tempo: u16,
-        end_tempo: u16,
-        length: u16,
-    },
-    PlaybackEvent {
-        channel_idx: u16,
-        clip_idx: u16,
-        sample: i32,
-    },
-    PlaybackStopEvent {
-        channel_idx: u16,
-    },
-    TimecodeEvent {
-        h: u8,
-        m: u8,
-        s: u8,
-        f: u8,
-    },
-    RehearsalMarkEvent {
-        label: String8,
-    },
-    PauseEvent {
-        behaviour: PauseEventBehaviour,
-    },
-}
-
-impl BeatEvent {
-    pub fn get_name(&self) -> &str {
-        match self {
-            BeatEvent::JumpEvent { .. } => "Jump",
-            BeatEvent::TempoChangeEvent { .. } => "Tempo Change",
-            BeatEvent::GradualTempoChangeEvent { .. } => "Gradual Tempo Change",
-            BeatEvent::PlaybackEvent { .. } => "Playback",
-            BeatEvent::PlaybackStopEvent { .. } => "Playback Stop",
-            BeatEvent::TimecodeEvent { .. } => "Timecode",
-            BeatEvent::RehearsalMarkEvent { .. } => "Rehearsal Mark",
-            BeatEvent::PauseEvent { .. } => "Pause Event",
-        }
-    }
-}
-
-const CUE_LENGTH: usize = 512;
-const EVENT_SLOTS: usize = 64;
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Cue {
     pub metadata: CueMetadata,
     #[serde(with = "BigArray")]
-    pub beats: [Beat; CUE_LENGTH],
+    pub beats: [Beat; Cue::CUE_LENGTH],
     #[serde(with = "BigArray")]
-    pub events: [BeatEventContainer; EVENT_SLOTS],
+    pub events: [BeatEventContainer; Self::EVENT_SLOTS],
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CueSkeleton {
     pub metadata: CueMetadata,
     #[serde(with = "BigArray")]
-    pub events: [BeatEventContainer; EVENT_SLOTS],
+    pub events: [BeatEventContainer; Cue::EVENT_SLOTS],
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq)]
@@ -221,10 +36,13 @@ impl Default for Cue {
 }
 
 impl Cue {
+    pub const CUE_LENGTH: usize = 512;
+    pub const EVENT_SLOTS: usize = 64;
+
     pub fn empty() -> Cue {
         Cue {
-            events: [BeatEventContainer::default(); EVENT_SLOTS],
-            beats: [Beat::empty(); CUE_LENGTH],
+            events: [BeatEventContainer::default(); Self::EVENT_SLOTS],
+            beats: [Beat::empty(); Self::CUE_LENGTH],
             metadata: CueMetadata::default(),
         }
     }
@@ -278,13 +96,13 @@ impl Cue {
     }
 
     pub fn get_beat(&self, idx: u16) -> Option<Beat> {
-        if self.beats[idx as usize].length == 0 || CUE_LENGTH <= idx as usize {
+        if self.beats[idx as usize].length == 0 || Self::CUE_LENGTH <= idx as usize {
             return None;
         }
         Some(self.beats[idx as usize])
     }
 
-    pub fn get_beats(&self) -> [Beat; CUE_LENGTH] {
+    pub fn get_beats(&self) -> [Beat; Self::CUE_LENGTH] {
         self.beats
     }
 
@@ -355,37 +173,5 @@ impl Cue {
 
         drop(cursor);
         self.beats = new_beats;
-    }
-}
-
-pub struct EventCursor<'a> {
-    cursor: u8,
-    cue: &'a Cue,
-}
-
-impl<'a> EventCursor<'a> {
-    fn new(cue: &'a Cue) -> EventCursor<'a> {
-        Self { cursor: 0, cue }
-    }
-
-    fn seek(&mut self, location: u16) {
-        if self.location() > location {
-            self.cursor = 0;
-        }
-        while self.location() < location && self.cursor < EVENT_SLOTS as u8 {
-            self.cursor += 1;
-        }
-    }
-
-    fn location(&self) -> u16 {
-        self.cue.events[self.cursor as usize].location
-    }
-
-    fn get(&mut self) -> BeatEventContainer {
-        self.cue.events[self.cursor as usize]
-    }
-
-    fn step(&mut self) {
-        self.cursor += (self.cursor + 1).min(EVENT_SLOTS as u8);
     }
 }

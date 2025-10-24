@@ -2,7 +2,7 @@ use core::fmt;
 use core::{error::Error, result};
 use serde::{Deserialize, Serialize};
 
-use crate::cue::JumpModeChange;
+use crate::event::JumpModeChange;
 
 #[derive(Clone, Deserialize, Serialize, Debug, PartialEq)]
 pub enum ControlCommand {

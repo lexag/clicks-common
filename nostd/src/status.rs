@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    beat::Beat,
     config::SystemConfiguration,
-    cue::{Beat, Cue, JumpModeChange},
+    cue::Cue,
+    event::JumpModeChange,
     network::{Heartbeat, JACKStatus, NetworkStatus},
     show::Show,
     timecode::TimecodeInstant,
