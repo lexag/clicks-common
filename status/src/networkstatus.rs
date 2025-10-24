@@ -1,4 +1,4 @@
-use config::network::SubscriberInfo;
+use crate::network::SubscriberInfo;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Default, Clone)]

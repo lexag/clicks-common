@@ -9,8 +9,8 @@ beat = { path = "../beat" }
 time = { path = "../time" }
 protocol = { path = "../protocol" }
 mem = { path = "../mem" }
-config = { path = "../config" }
 event = { path = "../event" }
+status = { path = "../status" }
 
 [features]
 builders = ["cue/builders"]

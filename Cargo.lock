@@ -24,22 +24,12 @@ name = "common"
 version = "0.1.0"
 dependencies = [
  "beat",
- "config",
  "cue",
  "event",
  "mem",
  "protocol",
+ "status",
  "time",
-]
-
-[[package]]
-name = "config"
-version = "0.1.0"
-dependencies = [
- "bitflags",
- "mem",
- "serde",
- "serde_json",
 ]
 
 [[package]]
@@ -100,7 +90,6 @@ version = "0.1.0"
 dependencies = [
  "beat",
  "bitflags",
- "config",
  "cue",
  "event",
  "mem",
@@ -183,7 +172,6 @@ version = "0.1.0"
 dependencies = [
  "beat",
  "bitflags",
- "config",
  "cue",
  "event",
  "mem",

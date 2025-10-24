@@ -1,8 +1,10 @@
 pub mod audiosource;
 pub mod beatstate;
 pub mod combinedstatus;
+pub mod config;
 pub mod cuestate;
 pub mod jackstatus;
+pub mod network;
 pub mod networkstatus;
 pub mod playbackstate;
 pub mod transportstate;

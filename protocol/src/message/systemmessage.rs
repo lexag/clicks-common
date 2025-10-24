@@ -1,10 +1,9 @@
 use crate::message::heartbeat::Heartbeat;
-use config::config::SystemConfiguration;
 use mem::message::NotificationKind;
 use serde::{Deserialize, Serialize};
 use status::{
-    beatstate::BeatState, cuestate::CueState, jackstatus::JACKStatus, networkstatus::NetworkStatus,
-    transportstate::TransportState,
+    beatstate::BeatState, config::SystemConfiguration, cuestate::CueState, jackstatus::JACKStatus,
+    networkstatus::NetworkStatus, transportstate::TransportState,
 };
 
 #[derive(Deserialize, Serialize, Clone, Debug)]

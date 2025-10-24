@@ -1,9 +1,9 @@
 use crate::request::command::ControlCommand;
-use config::{
+use serde::{Deserialize, Serialize};
+use status::{
     config::SystemConfiguration,
     network::{ConnectionInfo, SubscriberInfo},
 };
-use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ControlMessageKind {
