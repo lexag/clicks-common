@@ -1,7 +1,7 @@
 use crate::{heartbeat::Heartbeat, jackstatus::JACKStatus, networkstatus::NetworkStatus};
-use beat::beat::Beat;
+use beat::Beat;
 use config::{config::SystemConfiguration, notificationkind::NotificationKind};
-use cue::{cue::Cue, show::Show};
+use cue::{Cue, Show};
 use event::event::JumpModeChange;
 use serde::{Deserialize, Serialize};
 use time::timecode::TimecodeInstant;

@@ -1,3 +1,13 @@
-pub mod cue;
-pub mod show;
-pub mod showbuilder;
+mod cue;
+pub use cue::Cue;
+pub use cue::CueMetadata;
+pub use cue::CueSkeleton;
+
+mod show;
+pub use show::Show;
+pub use show::ShowMetadata;
+pub use show::ShowSkeleton;
+
+mod showbuilder;
+#[cfg(feature = "builders")]
+pub use showbuilder::ShowBuilder;

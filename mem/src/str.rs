@@ -19,6 +19,12 @@ impl String32 {
         a[..str.len().min(32)].copy_from_slice(&str.as_bytes()[..str.len().min(32)]);
         Self { content: a }
     }
+
+    pub fn set_char(&mut self, idx: usize, char: u8) {
+        if idx < self.content.len() {
+            self.content[idx] = char;
+        }
+    }
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
@@ -35,5 +41,11 @@ impl String8 {
         let mut a = [0x0; 8];
         a[..str.len().min(8)].copy_from_slice(&str.as_bytes()[..str.len().min(8)]);
         Self { content: a }
+    }
+
+    pub fn set_char(&mut self, idx: usize, char: u8) {
+        if idx < self.content.len() {
+            self.content[idx] = char;
+        }
     }
 }

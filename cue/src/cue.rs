@@ -1,4 +1,4 @@
-use beat::beat::Beat;
+use beat::Beat;
 use event::{
     event::{Event, EventDescription},
     eventcursor::EventCursor,

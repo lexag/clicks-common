@@ -12,3 +12,6 @@ notification = { path = "../notification" }
 mem = { path = "../mem" }
 config = { path = "../config" }
 event = { path = "../event" }
+
+[features]
+builders = ["cue/builders"]

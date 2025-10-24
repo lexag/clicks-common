@@ -1,1 +1,2 @@
-pub mod beat;
+mod beat;
+pub use beat::Beat;
