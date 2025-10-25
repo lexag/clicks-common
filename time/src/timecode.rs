@@ -48,7 +48,16 @@ impl TimecodeInstant {
         self.propagate();
     }
     pub fn sub_us(&mut self, time_us: u64) {
-        self.f -= (time_us * self.frame_rate as u64 / 1000000) as i16;
+        let mut tci = TimecodeInstant::new(self.frame_rate);
+        tci.add_us(time_us);
+        self.sub(tci);
+    }
+
+    pub fn sub(&mut self, other: TimecodeInstant) {
+        self.f -= other.f;
+        self.s -= other.s;
+        self.m -= other.m;
+        self.h -= other.h;
         self.propagate();
     }
 
@@ -92,6 +101,7 @@ mod tests {
     fn add_sub_identity() {
         let time_const = TimecodeInstant::new(25);
         for i in (0..36000 * 1000000).step_by(123456) {
+            println!("Adding and subtracting {i}");
             let mut time = time_const.clone();
             time.add_us(i);
             time.sub_us(i);
