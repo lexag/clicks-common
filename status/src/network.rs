@@ -1,11 +1,11 @@
-use mem::{message::NotificationKind, str::String32};
+use mem::{message::MessageType, str::String32};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq)]
 pub struct SubscriberInfo {
     pub identifier: String32,
     pub address: IpAddress,
-    pub message_kinds: NotificationKind,
+    pub message_kinds: MessageType,
     pub last_contact: u128,
 }
 
