@@ -1,3 +1,12 @@
-pub mod event;
-pub mod eventcursor;
-pub mod table;
+mod event;
+pub use event::Event;
+pub use event::EventDescription;
+pub use event::JumpModeChange;
+pub use event::JumpRequirement;
+pub use event::PauseEventBehaviour;
+
+mod eventcursor;
+pub use eventcursor::EventCursor;
+
+mod table;
+pub use table::EventTable;

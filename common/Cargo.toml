@@ -6,11 +6,10 @@ edition = "2024"
 [dependencies]
 cue = { path = "../cue" }
 beat = { path = "../beat" }
-time = { path = "../time" }
 protocol = { path = "../protocol" }
 mem = { path = "../mem" }
 event = { path = "../event" }
-status = { path = "../status" }
+local = { path = "../local" }
 
 [features]
 builders = ["cue/builders"]

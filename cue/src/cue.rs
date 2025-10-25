@@ -1,9 +1,5 @@
 use beat::Beat;
-use event::{
-    event::{Event, EventDescription},
-    eventcursor::EventCursor,
-    table::EventTable,
-};
+use event::{Event, EventCursor, EventDescription, EventTable, JumpModeChange, JumpRequirement};
 use mem::str::String32;
 use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
@@ -94,9 +90,9 @@ impl Cue {
                 location: 3,
                 event: Some(EventDescription::JumpEvent {
                     destination: 0,
-                    requirement: event::event::JumpRequirement::None,
-                    when_jumped: event::event::JumpModeChange::None,
-                    when_passed: event::event::JumpModeChange::None,
+                    requirement: JumpRequirement::None,
+                    when_jumped: JumpModeChange::None,
+                    when_passed: JumpModeChange::None,
                 }),
             },
         );
@@ -138,7 +134,7 @@ impl Cue {
 
     pub fn recalculate_tempo_changes(&mut self) {
         let mut beat_length: u32 = 1000000 * 60 / 120;
-        let mut beats_left_in_change = 0;
+        let mut beats_left_in_change: u16 = 0;
         let mut accelerator: f32 = 0.0;
 
         let mut new_beats = self.beats;

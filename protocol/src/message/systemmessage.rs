@@ -1,10 +1,10 @@
 use crate::message::heartbeat::Heartbeat;
-use mem::message::MessageType;
-use serde::{Deserialize, Serialize};
-use status::{
-    beatstate::BeatState, config::SystemConfiguration, cuestate::CueState, jackstatus::JACKStatus,
-    networkstatus::NetworkStatus, transportstate::TransportState,
+use local::{
+    config::SystemConfiguration,
+    status::{BeatState, CueState, JACKStatus, NetworkStatus, TransportState},
 };
+use mem::typeflags::MessageType;
+use serde::{Deserialize, Serialize};
 
 #[allow(clippy::large_enum_variant)]
 #[derive(Deserialize, Serialize, Clone, Debug)]

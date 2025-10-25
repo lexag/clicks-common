@@ -1,4 +1,4 @@
-use crate::network::SubscriberInfo;
+use mem::network::SubscriberInfo;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Default, Clone)]

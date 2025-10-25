@@ -26,10 +26,9 @@ dependencies = [
  "beat",
  "cue",
  "event",
+ "local",
  "mem",
  "protocol",
- "status",
- "time",
 ]
 
 [[package]]
@@ -59,6 +58,19 @@ name = "itoa"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
+
+[[package]]
+name = "local"
+version = "0.1.0"
+dependencies = [
+ "beat",
+ "bitflags",
+ "cue",
+ "event",
+ "mem",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "mem"
@@ -92,11 +104,10 @@ dependencies = [
  "bitflags",
  "cue",
  "event",
+ "local",
  "mem",
  "serde",
  "serde_json",
- "status",
- "time",
 ]
 
 [[package]]
@@ -167,20 +178,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "status"
-version = "0.1.0"
-dependencies = [
- "beat",
- "bitflags",
- "cue",
- "event",
- "mem",
- "serde",
- "serde_json",
- "time",
-]
-
-[[package]]
 name = "syn"
 version = "2.0.108"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -189,15 +186,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
-]
-
-[[package]]
-name = "time"
-version = "0.1.0"
-dependencies = [
- "mem",
- "serde",
- "serde_json",
 ]
 
 [[package]]

@@ -1,4 +1,4 @@
-use mem::str::String8;
+use crate::str::String8;
 
 pub fn format_hms(time_t: u64) -> String8 {
     let day_time = time_t % 86400;

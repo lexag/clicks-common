@@ -1,5 +1,5 @@
 use beat::Beat;
-use event::event::JumpModeChange;
+use event::JumpModeChange;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]

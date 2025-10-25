@@ -9,7 +9,6 @@ serde_json = "1.0.145"
 beat = { path = "../beat" }
 event = { path = "../event" }
 cue = { path = "../cue" }
-time = { path = "../time" }
 mem = { path = "../mem" }
-status = { path = "../status" }
+local = { path = "../local" }
 bitflags = { version = "2.10.0", features = ["serde"] }

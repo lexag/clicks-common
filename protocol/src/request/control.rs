@@ -1,22 +1,10 @@
 use crate::request::command::ControlAction;
-use serde::{Deserialize, Serialize};
-use status::{
-    config::SystemConfigurationChange,
+use local::config::SystemConfigurationChange;
+use mem::{
     network::{ConnectionInfo, SubscriberInfo},
+    typeflags::RequestType,
 };
-
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum RequestType {
-    NotifySubscribers,
-    Shutdown,
-    Initialize,
-    RoutingChange,
-    ControlCommand,
-    Subscribe,
-    Unsubscribe,
-    SetConfiguration,
-    Ping,
-}
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub enum Request {

@@ -1,4 +1,4 @@
-use mem::{message::MessageType, str::String32};
+use crate::{message::MessageType, str::String32};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq)]

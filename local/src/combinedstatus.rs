@@ -4,7 +4,7 @@ use crate::{
     transportstate::TransportState,
 };
 use cue::Show;
-use time::timecode::TimecodeInstant;
+use mem::smpte::TimecodeInstant;
 
 #[derive(Clone, Debug)]
 pub struct CombinedStatus {

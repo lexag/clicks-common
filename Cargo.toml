@@ -1,4 +1,4 @@
 [workspace]
 resolver = "3"
-members = ["beat", "common", "cue", "event", "mem", "protocol", "status", "time"]
+members = ["beat", "common", "cue", "event", "mem", "protocol", "local"]
 
