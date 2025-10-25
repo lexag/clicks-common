@@ -1,5 +1,5 @@
 use core::fmt;
-use core::{error::Error, result};
+use core::result;
 use serde::{Deserialize, Serialize};
 
 use event::event::JumpModeChange;
@@ -39,32 +39,6 @@ impl fmt::Display for ControlCommand {
             ControlCommand::SetChannelMute(..) => write!(f, "SetChannelMute"),
             ControlCommand::ChangeJumpMode(..) => write!(f, "ChangeJumpMode"),
             ControlCommand::ChangePlayrate(..) => write!(f, "ChangePlayrate"),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub enum CommandError {
-    UnknownCommand,
-    IsRunning,
-    IsNotRunning,
-}
-
-impl fmt::Display for CommandError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            CommandError::UnknownCommand => write!(f, "Unknown command"),
-            _ => {
-                write!(f, "")
-            }
-        }
-    }
-}
-
-impl Error for CommandError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        match self {
-            _ => None,
         }
     }
 }
