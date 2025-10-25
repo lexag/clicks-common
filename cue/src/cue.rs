@@ -170,7 +170,6 @@ impl Cue {
             }
         }
 
-        drop(cursor);
         self.beats = new_beats;
     }
 }
