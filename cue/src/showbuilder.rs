@@ -2,9 +2,14 @@ use crate::show::Show;
 use serde::de::Error;
 use std::path::PathBuf;
 
+#[allow(dead_code)]
+/// Builder type for [Show]
 pub struct ShowBuilder {}
 
+#[allow(dead_code)]
 impl ShowBuilder {
+    /// Load a [Show] from a show.json file
+    /// Returns an error if the file can't be read or if the json is invalid utf8
     pub fn from_file(path: PathBuf) -> Result<Show, serde_json::Error> {
         let file = match std::fs::read(path) {
             Ok(val) => val,
