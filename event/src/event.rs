@@ -95,6 +95,15 @@ impl Default for Event {
     }
 }
 
+impl Event {
+    pub fn new(location: u16, description: EventDescription) -> Self {
+        Self {
+            location,
+            event: Some(description),
+        }
+    }
+}
+
 #[derive(Clone, Serialize, Deserialize, PartialEq, Debug, Ord, PartialOrd, Eq, Copy)]
 pub enum EventDescription {
     JumpEvent {
