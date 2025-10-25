@@ -1,48 +1,48 @@
-use crate::request::command::ControlCommand;
+use crate::request::command::ControlAction;
 use serde::{Deserialize, Serialize};
 use status::{
-    config::SystemConfiguration,
+    config::SystemConfigurationChange,
     network::{ConnectionInfo, SubscriberInfo},
 };
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum ControlMessageKind {
+pub enum RequestType {
     NotifySubscribers,
     Shutdown,
     Initialize,
-    RoutingChangeRequest,
+    RoutingChange,
     ControlCommand,
-    SubscribeRequest,
-    UnsubscribeRequest,
-    SetConfigurationRequest,
+    Subscribe,
+    Unsubscribe,
+    SetConfiguration,
     Ping,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
-pub enum ControlMessage {
+pub enum Request {
     NotifySubscribers,
     Shutdown,
     Initialize,
-    RoutingChangeRequest(usize, usize, bool),
-    ControlCommand(ControlCommand),
-    SubscribeRequest(SubscriberInfo),
-    UnsubscribeRequest(ConnectionInfo),
-    SetConfigurationRequest(SystemConfiguration),
+    ChangeRouting(usize, usize, bool),
+    ControlAction(ControlAction),
+    Subscribe(SubscriberInfo),
+    Unsubscribe(ConnectionInfo),
+    ChangeConfiguration(SystemConfigurationChange),
     Ping,
 }
 
-impl ControlMessage {
-    pub fn to_kind(&self) -> ControlMessageKind {
+impl Request {
+    pub fn to_kind(&self) -> RequestType {
         match self {
-            Self::NotifySubscribers => ControlMessageKind::NotifySubscribers,
-            Self::Shutdown => ControlMessageKind::Shutdown,
-            Self::Initialize => ControlMessageKind::Initialize,
-            Self::RoutingChangeRequest(..) => ControlMessageKind::RoutingChangeRequest,
-            Self::ControlCommand(..) => ControlMessageKind::ControlCommand,
-            Self::SubscribeRequest(..) => ControlMessageKind::SubscribeRequest,
-            Self::UnsubscribeRequest(..) => ControlMessageKind::UnsubscribeRequest,
-            Self::SetConfigurationRequest(..) => ControlMessageKind::SetConfigurationRequest,
-            Self::Ping => ControlMessageKind::Ping,
+            Self::NotifySubscribers => RequestType::NotifySubscribers,
+            Self::Shutdown => RequestType::Shutdown,
+            Self::Initialize => RequestType::Initialize,
+            Self::ChangeRouting(..) => RequestType::RoutingChange,
+            Self::ControlAction(..) => RequestType::ControlCommand,
+            Self::Subscribe(..) => RequestType::Subscribe,
+            Self::Unsubscribe(..) => RequestType::Unsubscribe,
+            Self::ChangeConfiguration(..) => RequestType::SetConfiguration,
+            Self::Ping => RequestType::Ping,
         }
     }
 }

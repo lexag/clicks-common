@@ -1,13 +1,14 @@
 use crate::message::heartbeat::Heartbeat;
-use mem::message::NotificationKind;
+use mem::message::MessageType;
 use serde::{Deserialize, Serialize};
 use status::{
     beatstate::BeatState, config::SystemConfiguration, cuestate::CueState, jackstatus::JACKStatus,
     networkstatus::NetworkStatus, transportstate::TransportState,
 };
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Deserialize, Serialize, Clone, Debug)]
-pub enum Notification {
+pub enum Message {
     TransportChanged(TransportState),
     BeatChanged(BeatState),
     CueChanged(CueState),
@@ -18,17 +19,17 @@ pub enum Notification {
     Heartbeat(Heartbeat),
 }
 
-impl Notification {
-    pub fn to_kind(&self) -> NotificationKind {
+impl Message {
+    pub fn to_kind(&self) -> MessageType {
         match self {
-            Self::TransportChanged(..) => NotificationKind::TransportChanged,
-            Self::BeatChanged(..) => NotificationKind::BeatChanged,
-            Self::CueChanged(..) => NotificationKind::JACKStateChanged,
-            Self::NetworkChanged(..) => NotificationKind::ShowChanged,
-            Self::JACKStateChanged(..) => NotificationKind::NetworkChanged,
-            Self::ConfigurationChanged(..) => NotificationKind::ConfigurationChanged,
-            Self::ShutdownOccured => NotificationKind::ShutdownOccured,
-            Self::Heartbeat(..) => NotificationKind::Heartbeat,
+            Self::TransportChanged(..) => MessageType::TransportChanged,
+            Self::BeatChanged(..) => MessageType::BeatChanged,
+            Self::CueChanged(..) => MessageType::JACKStateChanged,
+            Self::NetworkChanged(..) => MessageType::ShowChanged,
+            Self::JACKStateChanged(..) => MessageType::NetworkChanged,
+            Self::ConfigurationChanged(..) => MessageType::ConfigurationChanged,
+            Self::ShutdownOccured => MessageType::ShutdownOccured,
+            Self::Heartbeat(..) => MessageType::Heartbeat,
         }
     }
 }

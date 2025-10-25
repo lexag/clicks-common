@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 bitflags::bitflags! {
     #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-    pub struct NotificationKind: u8 {
+    pub struct MessageType: u8 {
         const TransportChanged = 0x01;
         const BeatChanged = 0x01;
         const CueChanged = 0x02;
