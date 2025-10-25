@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 mod audioconfig;
 mod audiosource;
 mod beatstate;

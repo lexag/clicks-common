@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 mod message;
 mod request;
 mod timecode;

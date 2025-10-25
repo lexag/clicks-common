@@ -1,3 +1,5 @@
+#![warn(missing_docs)]
+//! Definitions of cue and show
 mod cue;
 pub use cue::Cue;
 pub use cue::CueMetadata;

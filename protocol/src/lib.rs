@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 /// Definition of messages sent core -> client
 pub mod message;
 

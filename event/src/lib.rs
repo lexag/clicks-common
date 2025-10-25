@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 mod event;
 pub use event::Event;
 pub use event::EventDescription;

@@ -2,9 +2,7 @@
 //! This crate contains common functionality and data formats shared between the ClicKS core and
 //! client components
 
-/// Definition of beat, the lowest-level timing unit in a Cue definition
 pub use beat;
-/// Definitions of cue and show
 pub use cue;
 /// Event types
 pub use event;
