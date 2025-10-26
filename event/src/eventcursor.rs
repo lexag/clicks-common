@@ -20,12 +20,12 @@ impl<'a> EventCursor<'a> {
     /// Move cursor to point to the next event after or on the location index.
     ///
     /// Example:
-    /// ```
+    /// <code>
     /// Table [0, 2, 4, 6, 8]
     /// seek(0) -> cursor 0 (loc 0)
     /// seek(1) -> cursor 1 (loc 2)
     /// seek(2) -> cursor 1 (loc 2)
-    /// ```
+    /// </code>
     pub fn seek(&mut self, location: u16) {
         if self.location() > location {
             self.cursor = 0;
@@ -54,13 +54,13 @@ impl<'a> EventCursor<'a> {
     }
 
     /// True if cursor is at or before the given location
-    /// ```
+    /// <code>
     /// while cursor.at_or_before(location) {
     ///     cursor.get_next();
     ///     // Will iterate all events up to and including the current beat (location)
     ///     // and leave the cursor pointing to the next unhandled event after this beat
     /// }
-    /// ```
+    /// </code>
     pub fn at_or_before(&self, location: u16) -> bool {
         self.location() <= location
     }
