@@ -130,6 +130,17 @@ impl Event {
             event: Some(description),
         }
     }
+
+    /// Create a new null event, without location or event desciption
+    pub fn null() -> Self {
+        Self::default()
+    }
+
+    /// Is this event null (opposite of populated), i.e. is this event just an empty slot in the
+    /// event table (true), or an actual event (false)?
+    pub fn is_null(&self) -> bool {
+        self.location == u16::MAX || self.event.is_none()
+    }
 }
 
 /// EventDescription contains definitions for all event types, and the data they contain

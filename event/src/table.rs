@@ -7,6 +7,7 @@ use serde_big_array::BigArray;
 pub struct EventTable {
     #[serde(with = "BigArray")]
     table: [Event; Self::SIZE],
+    table_ptr: u8,
 }
 
 impl EventTable {
@@ -18,6 +19,7 @@ impl EventTable {
     pub fn empty() -> Self {
         Self {
             table: [Event::default(); Self::SIZE],
+            table_ptr: 0,
         }
     }
 
@@ -45,5 +47,30 @@ impl EventTable {
     /// Unpopulated events (null-events) will be at the end of the table
     pub fn sort(&mut self) {
         self.table.sort_by_key(|o| o.location);
+    }
+
+    /// Add an event to this table.
+    /// The table will be sorted to place the new event in order.
+    /// This may break existing [crate::eventcursor::EventCursor]s
+    pub fn push(&mut self, event: Event) -> bool {
+        if self.table_ptr as usize >= Self::SIZE - 1 {
+            return false;
+        }
+        self.set(self.table_ptr, event);
+        self.table_ptr += 1;
+        self.sort();
+        true
+    }
+
+    /// Remove an event from the table by index.
+    /// The event is returned and the table is resorted to fill the gap
+    pub fn pop(&mut self, idx: u8) -> Option<Event> {
+        let e = self.get(idx);
+        if e.is_null() {
+            return None;
+        }
+        self.set(idx, Event::null());
+        self.sort();
+        Some(e)
     }
 }
