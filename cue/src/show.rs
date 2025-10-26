@@ -15,7 +15,7 @@ pub struct Show {
     pub cues: [Cue; 32],
 }
 
-/// Metadata for a Show instance. Like with [CueMetadata], anything that is human readable and
+/// Metadata for a Show instance. Like with [crate::cue::CueMetadata], anything that is human readable and
 /// might be of interest to anyone without in-depth technical knowledge about the inner workings
 /// of ClicKS should be in ShowMetadata in a human readable format.
 #[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -49,8 +49,8 @@ pub struct JACKStatus {
     pub frame_size: usize,
     /// Active routing connections between the ClicKS JACK audio client and the JACK audio server.
     /// Each entry corresponds to one ClicKS audio channel, and each bit in the entry to one JACK
-    /// server hardware out. I.e. if connections[0] == 0x0003, the metronome audio (ClicKS channel 1)
-    /// is routed to hardware outputs 1 and 2.
+    /// server hardware out. I.e. if <code>connections\[0\] == 0x0003</code>, the metronome audio
+    /// (ClicKS channel 1) is routed to hardware outputs 1 and 2.
     /// Only available after audio processing starts.
     pub connections: [u32; 32],
     /// Name of the JACK client

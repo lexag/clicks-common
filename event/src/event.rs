@@ -2,7 +2,7 @@ use core::fmt;
 use mem::str::String8;
 use serde::{Deserialize, Serialize};
 
-/// Conditional VLT requirement to perform a [JumpEvent].
+/// Conditional VLT requirement to perform a [EventDescription::JumpEvent].
 #[derive(Clone, Serialize, Deserialize, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
 pub enum JumpRequirement {
     /// VLT must be on

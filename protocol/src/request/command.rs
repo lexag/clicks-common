@@ -4,22 +4,49 @@ use serde::{Deserialize, Serialize};
 
 use event::JumpModeChange;
 
+/// Actions contained in a ControlAction request, representing actions on the core that can be
+/// executed safely during realtime playback.
+/// A ControlAction must not take enough time to disturb the audio thread, and should in general be
+/// lightweight actions.
 #[derive(Clone, Deserialize, Serialize, Debug, PartialEq)]
 pub enum ControlAction {
+    /// Start transport playback running.
     TransportStart,
+    /// Stop transport playback running.
     TransportStop,
+    /// Move transport to beginning of cue.
     TransportZero,
+    /// Seek to a specific beat index.
+    /// Seek does not need to obey beat timing, and should be executed immediately, but should land
+    /// in time with the playback, if playback is running, such that the tempo is not disturbed in
+    /// a constant tempo cue.
     TransportSeekBeat(usize),
+    /// Jump to a specific beat index.
+    /// Jump must obey beat timing, and can only set the next beat pointer to the destination and
+    /// await a jump.
     TransportJumpBeat(usize),
+    /// Load a cue indexed in the loaded show by the given index.
     LoadCueByIndex(usize),
+    /// Load a cue from the audio processor's internal cue index register. Generally unused by
+    /// clients, and only called internally.
     LoadCueFromSelfIndex,
+    /// Increment the audio processor's internal cue index register, and call LoadCueFromSelfIndex
     LoadNextCue,
+    /// Decrement the audio processor's internal cue index register, and call LoadCueFromSelfIndex
     LoadPreviousCue,
+    /// Internal action for inter-thread status report. Causes the audio processor to dump messages
+    /// containing various system status information out to the main thread and onto the network.
     DumpStatus,
+    /// Set the gain of a channel by index and gain. 0dB is default.
     SetChannelGain(usize, f32),
+    /// Set the mute state of a channel by index
     SetChannelMute(usize, bool),
+    /// Change VLT setting with a JumpModeChange
     ChangeJumpMode(JumpModeChange),
-    ChangePlayrate(usize),
+    /// Change the playrate.
+    /// A playrate different from 100% (0x0064) will currently disable audio and LTC playback, and
+    /// only run the metronome
+    ChangePlayrate(u16),
 }
 
 impl fmt::Display for ControlAction {
