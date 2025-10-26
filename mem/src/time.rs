@@ -1,5 +1,6 @@
 use crate::str::String8;
 
+/// Format a unix timestamp (or similar) into hh:mm:ss
 pub fn format_hms(time_t: u64) -> String8 {
     let day_time = time_t % 86400;
     let mut s = String8::empty();
@@ -14,6 +15,7 @@ pub fn format_hms(time_t: u64) -> String8 {
     s
 }
 
+/// Format a unix timestamp (or similar) into hh:mm
 pub fn format_hm(time_t: u64) -> String8 {
     let day_time = time_t % 86400;
     let mut s = String8::empty();

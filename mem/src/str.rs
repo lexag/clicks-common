@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
-
 // FIXME: this entire thing should probably be macroified and maybe have compile-time dynamic
 // length strings, so that you can specify type ConstString(24) for a 24 char string, or
 // something...
-
 #[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
 pub struct String32 {
     content: [u8; 32],

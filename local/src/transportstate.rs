@@ -1,12 +1,18 @@
 use mem::smpte::TimecodeInstant;
 use serde::{Deserialize, Serialize};
 
+/// Status of current transport location and state
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TransportState {
+    /// Time left to next beat in us
     pub us_to_next_beat: u16,
+    /// Is transport currently running, i.e. is location changing
     pub running: bool,
+    /// VLT state
     pub vlt: bool,
+    /// current LTC timestamp
     pub ltc: TimecodeInstant,
+    /// Playrate in percent
     pub playrate_percent: u16,
 }
 

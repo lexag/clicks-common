@@ -1,13 +1,20 @@
 use core::fmt::{Display, Formatter, Result};
 use serde::{Deserialize, Serialize};
 
+/// A SMPTE LTC timestamp, including frame rate.
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimecodeInstant {
+    /// Frame rate in frames per second
     pub frame_rate: usize,
+    /// Current number of hours
     pub h: i16,
+    /// Current number of minutes
     pub m: i16,
+    /// Current number of seconds
     pub s: i16,
+    /// Current number of frames
     pub f: i16,
+    /// Current progress through the current frame, 0-65536
     pub frame_progress: u16,
 }
 
@@ -28,6 +35,7 @@ impl Display for TimecodeInstant {
 }
 
 impl TimecodeInstant {
+    /// Create a 00:00:00:00 timecode instant with the given frame rate
     pub fn new(frame_rate: usize) -> TimecodeInstant {
         TimecodeInstant {
             frame_rate,
@@ -35,6 +43,9 @@ impl TimecodeInstant {
         }
     }
 
+    /// Add an amount of frame progress to the current timestamp.
+    /// If this reaches the end of the frame, f increments and the remaining progress adds to the
+    /// next frame.
     pub fn add_progress(&mut self, progress: u16) {
         let prog_of = self.frame_progress as u32 + progress as u32;
         self.frame_progress = (prog_of % 65536) as u16;
@@ -43,16 +54,20 @@ impl TimecodeInstant {
         }
         self.propagate();
     }
+
+    /// Add an amount of microseconds to this timestamp.
     pub fn add_us(&mut self, time_us: u64) {
         self.f += (time_us * self.frame_rate as u64 / 1000000) as i16;
         self.propagate();
     }
+    /// Subtract an amount of microseconds from this timestamp.
     pub fn sub_us(&mut self, time_us: u64) {
         let mut tci = TimecodeInstant::new(self.frame_rate);
         tci.add_us(time_us);
         self.sub(tci);
     }
 
+    /// Subtract another [TimecodeInstant] from this timestamp.
     pub fn sub(&mut self, other: TimecodeInstant) {
         self.f -= other.f;
         self.s -= other.s;
@@ -61,6 +76,7 @@ impl TimecodeInstant {
         self.propagate();
     }
 
+    /// Set the current timestamp
     pub fn set_time(&mut self, h: usize, m: usize, s: usize, f: usize) {
         self.h = h as i16;
         self.m = m as i16;
@@ -68,6 +84,7 @@ impl TimecodeInstant {
         self.f = f as i16;
     }
 
+    // propagate changes to f into the other values
     fn propagate(&mut self) {
         self.s += self.f / self.frame_rate as i16;
         self.f %= self.frame_rate as i16;

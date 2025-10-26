@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+//! Definitions (and supporting data formats) for Events, which happen on a specific beat in a cue
 mod event;
 pub use event::Event;
 pub use event::EventDescription;
