@@ -28,6 +28,25 @@ pub struct CueSkeleton {
     pub events: EventTable,
 }
 
+impl CueSkeleton {
+    /// Create a new CueSkeleton from a full cue
+    pub fn new(cue: Cue) -> Self {
+        Self {
+            metadata: cue.metadata,
+            events: cue.events,
+        }
+    }
+
+    /// Create a full cue from this skeleton
+    pub fn to_cue(self) -> Cue {
+        Cue {
+            metadata: self.metadata,
+            events: self.events,
+            ..Default::default()
+        }
+    }
+}
+
 /// Cue metadata, for all information (mostly strings) regarding a cue that is not specifically
 /// playback-data such as beats and events. As a rule, everything that someone not familiar with
 /// ClicKS inner working may want to know should be in metadata

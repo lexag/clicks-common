@@ -35,3 +35,21 @@ pub struct ShowSkeleton {
     /// Cue table for this show.
     pub cues: [CueSkeleton; 32],
 }
+
+impl ShowSkeleton {
+    /// Create a new ShowSkeleton from a full show
+    pub fn new(show: Show) -> Self {
+        Self {
+            metadata: show.metadata,
+            cues: show.cues.map(CueSkeleton::new),
+        }
+    }
+
+    /// Create a full show from this skeleton
+    pub fn to_show(self) -> Show {
+        Show {
+            metadata: self.metadata,
+            cues: self.cues.map(|c| c.to_cue()),
+        }
+    }
+}
