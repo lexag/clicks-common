@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TransportState {
     /// Time left to next beat in us
-    pub us_to_next_beat: u16,
+    pub us_to_next_beat: u64,
     /// Is transport currently running, i.e. is location changing
     pub running: bool,
     /// VLT state

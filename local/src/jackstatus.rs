@@ -13,17 +13,20 @@ pub struct AudioDevice {
 }
 
 impl AudioDevice {
-    //pub fn from_aplay_str(str: String32) -> Option<AudioDevice> {
-    //    //card 1: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
-    //    let card_idx = &str[str.find("card")? + 5..str.find(':')?];
-    //    let _device_idx = &str[(str.find("device")? + 7)..(str[8..].find(':')? + 8)];
-    //    let id = format!("hw:{card_idx}");
-    //    Some(Self {
-    //        id,
-    //        io_size: (0, 0),
-    //        name: str,
-    //    })
-    //}
+    /// Create an Audio Device object from an aplay str:
+    /// ```txt
+    /// card 1: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
+    /// ```
+    pub fn from_aplay_str(str: &str) -> Option<AudioDevice> {
+        let card_idx = &str[str.find("card")? + 5..str.find(':')?];
+        let _device_idx = &str[(str.find("device")? + 7)..(str[8..].find(':')? + 8)];
+        let id = format!("hw:{card_idx}");
+        Some(Self {
+            id: String32::new(&id),
+            io_size: (0, 0),
+            name: String32::new(str),
+        })
+    }
 }
 
 /// JACK audio status. Contains both some server specific and some client specific data, as the
