@@ -23,6 +23,14 @@ impl String32 {
             self.content[idx] = char;
         }
     }
+
+    pub fn str(&mut self) -> &str {
+        str::from_utf8(&self.content).unwrap_or_default()
+    }
+
+    pub fn bytes(&mut self) -> [u8; 32] {
+        self.content
+    }
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
@@ -45,5 +53,13 @@ impl String8 {
         if idx < self.content.len() {
             self.content[idx] = char;
         }
+    }
+
+    pub fn str(&mut self) -> &str {
+        str::from_utf8(&self.content).unwrap_or_default()
+    }
+
+    pub fn bytes(&mut self) -> [u8; 8] {
+        self.content
     }
 }
