@@ -20,13 +20,13 @@ pub enum ControlAction {
     /// Seek does not need to obey beat timing, and should be executed immediately, but should land
     /// in time with the playback, if playback is running, such that the tempo is not disturbed in
     /// a constant tempo cue.
-    TransportSeekBeat(usize),
+    TransportSeekBeat(u16),
     /// Jump to a specific beat index.
     /// Jump must obey beat timing, and can only set the next beat pointer to the destination and
     /// await a jump.
-    TransportJumpBeat(usize),
+    TransportJumpBeat(u16),
     /// Load a cue indexed in the loaded show by the given index.
-    LoadCueByIndex(usize),
+    LoadCueByIndex(u8),
     /// Load a cue from the audio processor's internal cue index register. Generally unused by
     /// clients, and only called internally.
     LoadCueFromSelfIndex,
@@ -38,9 +38,9 @@ pub enum ControlAction {
     /// containing various system status information out to the main thread and onto the network.
     DumpStatus,
     /// Set the gain of a channel by index and gain. 0dB is default.
-    SetChannelGain(usize, f32),
+    SetChannelGain(u8, f32),
     /// Set the mute state of a channel by index
-    SetChannelMute(usize, bool),
+    SetChannelMute(u8, bool),
     /// Change VLT setting with a JumpModeChange
     ChangeJumpMode(JumpModeChange),
     /// Change the playrate.

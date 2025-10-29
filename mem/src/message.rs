@@ -5,13 +5,13 @@ bitflags::bitflags! {
     #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
     pub struct MessageType: u8 {
         /// Transport changed
-        const TransportChanged = 0x01;
+        const TransportData = 0x01;
         /// Beat changed
-        const BeatChanged = 0x01;
+        const BeatData = 0x01;
         /// Cue changed
-        const CueChanged = 0x02;
+        const CueData = 0x02;
         /// Show changed
-        const ShowChanged = 0x04;
+        const ShowData = 0x04;
         /// Network changed
         const NetworkChanged = 0x08;
         /// JACKState changed
