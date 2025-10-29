@@ -118,7 +118,6 @@ mod tests {
     fn add_sub_identity() {
         let time_const = TimecodeInstant::new(25);
         for i in (0..36000 * 1000000).step_by(123456) {
-            println!("Adding and subtracting {i}");
             let mut time = time_const.clone();
             time.add_us(i);
             time.sub_us(i);

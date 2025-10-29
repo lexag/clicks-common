@@ -12,4 +12,4 @@ event = { path = "../event" }
 local = { path = "../local" }
 
 [features]
-builders = ["cue/builders"]
+std = ["cue/std"]

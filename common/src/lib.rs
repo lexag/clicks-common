@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+#![no_std]
 //! This crate contains common functionality and data formats shared between the ClicKS core and
 //! client components
 

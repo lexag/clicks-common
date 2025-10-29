@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+#![no_std]
 //! Definitions pertaining to local core storage that other clients might still have use for, such
 //! as configuration and status
 mod audioconfig;

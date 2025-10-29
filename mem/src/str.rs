@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 // something...
 #[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
 pub struct String32 {
-    content: [u8; 32],
+    pub content: [u8; 32],
 }
 
 impl String32 {
@@ -35,7 +35,7 @@ impl String32 {
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
 pub struct String8 {
-    content: [u8; 8],
+    pub content: [u8; 8],
 }
 
 impl String8 {
@@ -59,7 +59,7 @@ impl String8 {
         str::from_utf8(&self.content).unwrap_or_default()
     }
 
-    pub fn bytes(self) -> [u8; 8] {
+    pub fn bytes(&mut self) -> [u8; 8] {
         self.content
     }
 }

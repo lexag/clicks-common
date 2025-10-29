@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+#![no_std]
 //! Definitions of cue and show
 mod cue;
 pub use cue::Cue;
@@ -11,5 +12,5 @@ pub use show::ShowMetadata;
 pub use show::ShowSkeleton;
 
 mod showbuilder;
-#[cfg(feature = "builders")]
+#[cfg(feature = "std")]
 pub use showbuilder::ShowBuilder;

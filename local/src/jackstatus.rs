@@ -20,9 +20,13 @@ impl AudioDevice {
     pub fn from_aplay_str(str: &str) -> Option<AudioDevice> {
         let card_idx = &str[str.find("card")? + 5..str.find(':')?];
         let _device_idx = &str[(str.find("device")? + 7)..(str[8..].find(':')? + 8)];
-        let id = format!("hw:{card_idx}");
+        let mut id_str = String32::new(card_idx);
+        id_str.content.rotate_right(3);
+        id_str.set_char(0, b'h');
+        id_str.set_char(1, b'w');
+        id_str.set_char(2, b':');
         Some(Self {
-            id: String32::new(&id),
+            id: id_str,
             io_size: (0, 0),
             name: String32::new(str),
         })

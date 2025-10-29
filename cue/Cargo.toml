@@ -12,4 +12,4 @@ event = { path = "../event" }
 mem = { path = "../mem" }
 
 [features]
-builders = []
+std = []

@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+#![no_std]
 //! Low-level data representation formats
 mod message;
 mod request;
