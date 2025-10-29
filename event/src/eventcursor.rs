@@ -46,11 +46,16 @@ impl<'a> EventCursor<'a> {
     }
 
     /// Get the currently pointed at event, and step forward.
+    /// Returns None if the event is unpopulated (null)
     /// Used in a while loop to step through events
-    pub fn get_next(&mut self) -> Event {
+    pub fn get_next(&mut self) -> Option<Event> {
         let e = self.get();
         self.step();
-        e
+        if e.is_null() {
+            None
+        } else {
+            Some(e)
+        }
     }
 
     /// True if cursor is at or before the given location
