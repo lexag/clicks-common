@@ -24,11 +24,11 @@ impl String32 {
         }
     }
 
-    pub fn str(&mut self) -> &str {
+    pub fn str(&self) -> &str {
         str::from_utf8(&self.content).unwrap_or_default()
     }
 
-    pub fn bytes(&mut self) -> [u8; 32] {
+    pub fn bytes(self) -> [u8; 32] {
         self.content
     }
 }
@@ -55,11 +55,11 @@ impl String8 {
         }
     }
 
-    pub fn str(&mut self) -> &str {
+    pub fn str(&self) -> &str {
         str::from_utf8(&self.content).unwrap_or_default()
     }
 
-    pub fn bytes(&mut self) -> [u8; 8] {
+    pub fn bytes(self) -> [u8; 8] {
         self.content
     }
 }
