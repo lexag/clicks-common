@@ -21,7 +21,7 @@ pub enum Request {
     Initialize,
     /// Change routing (from, to, connect?) between a ClicKS channel and a JACK hardware out.
     /// This only has effect when the audio processor is running.
-    ChangeRouting(usize, usize, bool),
+    ChangeRouting(u8, u8, bool),
     /// Execute a ControlAction.
     /// This only has effect when the audio processor is running.
     ControlAction(ControlAction),
