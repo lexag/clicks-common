@@ -8,3 +8,6 @@ pub use event;
 pub use local;
 pub use mem;
 pub use protocol;
+
+/// Software version of ClicKS common library
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
