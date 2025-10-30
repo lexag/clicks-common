@@ -20,7 +20,7 @@ pub enum BootProgramOrder {
 }
 
 /// Wrapper configuration type for system configuration
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Copy)]
 #[serde(default)]
 pub struct SystemConfiguration {
     /// Audio configuration values
