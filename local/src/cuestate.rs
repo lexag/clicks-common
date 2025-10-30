@@ -2,7 +2,7 @@ use cue::Cue;
 use serde::{Deserialize, Serialize};
 
 /// Status of the current cue
-#[derive(Clone, Debug, Serialize, Deserialize, Default)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default, Copy)]
 pub struct CueState {
     /// Cue idx of this cue in the show
     pub cue_idx: u16,

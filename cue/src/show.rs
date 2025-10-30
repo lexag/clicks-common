@@ -3,7 +3,7 @@ use mem::str::String32;
 use serde::{Deserialize, Serialize};
 
 /// A Show represents a collection of Cues for semi-linear sequential playback
-#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq, Copy)]
 pub struct Show {
     /// Metadata for this show
     pub metadata: ShowMetadata,
@@ -18,7 +18,7 @@ pub struct Show {
 /// Metadata for a Show instance. Like with [crate::cue::CueMetadata], anything that is human readable and
 /// might be of interest to anyone without in-depth technical knowledge about the inner workings
 /// of ClicKS should be in ShowMetadata in a human readable format.
-#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Default, Serialize, Deserialize, Debug, Clone, PartialEq, Copy)]
 pub struct ShowMetadata {
     /// Name of this show. Usually the name of the production
     pub name: String32,
@@ -28,7 +28,7 @@ pub struct ShowMetadata {
 }
 
 /// Lightweight shadow of [Show] for network and uC purposes, see [CueSkeleton]
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Copy)]
 pub struct ShowSkeleton {
     /// Metadata for this show
     pub metadata: ShowMetadata,

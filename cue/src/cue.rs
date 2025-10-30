@@ -20,7 +20,7 @@ pub struct Cue {
 /// Shadow-type of Cue, without a Beat-table. Used for lightweight network communication with
 /// clients that do not care about knowing all beat details for the cue, but may still need
 /// information about events and metadata
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
 pub struct CueSkeleton {
     /// Metadata for this cue
     pub metadata: CueMetadata,

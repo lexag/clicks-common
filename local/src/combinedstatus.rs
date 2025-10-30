@@ -77,7 +77,7 @@ impl CombinedStatus {
             return BeatState::default();
         }
         if let AudioSourceState::BeatStatus(state) = &self.sources[0] {
-            state.clone()
+            *state
         } else {
             panic!(
                 "Metronome is not in slot 0. Slot 0 contains {:?}",
@@ -91,7 +91,7 @@ impl CombinedStatus {
             return TimecodeInstant::default();
         }
         if let AudioSourceState::TimeStatus(state) = &self.sources[1] {
-            state.clone()
+            *state
         } else {
             panic!(
                 "Timecode is not in slot 1. Slot 1 contains {:?}",
