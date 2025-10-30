@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 bitflags::bitflags! {
     /// Bitflag for different types of logs
-    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq)]
+    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, PartialOrd, Ord)]
     pub struct LogKind: u8 {
         /// Error, something has gone wrong
         const Error = 0x01;
@@ -33,7 +33,7 @@ impl fmt::Display for LogKind {
 
 bitflags::bitflags! {
     /// Bitflag for various contexts from which log messages can source
-    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq)]
+    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, PartialOrd, Ord)]
     pub struct LogContext: u8 {
         /// The logging device itself
         const Logger = 0x01;
