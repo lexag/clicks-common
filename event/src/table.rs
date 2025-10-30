@@ -24,11 +24,12 @@ impl EventTable {
     }
 
     /// Get the event at idx, returning a null-event if idx is out of bounds.
-    pub fn get(&self, idx: u8) -> Event {
-        if idx > Self::SIZE as u8 {
-            Event::default()
+    pub fn get(&self, idx: u8) -> Option<Event> {
+        let e = self.table.get(idx as usize)?;
+        if e.is_null() {
+            None
         } else {
-            self.table[idx as usize]
+            Some(*e)
         }
     }
 
@@ -65,10 +66,7 @@ impl EventTable {
     /// Remove an event from the table by index.
     /// The event is returned and the table is resorted to fill the gap
     pub fn pop(&mut self, idx: u8) -> Option<Event> {
-        let e = self.get(idx);
-        if e.is_null() {
-            return None;
-        }
+        let e = self.get(idx)?;
         self.set(idx, Event::null());
         self.sort();
         Some(e)

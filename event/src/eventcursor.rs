@@ -37,11 +37,11 @@ impl<'a> EventCursor<'a> {
 
     /// Beat idx that the currently pointed at event occurs
     pub fn location(&self) -> u16 {
-        self.table.get(self.cursor).location
+        self.table.get(self.cursor).map_or(u16::MAX, |e| e.location)
     }
 
     /// Get the currently pointed at event
-    pub fn get(&mut self) -> Event {
+    pub fn get(&mut self) -> Option<Event> {
         self.table.get(self.cursor)
     }
 
@@ -51,11 +51,7 @@ impl<'a> EventCursor<'a> {
     pub fn get_next(&mut self) -> Option<Event> {
         let e = self.get();
         self.step();
-        if e.is_null() {
-            None
-        } else {
-            Some(e)
-        }
+        e
     }
 
     /// True if cursor is at or before the given location

@@ -218,7 +218,9 @@ impl Cue {
                 break;
             }
 
-            if let Some(EventDescription::TempoChangeEvent { tempo }) = cursor.get().event {
+            if let Some(EventDescription::TempoChangeEvent { tempo }) =
+                cursor.get().unwrap_or_default().event
+            {
                 cursor.step();
                 beat_length = 1000000 * 60 / tempo as u32;
                 accelerator = 0.0;
@@ -227,7 +229,7 @@ impl Cue {
                 start_tempo,
                 end_tempo,
                 length,
-            }) = cursor.get().event
+            }) = cursor.get().unwrap_or_default().event
             {
                 cursor.step();
                 beat_length = 1000000 * 60 / start_tempo as u32;
