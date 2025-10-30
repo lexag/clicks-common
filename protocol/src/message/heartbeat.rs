@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 /// A tiny packet sent from core to client once every couple of seconds to make sure both ends of
 /// the connection are alive and to report some basic information about the core
-#[derive(Deserialize, Serialize, Clone, Debug, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, Copy)]
 pub struct Heartbeat {
     /// The version of the ClicKS common library that the core is running on
     pub common_version: String8,

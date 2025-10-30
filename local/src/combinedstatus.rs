@@ -7,7 +7,7 @@ use cue::Show;
 use mem::smpte::TimecodeInstant;
 
 /// Wrapper type for the core audio processing status.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub struct CombinedStatus {
     /// State of the 32 audio sources (metronome, timecode, and 30 playback channels)
     pub sources: [AudioSourceState; 32],

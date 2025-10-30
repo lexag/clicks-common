@@ -64,7 +64,7 @@ impl Default for SystemConfiguration {
 }
 
 /// Represents a requested change in a system subconfiguration
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Copy)]
 pub enum SystemConfigurationChange {
     /// Replace the audio configuration with the provided
     ChangeAudioConfiguration(AudioConfiguration),

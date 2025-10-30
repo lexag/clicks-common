@@ -3,7 +3,7 @@ use mem::smpte::TimecodeInstant;
 use serde::{Deserialize, Serialize};
 
 /// Wrapper type for the state of an audio source (audio channel)
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Copy)]
 pub enum AudioSourceState {
     /// Metronome channel state
     BeatStatus(BeatState),

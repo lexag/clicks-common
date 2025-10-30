@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 bitflags::bitflags! {
     /// Bitflag for one or multiple types of core -> client message
-    #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+    #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default, Copy)]
     pub struct MessageType: u16 {
         /// Transport changed
         const TransportData = 0x01;

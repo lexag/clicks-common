@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Enumerator for specifying the type of client->core request.
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy)]
 pub enum RequestType {
     /// This request is a NotifySubscribers request.
     NotifySubscribers,

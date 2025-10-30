@@ -3,7 +3,7 @@ use core::fmt;
 use serde::{Deserialize, Serialize};
 
 /// Information about a client subscribing to core messages
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq, Copy)]
 pub struct SubscriberInfo {
     /// Human readable identifier, such as device name or user
     pub identifier: String32,
@@ -16,7 +16,7 @@ pub struct SubscriberInfo {
 }
 
 /// Ipv4 address and udp port information
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Default, Eq, Copy)]
 pub struct IpAddress {
     /// UDP/TCP port number 0-65535
     pub port: u16,
@@ -73,7 +73,7 @@ impl fmt::Display for IpAddress {
 }
 
 /// Which end of a network connection is this?
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Copy)]
 pub enum ConnectionEnd {
     /// The ClicKS core
     Server,
@@ -86,7 +86,7 @@ pub enum ConnectionEnd {
 }
 
 /// Information about a connection
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Copy)]
 pub struct ConnectionInfo {
     /// Identifier
     pub identifier: String32,
