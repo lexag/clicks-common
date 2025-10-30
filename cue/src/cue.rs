@@ -6,7 +6,7 @@ use serde_big_array::BigArray;
 
 /// A Cue represents a musical or technical "cue", in the meaning semi-linear timeline progression
 /// with a clearly defined start and end, which may be followed or preceded by other cues.
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
 pub struct Cue {
     /// Metadata for this cue
     pub metadata: CueMetadata,
@@ -50,7 +50,7 @@ impl CueSkeleton {
 /// Cue metadata, for all information (mostly strings) regarding a cue that is not specifically
 /// playback-data such as beats and events. As a rule, everything that someone not familiar with
 /// ClicKS inner working may want to know should be in metadata
-#[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq, Copy)]
 pub struct CueMetadata {
     /// Name of the cue, usually a song name or description of what happens on stage
     pub name: String32,

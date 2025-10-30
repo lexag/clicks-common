@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_big_array::BigArray;
 
 /// Table of events that occur in a specific cue.
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
 pub struct EventTable {
     #[serde(with = "BigArray")]
     table: [Event; Self::SIZE],
