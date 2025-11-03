@@ -1,8 +1,8 @@
 use core::fmt;
-use serde::{Deserialize, Serialize};
 
 /// Beat represent a musical beat, or a subdivision thereof
-#[derive(Clone, Serialize, Deserialize, Default, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Default, PartialEq, Copy)]
 pub struct Beat {
     /// Beat number, first beat in a bar typically has 1, followed by 2 etc. Can be between 0 and 255.
     pub count: u8,
@@ -45,7 +45,7 @@ impl Beat {
         if self.length == 0 {
             return 0;
         }
-        (60000000.0 / self.length as f32).round() as u16
+        (60000000 / self.length) as u16
     }
 
     /// Is this beat null (opposite of populated), i.e. is this beat just an empty slot in the beat

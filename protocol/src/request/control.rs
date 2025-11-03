@@ -4,12 +4,12 @@ use mem::{
     network::{ConnectionInfo, SubscriberInfo},
     typeflags::RequestType,
 };
-use serde::{Deserialize, Serialize};
 
 /// Requests that are given to the core by a client.
 /// Requests may be non-realtime-safe, apart from ControlAction, which has its own subactions that
 /// must all be realtime safe during playback.
-#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, PartialEq, Copy)]
 pub enum Request {
     /// Inform all subscribers with all relevant system status messages.
     /// Used to get a complete update on status when connecting a new subscriber.

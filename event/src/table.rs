@@ -1,11 +1,10 @@
 use crate::event::Event;
-use serde::{Deserialize, Serialize};
-use serde_big_array::BigArray;
 
 /// Table of events that occur in a specific cue.
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, PartialEq, Copy)]
 pub struct EventTable {
-    #[serde(with = "BigArray")]
+    #[cfg_attr(feature = "serde", serde(with = "serde_big_array::BigArray"))]
     table: [Event; Self::SIZE],
     table_ptr: u8,
 }

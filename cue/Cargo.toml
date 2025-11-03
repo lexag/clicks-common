@@ -13,3 +13,4 @@ mem = { path = "../mem" }
 
 [features]
 std = []
+serde = []

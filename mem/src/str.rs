@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
 // FIXME: this entire thing should probably be macroified and maybe have compile-time dynamic
 // length strings, so that you can specify type ConstString(24) for a 24 char string, or
 // something...
-#[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Default, Debug, Copy)]
 pub struct String32 {
     pub content: [u8; 32],
 }
@@ -33,7 +33,8 @@ impl String32 {
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Deserialize, Serialize, Clone, Default, Debug, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Default, Debug, Copy)]
 pub struct String8 {
     pub content: [u8; 8],
 }

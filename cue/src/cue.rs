@@ -1,17 +1,16 @@
 use beat::Beat;
 use event::{Event, EventCursor, EventDescription, EventTable, JumpModeChange, JumpRequirement};
 use mem::str::String32;
-use serde::{Deserialize, Serialize};
-use serde_big_array::BigArray;
 
 /// A Cue represents a musical or technical "cue", in the meaning semi-linear timeline progression
 /// with a clearly defined start and end, which may be followed or preceded by other cues.
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, PartialEq, Copy)]
 pub struct Cue {
     /// Metadata for this cue
     pub metadata: CueMetadata,
     /// Table of beats in this cue
-    #[serde(with = "BigArray")]
+    #[cfg_attr(feature = "serde", serde(with = "serde_big_array::BigArray"))]
     pub beats: [Beat; Cue::LENGTH],
     /// Table of events that will/can occur during this cue
     pub events: EventTable,
@@ -20,7 +19,8 @@ pub struct Cue {
 /// Shadow-type of Cue, without a Beat-table. Used for lightweight network communication with
 /// clients that do not care about knowing all beat details for the cue, but may still need
 /// information about events and metadata
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, PartialEq, Copy)]
 pub struct CueSkeleton {
     /// Metadata for this cue
     pub metadata: CueMetadata,
@@ -50,7 +50,8 @@ impl CueSkeleton {
 /// Cue metadata, for all information (mostly strings) regarding a cue that is not specifically
 /// playback-data such as beats and events. As a rule, everything that someone not familiar with
 /// ClicKS inner working may want to know should be in metadata
-#[derive(Clone, Serialize, Deserialize, Debug, Default, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, Default, PartialEq, Copy)]
 pub struct CueMetadata {
     /// Name of the cue, usually a song name or description of what happens on stage
     pub name: String32,

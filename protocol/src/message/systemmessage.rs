@@ -5,11 +5,11 @@ use local::{
     status::{BeatState, CueState, JACKStatus, NetworkStatus, TransportState},
 };
 use mem::typeflags::MessageType;
-use serde::{Deserialize, Serialize};
 
 /// Definition of messages sent from core to client
 #[allow(clippy::large_enum_variant)]
-#[derive(Deserialize, Serialize, Clone, Debug, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, Copy)]
 pub enum Message {
     /// Transport state has changed. Sent once whenever jumping or starting/stopping playback, and
     /// multiple times per second during playback.

@@ -1,8 +1,8 @@
 use mem::str::String32;
-use serde::{Deserialize, Serialize};
 
 /// Description of a system audio device
-#[derive(Deserialize, Serialize, Debug, Clone, Default, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, Default, Copy)]
 pub struct AudioDevice {
     /// Id string of this device
     pub id: String32,
@@ -36,7 +36,8 @@ impl AudioDevice {
 /// JACK audio status. Contains both some server specific and some client specific data, as the
 /// line between client and server is blurred on an integrated system with its own JACK-server and
 /// a single client.
-#[derive(Deserialize, Serialize, Debug, Clone, Default, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, Default, Copy)]
 pub struct JACKStatus {
     /// Before starting the audio processing, the first 8 available devices to connect the JACK server to.
     /// After starting the audio processing, no audio devices are available and this value shows
