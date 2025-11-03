@@ -104,7 +104,7 @@ mod tests {
     #[test]
     fn add_progress() {
         let time_const = TimecodeInstant::new(25);
-        let mut time = time_const.clone();
+        let mut time = time_const;
         time.add_progress(0);
         assert_eq!(time, time_const);
         time.add_progress(u16::MAX);
@@ -118,7 +118,7 @@ mod tests {
     fn add_sub_identity() {
         let time_const = TimecodeInstant::new(25);
         for i in (0..36000 * 1000000).step_by(123456) {
-            let mut time = time_const.clone();
+            let mut time = time_const;
             time.add_us(i);
             time.sub_us(i);
             assert_eq!(time, time_const, "Failed with {}us ({} s)", i, i / 1000000);
