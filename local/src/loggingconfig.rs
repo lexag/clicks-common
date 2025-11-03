@@ -1,9 +1,9 @@
 use core::fmt;
-use serde::{Deserialize, Serialize};
 
 bitflags::bitflags! {
     /// Bitflag for different types of logs
-    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+    #[derive(Default, Debug, Clone, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
     pub struct LogKind: u8 {
         /// Error, something has gone wrong
         const Error = 0x01;
@@ -33,7 +33,8 @@ impl fmt::Display for LogKind {
 
 bitflags::bitflags! {
     /// Bitflag for various contexts from which log messages can source
-    #[derive(Default, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+    #[derive(Default, Debug, Clone, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
     pub struct LogContext: u8 {
         /// The logging device itself
         const Logger = 0x01;
@@ -66,8 +67,8 @@ impl LogContext {
 }
 
 /// Wrapper configuration for the logging device
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default, Copy)]
-#[serde(default)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Debug, Clone, PartialEq, Default, Copy)]
 pub struct LoggerConfiguration {
     /// Which log-kinds to log. Ignores all others.
     pub active_kinds: LogKind,

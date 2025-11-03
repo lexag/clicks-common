@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-serde = { version = "1.0.228", features = ["serde_derive"] }
-serde_json = "1.0.145"
+serde = { version = "1.0.228", features = ["serde_derive"], optional = true }
+serde_json = { version = "1.0.145", optional = true }
 beat = { path = "../beat" }
 event = { path = "../event" }
 cue = { path = "../cue" }
@@ -14,4 +14,4 @@ local = { path = "../local" }
 bitflags = { version = "2.10.0", features = ["serde"] }
 
 [features]
-serde = []
+serde = ["dep:serde", "dep:serde_json"]

@@ -1,8 +1,8 @@
 use core::fmt::{Display, Formatter, Result};
-use serde::{Deserialize, Serialize};
 
 /// A SMPTE LTC timestamp, including frame rate.
-#[derive(Default, Debug, Clone, Serialize, Deserialize, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Default, Debug, Clone, Copy)]
 pub struct TimecodeInstant {
     /// Frame rate in frames per second
     pub frame_rate: usize,

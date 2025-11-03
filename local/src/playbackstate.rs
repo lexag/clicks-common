@@ -1,7 +1,6 @@
-use serde::{Deserialize, Serialize};
-
 /// State of audio playback channel
-#[derive(Clone, Debug, Serialize, Deserialize, Default, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, Default, Copy)]
 pub struct PlaybackState {
     /// Current clip idx
     pub clip_idx: u16,

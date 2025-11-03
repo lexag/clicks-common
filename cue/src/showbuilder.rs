@@ -1,5 +1,7 @@
 #![allow(unused_imports)]
+#[cfg(feature = "std")]
 use crate::show::Show;
+#[cfg(feature = "std")]
 use serde::de::Error;
 
 #[cfg(feature = "std")]

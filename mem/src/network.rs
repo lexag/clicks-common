@@ -1,6 +1,5 @@
 use crate::{message::MessageType, str::String32};
 use core::fmt;
-use serde::{Deserialize, Serialize};
 
 /// Information about a client subscribing to core messages
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -75,7 +74,8 @@ impl fmt::Display for IpAddress {
 }
 
 /// Which end of a network connection is this?
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Copy)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, PartialEq, Copy)]
 pub enum ConnectionEnd {
     /// The ClicKS core
     Server,

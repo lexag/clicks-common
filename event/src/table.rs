@@ -46,7 +46,7 @@ impl EventTable {
     /// Sort this table in order of event location.
     /// Unpopulated events (null-events) will be at the end of the table
     pub fn sort(&mut self) {
-        self.table.sort_by_key(|o| o.location);
+        unimplemented!()
     }
 
     /// Add an event to this table.

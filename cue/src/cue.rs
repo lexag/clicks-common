@@ -239,7 +239,7 @@ impl Cue {
                 beats_left_in_change = length;
             }
             beat.length = beat_length;
-            beat_length = (beat_length as f32 + accelerator).round() as u32;
+            beat_length = (beat_length as f32 + accelerator) as u32;
             beats_left_in_change = beats_left_in_change.saturating_sub(1);
             if beats_left_in_change == 0 {
                 accelerator = 0.0;
