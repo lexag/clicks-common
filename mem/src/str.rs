@@ -25,11 +25,23 @@ impl String32 {
     }
 
     pub fn str(&self) -> &str {
-        str::from_utf8(&self.content).unwrap_or_default()
+        str::from_utf8(&self.content[0..self.len()]).unwrap_or_default()
     }
 
     pub fn bytes(self) -> [u8; 32] {
         self.content
+    }
+
+    pub fn len(self) -> usize {
+        let mut len = 0;
+        while len < 32 && self.content[len] != 0 {
+            len += 1;
+        }
+        len
+    }
+
+    pub fn is_empty(self) -> bool {
+        self.len() == 0
     }
 }
 
@@ -57,10 +69,40 @@ impl String8 {
     }
 
     pub fn str(&self) -> &str {
-        str::from_utf8(&self.content).unwrap_or_default()
+        str::from_utf8(&self.content[0..self.len()]).unwrap_or_default()
     }
 
     pub fn bytes(&mut self) -> [u8; 8] {
         self.content
+    }
+
+    pub fn len(self) -> usize {
+        let mut len = 0;
+        while len < 8 && self.content[len] != 0 {
+            len += 1;
+        }
+        len
+    }
+
+    pub fn is_empty(self) -> bool {
+        self.len() == 0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn str_8() {
+        let a = String8::new("");
+        let b = String8::new("abc");
+        let c = String8::new("abcdefgh");
+        let d = String8::new("lmnopqrstuvw");
+
+        assert_eq!(a.str(), "");
+        assert_eq!(b.str(), "abc");
+        assert_eq!(c.str(), "abcdefgh");
+        assert_eq!(d.str(), "lmnopqrs");
     }
 }
