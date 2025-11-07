@@ -30,7 +30,7 @@ impl Beat {
     /// Does not have any length, and is thus unstable for playback.
     /// Should not be used to directly generate played Beats, just to fill out collections with
     /// beats to be edited.
-    pub fn empty() -> Beat {
+    pub const fn empty() -> Beat {
         Beat {
             count: 0,
             bar_number: 0,

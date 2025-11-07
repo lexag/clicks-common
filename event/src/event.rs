@@ -135,8 +135,11 @@ impl Event {
     }
 
     /// Create a new null event, without location or event desciption
-    pub fn null() -> Self {
-        Self::default()
+    pub const fn null() -> Self {
+        Self {
+            location: u16::MAX,
+            event: None,
+        }
     }
 
     /// Is this event null (opposite of populated), i.e. is this event just an empty slot in the

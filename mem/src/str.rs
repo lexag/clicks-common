@@ -8,7 +8,7 @@ pub struct String32 {
 }
 
 impl String32 {
-    pub fn empty() -> Self {
+    pub const fn empty() -> Self {
         Self { content: [0x0; 32] }
     }
 
@@ -52,7 +52,7 @@ pub struct String8 {
 }
 
 impl String8 {
-    pub fn empty() -> Self {
+    pub const fn empty() -> Self {
         Self { content: [0x0; 8] }
     }
 

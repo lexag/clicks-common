@@ -30,7 +30,7 @@ pub struct CueSkeleton {
 
 impl CueSkeleton {
     /// Create a new CueSkeleton from a full cue
-    pub fn new(cue: Cue) -> Self {
+    pub const fn new(cue: Cue) -> Self {
         Self {
             metadata: cue.metadata,
             events: cue.events,
@@ -59,6 +59,16 @@ pub struct CueMetadata {
     pub human_ident: String32,
 }
 
+impl CueMetadata {
+    /// Compile time constant empty default function
+    pub const fn const_default() -> Self {
+        Self {
+            name: String32::empty(),
+            human_ident: String32::empty(),
+        }
+    }
+}
+
 impl Default for Cue {
     fn default() -> Cue {
         Cue::empty()
@@ -78,11 +88,11 @@ impl Cue {
 
     /// Create an empty cue containing no beats.
     /// The cue is valid for playback
-    pub fn empty() -> Cue {
+    pub const fn empty() -> Cue {
         Cue {
             events: EventTable::empty(),
             beats: [Beat::empty(); Self::LENGTH],
-            metadata: CueMetadata::default(),
+            metadata: CueMetadata::const_default(),
         }
     }
 

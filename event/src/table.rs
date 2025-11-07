@@ -15,9 +15,9 @@ impl EventTable {
     pub const SIZE: usize = 64;
 
     /// Create an empty EventTable.
-    pub fn empty() -> Self {
+    pub const fn empty() -> Self {
         Self {
-            table: [Event::default(); Self::SIZE],
+            table: [Event::null(); Self::SIZE],
             table_ptr: 0,
         }
     }
