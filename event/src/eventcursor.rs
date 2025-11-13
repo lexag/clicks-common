@@ -93,10 +93,14 @@ mod tests {
                 Event {
                     location: i as u16 * 2,
                     event: Some(crate::event::EventDescription::TimecodeEvent {
-                        h: 0,
-                        m: 0,
-                        s: 0,
-                        f: 0,
+                        time: mem::smpte::TimecodeInstant {
+                            frame_rate: 25,
+                            h: 0,
+                            m: 0,
+                            s: 0,
+                            f: 0,
+                            frame_progress: 0,
+                        },
                     }),
                 },
             );

@@ -2,7 +2,7 @@ use core::fmt::{Display, Formatter, Result};
 
 /// A SMPTE LTC timestamp, including frame rate.
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[derive(Default, Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy, Eq)]
 pub struct TimecodeInstant {
     /// Frame rate in frames per second
     pub frame_rate: usize,
@@ -21,6 +21,32 @@ pub struct TimecodeInstant {
 impl PartialEq for TimecodeInstant {
     fn eq(&self, other: &TimecodeInstant) -> bool {
         self.f == other.f && self.s == other.s && self.m == other.m && self.h == other.h
+    }
+}
+
+impl Ord for TimecodeInstant {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        let h_comp = self.h.cmp(&other.h);
+        let m_comp = self.m.cmp(&other.m);
+        let s_comp = self.s.cmp(&other.s);
+        let f_comp = self.f.cmp(&other.f);
+        if h_comp != core::cmp::Ordering::Equal {
+            h_comp
+        } else if m_comp != core::cmp::Ordering::Equal {
+            m_comp
+        } else if s_comp != core::cmp::Ordering::Equal {
+            s_comp
+        } else if f_comp != core::cmp::Ordering::Equal {
+            f_comp
+        } else {
+            core::cmp::Ordering::Equal
+        }
+    }
+}
+
+impl PartialOrd for TimecodeInstant {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        Some(self.cmp(other))
     }
 }
 

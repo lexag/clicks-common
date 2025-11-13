@@ -1,5 +1,5 @@
 use core::fmt;
-use mem::str::String8;
+use mem::{smpte::TimecodeInstant, str::String8};
 
 /// Conditional VLT requirement to perform a [EventDescription::JumpEvent].
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -201,18 +201,13 @@ pub enum EventDescription {
     },
 
     /// Marks an SMPTE LTC timestamp
-    /// FIXME: timecode event should probably implement TimecodeInstant instead of separate time
-    /// values
     TimecodeEvent {
-        /// Hours
-        h: u8,
-        /// Minutes
-        m: u8,
-        /// Seconds
-        s: u8,
-        /// Frames
-        f: u8,
+        /// Timecode Instant this LTC starts at
+        time: TimecodeInstant,
     },
+
+    /// Marks the point where SMPTE LTC should stop running
+    TimecodeStopEvent,
 
     /// Cosmetic marker for rehearsal marks
     RehearsalMarkEvent {
@@ -238,6 +233,7 @@ impl EventDescription {
             EventDescription::PlaybackEvent { .. } => "Playback",
             EventDescription::PlaybackStopEvent { .. } => "Playback Stop",
             EventDescription::TimecodeEvent { .. } => "Timecode",
+            EventDescription::TimecodeStopEvent => "Timecode Stop",
             EventDescription::RehearsalMarkEvent { .. } => "Rehearsal Mark",
             EventDescription::PauseEvent { .. } => "Pause Event",
         }
