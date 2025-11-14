@@ -27,8 +27,6 @@ pub mod config {
     pub use super::loggingconfig::LogContext;
     pub use super::loggingconfig::LogKind;
     pub use super::loggingconfig::LoggerConfiguration;
-    #[allow(deprecated)]
-    pub use super::systemconfig::BootProgramOrder;
     pub use super::systemconfig::SystemConfiguration;
     pub use super::systemconfig::SystemConfigurationChange;
 }

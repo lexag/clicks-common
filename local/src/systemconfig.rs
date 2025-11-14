@@ -4,21 +4,6 @@ use crate::{
 };
 use mem::str::String32;
 
-#[deprecated(note = "all boot actions must be run through user interface or client request")]
-#[allow(missing_docs)]
-#[allow(deprecated)]
-/// Instruction for the program boot module of what to do. Deprecated, as all boot actions should
-/// be run through user interface or client request to prevent unsaveable startup failure
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[derive(Default, Debug, Clone)]
-pub enum BootProgramOrder {
-    #[default]
-    Run,
-    WriteConfig,
-    Upgrade,
-    ExtractLogs,
-}
-
 /// Wrapper configuration type for system configuration
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Copy)]
