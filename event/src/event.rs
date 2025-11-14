@@ -1,8 +1,7 @@
 use core::fmt;
-use mem::{smpte::TimecodeInstant, str::String8};
+use mem::{smpte::TimecodeInstant, str::StaticString};
 
 /// Conditional VLT requirement to perform a [EventDescription::JumpEvent].
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
 pub enum JumpRequirement {
     /// VLT must be on
@@ -24,7 +23,6 @@ impl fmt::Display for JumpRequirement {
 }
 
 /// How (if at all) to change VLT state, for example after a jump or on a request from client
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, PartialEq, Debug, Default, PartialOrd, Ord, Eq, Copy)]
 pub enum JumpModeChange {
     /// Set VLT on
@@ -61,7 +59,6 @@ impl JumpModeChange {
 }
 
 /// When pausing from a PauseEvent, what action to take to prepare for playback again
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
 pub enum PauseEventBehaviour {
     /// Pause and do nothing. Playback will resume exactly where stopped, which may have been in
@@ -107,7 +104,6 @@ impl fmt::Display for PauseEventBehaviour {
 /// All triggers, markers and similar are events.
 ///
 /// Events can be unpopulated, in which case they have location = u16::MAX and event = None
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy)]
 pub struct Event {
     /// Location (beat idx) of this event in the cue
@@ -152,7 +148,6 @@ impl Event {
 /// EventDescription contains definitions for all event types, and the data they contain
 /// All events are const-size to support uC communication, but must not be equal size to each
 /// other. Guideline is about 128 bytes per event.
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, PartialEq, Debug, Ord, PartialOrd, Eq, Copy)]
 pub enum EventDescription {
     /// When triggered: change the next beat pointer to this event's destination field.
@@ -213,7 +208,7 @@ pub enum EventDescription {
     RehearsalMarkEvent {
         /// Rehearsal mark label
         /// Can be empty.
-        label: String8,
+        label: StaticString<8>,
     },
 
     /// When triggered: pause transport, and execute the PauseEventBehaviour.

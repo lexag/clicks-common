@@ -4,13 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-serde = { version = "1.0.228", features = ["serde_derive"], optional = true }
-serde-big-array = { version = "0.5.1", optional = true }
-serde_json = { version = "1.0.145", optional = true }
 beat = { path = "../beat" }
 event = { path = "../event" }
 mem = { path = "../mem" }
 
 [features]
 std = []
-serde = ["dep:serde", "dep:serde-big-array", "dep:serde_json"]

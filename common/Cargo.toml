@@ -13,4 +13,3 @@ local = { path = "../local" }
 
 [features]
 std = ["cue/std"]
-serde = ["cue/serde", "beat/serde", "protocol/serde", "mem/serde", "event/serde", "local/serde"]

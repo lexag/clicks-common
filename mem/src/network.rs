@@ -1,12 +1,11 @@
-use crate::{message::MessageType, str::String32};
+use crate::{message::MessageType, str::StaticString};
 use core::fmt;
 
 /// Information about a client subscribing to core messages
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Default, Eq, Copy)]
 pub struct SubscriberInfo {
     /// Human readable identifier, such as device name or user
-    pub identifier: String32,
+    pub identifier: StaticString<32>,
     /// Ipv4 address of this device
     pub address: IpAddress,
     /// What message types does this client want to receive?
@@ -16,7 +15,6 @@ pub struct SubscriberInfo {
 }
 
 /// Ipv4 address and udp port information
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Default, Eq, Copy)]
 pub struct IpAddress {
     /// UDP/TCP port number 0-65535
@@ -74,7 +72,6 @@ impl fmt::Display for IpAddress {
 }
 
 /// Which end of a network connection is this?
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, PartialEq, Copy)]
 pub enum ConnectionEnd {
     /// The ClicKS core
@@ -88,11 +85,10 @@ pub enum ConnectionEnd {
 }
 
 /// Information about a connection
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, PartialEq, Copy)]
 pub struct ConnectionInfo {
     /// Identifier
-    pub identifier: String32,
+    pub identifier: StaticString<32>,
     /// Which end of a connection is this?
     pub end: ConnectionEnd,
     /// Ipv4 address
@@ -103,7 +99,7 @@ impl Default for ConnectionInfo {
     fn default() -> Self {
         ConnectionInfo {
             end: ConnectionEnd::Local,
-            identifier: String32::new("Unknown identifier"),
+            identifier: StaticString::new("Unknown identifier"),
             address: IpAddress::default(),
         }
     }

@@ -8,7 +8,6 @@ use mem::typeflags::MessageType;
 
 /// Definition of messages sent from core to client
 #[allow(clippy::large_enum_variant)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, Copy)]
 pub enum Message {
     /// Transport state has changed. Sent once whenever jumping or starting/stopping playback, and

@@ -1,5 +1,4 @@
 /// Enumerator for specifying the type of client->core request.
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy)]
 pub enum RequestType {
     /// This request is a NotifySubscribers request.

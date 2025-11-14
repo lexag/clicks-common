@@ -1,7 +1,6 @@
 use cue::Cue;
 
 /// Status of the current cue
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, Default, Copy)]
 pub struct CueState {
     /// Cue idx of this cue in the show

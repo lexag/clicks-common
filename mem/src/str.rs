@@ -1,20 +1,16 @@
-// FIXME: this entire thing should probably be macroified and maybe have compile-time dynamic
-// length strings, so that you can specify type ConstString(24) for a 24 char string, or
-// something...
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Default, Debug, Copy)]
-pub struct String32 {
-    pub content: [u8; 32],
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy)]
+pub struct StaticString<const L: usize> {
+    pub content: [u8; L],
 }
 
-impl String32 {
+impl<const L: usize> StaticString<L> {
     pub const fn empty() -> Self {
-        Self { content: [0x0; 32] }
+        Self { content: [0x0; L] }
     }
 
     pub fn new(str: &str) -> Self {
-        let mut a = [0x0; 32];
-        a[..str.len().min(32)].copy_from_slice(&str.as_bytes()[..str.len().min(32)]);
+        let mut a = [0x0; L];
+        a[..str.len().min(L)].copy_from_slice(&str.as_bytes()[..str.len().min(L)]);
         Self { content: a }
     }
 
@@ -28,13 +24,13 @@ impl String32 {
         str::from_utf8(&self.content[0..self.len()]).unwrap_or_default()
     }
 
-    pub fn bytes(self) -> [u8; 32] {
+    pub fn bytes(self) -> [u8; L] {
         self.content
     }
 
     pub fn len(self) -> usize {
         let mut len = 0;
-        while len < 32 && self.content[len] != 0 {
+        while len < L && self.content[len] != 0 {
             len += 1;
         }
         len
@@ -45,47 +41,9 @@ impl String32 {
     }
 }
 
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Default, Debug, Copy)]
-pub struct String8 {
-    pub content: [u8; 8],
-}
-
-impl String8 {
-    pub const fn empty() -> Self {
-        Self { content: [0x0; 8] }
-    }
-
-    pub fn new(str: &str) -> Self {
-        let mut a = [0x0; 8];
-        a[..str.len().min(8)].copy_from_slice(&str.as_bytes()[..str.len().min(8)]);
-        Self { content: a }
-    }
-
-    pub fn set_char(&mut self, idx: usize, char: u8) {
-        if idx < self.content.len() {
-            self.content[idx] = char;
-        }
-    }
-
-    pub fn str(&self) -> &str {
-        str::from_utf8(&self.content[0..self.len()]).unwrap_or_default()
-    }
-
-    pub fn bytes(&mut self) -> [u8; 8] {
-        self.content
-    }
-
-    pub fn len(self) -> usize {
-        let mut len = 0;
-        while len < 8 && self.content[len] != 0 {
-            len += 1;
-        }
-        len
-    }
-
-    pub fn is_empty(self) -> bool {
-        self.len() == 0
+impl<const L: usize> Default for StaticString<L> {
+    fn default() -> Self {
+        Self::empty()
     }
 }
 
@@ -95,10 +53,10 @@ mod tests {
 
     #[test]
     fn str_8() {
-        let a = String8::new("");
-        let b = String8::new("abc");
-        let c = String8::new("abcdefgh");
-        let d = String8::new("lmnopqrstuvw");
+        let a = StaticString::<8>::new("");
+        let b = StaticString::<8>::new("abc");
+        let c = StaticString::<8>::new("abcdefgh");
+        let d = StaticString::<8>::new("lmnopqrstuvw");
 
         assert_eq!(a.str(), "");
         assert_eq!(b.str(), "abc");

@@ -2,10 +2,9 @@ use crate::{
     audioconfig::AudioConfiguration, channelconfig::ChannelConfiguration,
     loggingconfig::LoggerConfiguration,
 };
-use mem::str::String32;
+use mem::str::StaticString;
 
 /// Wrapper configuration type for system configuration
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub struct SystemConfiguration {
     /// Audio configuration values
@@ -35,21 +34,20 @@ impl Default for SystemConfiguration {
             audio: AudioConfiguration::default(),
             logger: LoggerConfiguration::default(),
             channels: [ChannelConfiguration {
-                name: String32::empty(),
+                name: StaticString::empty(),
                 ..ChannelConfiguration::default()
             }; 32],
         };
-        a.channels[0].name = String32::new("Metronome");
-        a.channels[0].name = String32::new("Timecode");
+        a.channels[0].name = StaticString::new("Metronome");
+        a.channels[1].name = StaticString::new("Timecode");
         for i in 2..32 {
-            a.channels[i].name = String32::new("i");
+            a.channels[i].name = StaticString::new("i");
         }
         a
     }
 }
 
 /// Represents a requested change in a system subconfiguration
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum SystemConfigurationChange {
     /// Replace the audio configuration with the provided
