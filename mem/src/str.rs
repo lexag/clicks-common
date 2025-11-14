@@ -1,3 +1,6 @@
+#[cfg(feature = "serde")]
+extern crate serde;
+
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy, bincode::Encode, bincode::Decode)]
 pub struct StaticString<const L: usize> {
     pub content: [u8; L],
@@ -62,5 +65,42 @@ mod tests {
         assert_eq!(b.str(), "abc");
         assert_eq!(c.str(), "abcdefgh");
         assert_eq!(d.str(), "lmnopqrs");
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<const L: usize> serde::Serialize for StaticString<L> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.str())
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de, const L: usize> serde::Deserialize<'de> for StaticString<L> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct StaticStringVisitor<const L: usize>;
+
+        impl<'de, const L: usize> serde::de::Visitor<'de> for StaticStringVisitor<L> {
+            type Value = StaticString<L>;
+
+            fn expecting(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+                write!(f, "a string of exactly {} bytes", L)
+            }
+
+            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Ok(StaticString::new(v))
+            }
+        }
+
+        deserializer.deserialize_str(StaticStringVisitor::<L>)
     }
 }

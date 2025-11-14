@@ -2,6 +2,7 @@ use crate::{message::MessageType, str::StaticString};
 use core::fmt;
 
 /// Information about a client subscribing to core messages
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Default, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub struct SubscriberInfo {
     /// Human readable identifier, such as device name or user
@@ -15,6 +16,7 @@ pub struct SubscriberInfo {
 }
 
 /// Ipv4 address and udp port information
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Default, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub struct IpAddress {
     /// UDP/TCP port number 0-65535
@@ -72,6 +74,7 @@ impl fmt::Display for IpAddress {
 }
 
 /// Which end of a network connection is this?
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub enum ConnectionEnd {
     /// The ClicKS core
@@ -85,6 +88,7 @@ pub enum ConnectionEnd {
 }
 
 /// Information about a connection
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct ConnectionInfo {
     /// Identifier
