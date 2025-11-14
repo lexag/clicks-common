@@ -61,6 +61,27 @@ impl IpAddress {
         }
         Some(octets)
     }
+
+    /// Format the a.b.c.d part of the address as a string: "aaa.bbb.ccc.ddd"
+    pub fn str_from_octets(&self) -> StaticString<32> {
+        let mut s = StaticString::new("");
+        s.set_char(0, self.addr[0] / 100 + 0x30);
+        s.set_char(1, self.addr[0] / 10 % 10 + 0x30);
+        s.set_char(2, self.addr[0] % 10 + 0x30);
+        s.set_char(3, b'.');
+        s.set_char(4, self.addr[1] / 100 + 0x30);
+        s.set_char(5, self.addr[1] / 10 % 10 + 0x30);
+        s.set_char(6, self.addr[1] % 10 + 0x30);
+        s.set_char(7, b'.');
+        s.set_char(8, self.addr[2] / 100 + 0x30);
+        s.set_char(9, self.addr[2] / 10 % 10 + 0x30);
+        s.set_char(10, self.addr[2] % 10 + 0x30);
+        s.set_char(11, b'.');
+        s.set_char(12, self.addr[3] / 100 + 0x30);
+        s.set_char(13, self.addr[3] / 10 % 10 + 0x30);
+        s.set_char(14, self.addr[3] % 10 + 0x30);
+        s
+    }
 }
 
 impl fmt::Display for IpAddress {
