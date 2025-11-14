@@ -1,7 +1,7 @@
 use core::fmt::{Display, Formatter, Result};
 
 /// A SMPTE LTC timestamp, including frame rate.
-#[derive(Default, Debug, Clone, Copy, Eq)]
+#[derive(Default, Debug, Clone, Copy, Eq, bincode::Encode, bincode::Decode)]
 pub struct TimecodeInstant {
     /// Frame rate in frames per second
     pub frame_rate: usize,

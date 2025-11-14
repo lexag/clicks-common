@@ -2,7 +2,7 @@ use crate::{message::MessageType, str::StaticString};
 use core::fmt;
 
 /// Information about a client subscribing to core messages
-#[derive(Debug, Clone, PartialEq, Default, Eq, Copy)]
+#[derive(Debug, Clone, PartialEq, Default, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub struct SubscriberInfo {
     /// Human readable identifier, such as device name or user
     pub identifier: StaticString<32>,
@@ -15,7 +15,7 @@ pub struct SubscriberInfo {
 }
 
 /// Ipv4 address and udp port information
-#[derive(Debug, Clone, PartialEq, Default, Eq, Copy)]
+#[derive(Debug, Clone, PartialEq, Default, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub struct IpAddress {
     /// UDP/TCP port number 0-65535
     pub port: u16,
@@ -72,7 +72,7 @@ impl fmt::Display for IpAddress {
 }
 
 /// Which end of a network connection is this?
-#[derive(Clone, Debug, PartialEq, Copy)]
+#[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub enum ConnectionEnd {
     /// The ClicKS core
     Server,
@@ -85,7 +85,7 @@ pub enum ConnectionEnd {
 }
 
 /// Information about a connection
-#[derive(Clone, Debug, PartialEq, Copy)]
+#[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct ConnectionInfo {
     /// Identifier
     pub identifier: StaticString<32>,

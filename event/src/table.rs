@@ -1,7 +1,7 @@
 use crate::event::Event;
 
 /// Table of events that occur in a specific cue.
-#[derive(Clone, Debug, PartialEq, Copy)]
+#[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct EventTable {
     table: [Event; Self::SIZE],
     table_ptr: u8,

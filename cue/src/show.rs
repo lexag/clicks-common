@@ -2,7 +2,7 @@ use crate::cue::{Cue, CueSkeleton};
 use mem::str::StaticString;
 
 /// A Show represents a collection of Cues for semi-linear sequential playback
-#[derive(Debug, Clone, PartialEq, Copy)]
+#[derive(Debug, Clone, PartialEq, Copy, bincode::Decode, bincode::Encode)]
 pub struct Show {
     /// Metadata for this show
     pub metadata: ShowMetadata,
@@ -27,7 +27,7 @@ impl Default for Show {
 /// Metadata for a Show instance. Like with [crate::cue::CueMetadata], anything that is human readable and
 /// might be of interest to anyone without in-depth technical knowledge about the inner workings
 /// of ClicKS should be in ShowMetadata in a human readable format.
-#[derive(Default, Debug, Clone, PartialEq, Copy)]
+#[derive(Default, Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct ShowMetadata {
     /// Name of this show. Usually the name of the production
     pub name: StaticString<32>,
@@ -37,7 +37,7 @@ pub struct ShowMetadata {
 }
 
 /// Lightweight shadow of [Show] for network and uC purposes, see [CueSkeleton]
-#[derive(Debug, Clone, PartialEq, Copy)]
+#[derive(Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct ShowSkeleton {
     /// Metadata for this show
     pub metadata: ShowMetadata,

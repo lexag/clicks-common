@@ -8,7 +8,7 @@ use mem::typeflags::MessageType;
 
 /// Definition of messages sent from core to client
 #[allow(clippy::large_enum_variant)]
-#[derive(Clone, Debug, Copy)]
+#[derive(Clone, Debug, Copy, bincode::Encode, bincode::Decode)]
 pub enum Message {
     /// Transport state has changed. Sent once whenever jumping or starting/stopping playback, and
     /// multiple times per second during playback.

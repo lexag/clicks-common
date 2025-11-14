@@ -2,7 +2,7 @@ use beat::Beat;
 use event::JumpModeChange;
 
 /// Current timing state of the metronome
-#[derive(Clone, Debug, Default, Copy)]
+#[derive(Clone, Debug, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct BeatState {
     /// Current beat idx
     pub beat_idx: u16,

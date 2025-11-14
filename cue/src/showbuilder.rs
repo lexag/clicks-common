@@ -1,8 +1,6 @@
 #![allow(unused_imports)]
 #[cfg(feature = "std")]
 use crate::show::Show;
-#[cfg(feature = "std")]
-use serde::de::Error;
 
 #[cfg(feature = "std")]
 extern crate std;
@@ -17,16 +15,17 @@ pub struct ShowBuilder {}
 impl ShowBuilder {
     /// Load a [Show] from a show.json file
     /// Returns an error if the file can't be read or if the json is invalid utf8
-    pub fn from_file(path: std::path::PathBuf) -> Result<Show, serde_json::Error> {
+    pub fn from_file(
+        path: std::path::PathBuf,
+    ) -> Result<(Show, usize), bincode::error::DecodeError> {
+        use bincode::config::{BigEndian, Config, Configuration, Fixint};
+
         let file = match std::fs::read(path) {
             Ok(val) => val,
-            Err(_err) => return Err(serde_json::Error::custom("could not read file")),
+            Err(_err) => return Err(bincode::error::DecodeError::Other("file read error")),
         };
 
-        let file_str = match std::str::from_utf8(&file) {
-            Ok(val) => val,
-            Err(_err) => return Err(serde_json::Error::custom("invalid utf8")),
-        };
-        serde_json::from_str::<Show>(file_str)
+        let config = Configuration::default();
+        bincode::decode_from_slice::<Show, Configuration<BigEndian, Fixint>>(&file, config)
     }
 }

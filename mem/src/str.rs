@@ -1,4 +1,4 @@
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy, bincode::Encode, bincode::Decode)]
 pub struct StaticString<const L: usize> {
     pub content: [u8; L],
 }

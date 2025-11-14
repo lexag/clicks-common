@@ -1,7 +1,7 @@
 use mem::str::StaticString;
 
 /// Description of a system audio device
-#[derive(Debug, Clone, Default, Copy)]
+#[derive(Debug, Clone, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct AudioDevice {
     /// Id string of this device
     pub id: StaticString<32>,
@@ -35,7 +35,7 @@ impl AudioDevice {
 /// JACK audio status. Contains both some server specific and some client specific data, as the
 /// line between client and server is blurred on an integrated system with its own JACK-server and
 /// a single client.
-#[derive(Debug, Clone, Default, Copy)]
+#[derive(Debug, Clone, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct JACKStatus {
     /// Before starting the audio processing, the first 8 available devices to connect the JACK server to.
     /// After starting the audio processing, no audio devices are available and this value shows

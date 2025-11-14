@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 beat = { path = "../beat" }
+bincode = { version = "2.0.1", features = ["derive"] }
 event = { path = "../event" }
 mem = { path = "../mem" }
 

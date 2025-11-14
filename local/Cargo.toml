@@ -9,5 +9,6 @@ event = { path = "../event" }
 cue = { path = "../cue" }
 mem = { path = "../mem" }
 bitflags = { version = "2.10.0" }
+bincode = { version = "2.0.1", features = ["derive"] }
 
 [features]

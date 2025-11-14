@@ -1,5 +1,7 @@
 /// Enumerator for specifying the type of client->core request.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy)]
+#[derive(
+    Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, bincode::Encode, bincode::Decode,
+)]
 pub enum RequestType {
     /// This request is a NotifySubscribers request.
     NotifySubscribers,

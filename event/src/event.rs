@@ -2,7 +2,7 @@ use core::fmt;
 use mem::{smpte::TimecodeInstant, str::StaticString};
 
 /// Conditional VLT requirement to perform a [EventDescription::JumpEvent].
-#[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
+#[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub enum JumpRequirement {
     /// VLT must be on
     JumpModeOn,
@@ -23,7 +23,9 @@ impl fmt::Display for JumpRequirement {
 }
 
 /// How (if at all) to change VLT state, for example after a jump or on a request from client
-#[derive(Clone, PartialEq, Debug, Default, PartialOrd, Ord, Eq, Copy)]
+#[derive(
+    Clone, PartialEq, Debug, Default, PartialOrd, Ord, Eq, Copy, bincode::Encode, bincode::Decode,
+)]
 pub enum JumpModeChange {
     /// Set VLT on
     SetOn,
@@ -59,7 +61,7 @@ impl JumpModeChange {
 }
 
 /// When pausing from a PauseEvent, what action to take to prepare for playback again
-#[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy)]
+#[derive(Clone, PartialEq, Debug, PartialOrd, Ord, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub enum PauseEventBehaviour {
     /// Pause and do nothing. Playback will resume exactly where stopped, which may have been in
     /// the middle of a beat.
@@ -104,7 +106,7 @@ impl fmt::Display for PauseEventBehaviour {
 /// All triggers, markers and similar are events.
 ///
 /// Events can be unpopulated, in which case they have location = u16::MAX and event = None
-#[derive(PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy, bincode::Encode, bincode::Decode)]
 pub struct Event {
     /// Location (beat idx) of this event in the cue
     pub location: u16,
@@ -148,7 +150,7 @@ impl Event {
 /// EventDescription contains definitions for all event types, and the data they contain
 /// All events are const-size to support uC communication, but must not be equal size to each
 /// other. Guideline is about 128 bytes per event.
-#[derive(Clone, PartialEq, Debug, Ord, PartialOrd, Eq, Copy)]
+#[derive(Clone, PartialEq, Debug, Ord, PartialOrd, Eq, Copy, bincode::Encode, bincode::Decode)]
 pub enum EventDescription {
     /// When triggered: change the next beat pointer to this event's destination field.
     /// Can be conditional with [JumpRequirement] and can conditionally change VLT state with [JumpModeChange]

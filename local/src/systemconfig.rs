@@ -5,7 +5,7 @@ use crate::{
 use mem::str::StaticString;
 
 /// Wrapper configuration type for system configuration
-#[derive(Debug, Clone, PartialEq, Copy)]
+#[derive(Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct SystemConfiguration {
     /// Audio configuration values
     pub audio: AudioConfiguration,
@@ -48,7 +48,7 @@ impl Default for SystemConfiguration {
 }
 
 /// Represents a requested change in a system subconfiguration
-#[derive(Debug, Clone, PartialEq, Copy)]
+#[derive(Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub enum SystemConfigurationChange {
     /// Replace the audio configuration with the provided
     ChangeAudioConfiguration(AudioConfiguration),
