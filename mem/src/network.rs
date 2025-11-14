@@ -55,7 +55,7 @@ impl IpAddress {
     fn octets_from_str(mut str: &str) -> Option<[u8; 4]> {
         let mut octets: [u8; 4] = [0; 4];
         for i in &mut octets {
-            let (octet, rest) = str.split_once('.')?;
+            let (octet, rest) = str.split_once('.').or(Some((str, "")))?;
             *i = octet.parse().ok()?;
             str = rest;
         }
@@ -106,5 +106,33 @@ impl Default for ConnectionInfo {
             identifier: StaticString::new("Unknown identifier"),
             address: IpAddress::default(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn ip_from_str() {
+        assert_eq!(
+            IpAddress::from_address_str("192.168.1.123:12345"),
+            Some(IpAddress::new([192, 168, 1, 123], 12345))
+        );
+        assert_eq!(
+            IpAddress::from_address_str("0.0.0.0:0"),
+            Some(IpAddress::new([0, 0, 0, 0], 0))
+        );
+        assert_eq!(IpAddress::from_address_str("300.168.1.123:12345"), None);
+        assert_eq!(IpAddress::from_address_str("192.168:1"), None);
+    }
+
+    #[test]
+    fn octets_from_str() {
+        assert_eq!(
+            IpAddress::octets_from_str("192.168.1.123"),
+            Some([192, 168, 1, 123])
+        );
+        assert_eq!(IpAddress::octets_from_str("168.1.123"), None);
+        assert_eq!(IpAddress::octets_from_str("192.168:1.123"), None);
     }
 }
