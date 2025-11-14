@@ -20,6 +20,7 @@ mod tests {
         print_size_of!(crate::cue::ShowMetadata);
         print_size_of!(crate::cue::ShowSkeleton);
         print_size_of!(crate::event::Event);
+        print_size_of!(crate::event::EventDescription);
         print_size_of!(crate::local::config::AudioConfiguration);
         print_size_of!(crate::local::config::ChannelConfiguration);
         print_size_of!(crate::local::config::JACKClientConfiguration);
@@ -41,6 +42,7 @@ mod tests {
         print_size_of!(crate::mem::network::IpAddress);
         print_size_of!(crate::mem::network::SubscriberInfo);
         print_size_of!(crate::mem::smpte::TimecodeInstant);
+        print_size_of!(crate::mem::str::StaticString<8>);
         print_size_of!(crate::mem::typeflags::MessageType);
         print_size_of!(crate::protocol::message::Heartbeat);
         print_size_of!(crate::protocol::message::Message);

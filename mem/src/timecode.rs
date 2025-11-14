@@ -4,15 +4,15 @@ use core::fmt::{Display, Formatter, Result};
 #[derive(Default, Debug, Clone, Copy, Eq, bincode::Encode, bincode::Decode)]
 pub struct TimecodeInstant {
     /// Frame rate in frames per second
-    pub frame_rate: usize,
+    pub frame_rate: u8,
     /// Current number of hours
-    pub h: i16,
+    pub h: i8,
     /// Current number of minutes
-    pub m: i16,
+    pub m: i8,
     /// Current number of seconds
-    pub s: i16,
+    pub s: i8,
     /// Current number of frames
-    pub f: i16,
+    pub f: i8,
     /// Current progress through the current frame, 0-65536
     pub frame_progress: u16,
 }
@@ -61,7 +61,7 @@ impl Display for TimecodeInstant {
 
 impl TimecodeInstant {
     /// Create a 00:00:00:00 timecode instant with the given frame rate
-    pub fn new(frame_rate: usize) -> TimecodeInstant {
+    pub fn new(frame_rate: u8) -> TimecodeInstant {
         TimecodeInstant {
             frame_rate,
             ..Default::default()
@@ -82,7 +82,7 @@ impl TimecodeInstant {
 
     /// Add an amount of microseconds to this timestamp.
     pub fn add_us(&mut self, time_us: u64) {
-        self.f += (time_us * self.frame_rate as u64 / 1000000) as i16;
+        self.f += (time_us * self.frame_rate as u64 / 1000000) as i8;
         self.propagate();
     }
     /// Subtract an amount of microseconds from this timestamp.
@@ -103,18 +103,18 @@ impl TimecodeInstant {
 
     /// Set the current timestamp
     pub fn set_time(&mut self, h: usize, m: usize, s: usize, f: usize) {
-        self.h = h as i16;
-        self.m = m as i16;
-        self.s = s as i16;
-        self.f = f as i16;
+        self.h = h as i8;
+        self.m = m as i8;
+        self.s = s as i8;
+        self.f = f as i8;
     }
 
     // propagate changes to f into the other values
     fn propagate(&mut self) {
-        self.s += self.f / self.frame_rate as i16;
-        self.f %= self.frame_rate as i16;
-        self.f += self.frame_rate as i16;
-        self.f %= self.frame_rate as i16;
+        self.s += self.f / self.frame_rate as i8;
+        self.f %= self.frame_rate as i8;
+        self.f += self.frame_rate as i8;
+        self.f %= self.frame_rate as i8;
         self.m += self.s / 60;
         self.s %= 60;
         self.h += self.m / 60;

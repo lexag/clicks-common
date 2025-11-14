@@ -184,12 +184,12 @@ pub enum EventDescription {
 
     /// When triggered: start playing a clip on a playback channel
     PlaybackEvent {
+        /// Clip start offset in samples
+        sample: i32,
         /// targeted playback channel
         channel_idx: u16,
         /// playback clip idx
         clip_idx: u16,
-        /// Clip start offset in samples
-        sample: i32,
     },
     /// When triggered: stop playback on a channel
     PlaybackStopEvent {
