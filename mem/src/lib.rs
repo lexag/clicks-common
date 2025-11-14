@@ -1,5 +1,5 @@
 #![warn(missing_docs)]
-#![no_std]
+#![cfg_attr(feature = "std", no_std)]
 //! Low-level data representation formats
 mod message;
 mod request;

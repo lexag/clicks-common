@@ -2,6 +2,7 @@
 #![no_std]
 //! This crate contains common functionality and data formats shared between the ClicKS core and
 //! client components
+mod test_size;
 
 pub use beat;
 pub use cue;

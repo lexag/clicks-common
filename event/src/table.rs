@@ -10,7 +10,7 @@ pub struct EventTable {
 impl EventTable {
     /// EventTable is const-size to support uC and low level network communication, and must
     /// therefore have a constant size. 64 events per cue should be plenty for most situtations.
-    pub const SIZE: usize = 64;
+    pub const SIZE: usize = 32;
 
     /// Create an empty EventTable.
     pub const fn empty() -> Self {

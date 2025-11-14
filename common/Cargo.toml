@@ -12,5 +12,5 @@ event = { path = "../event" }
 local = { path = "../local" }
 
 [features]
-std = ["cue/std"]
+std = ["cue/std", "mem/std"]
 serde = ["mem/serde"]
