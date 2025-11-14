@@ -50,24 +50,6 @@ impl<const L: usize> Default for StaticString<L> {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn str_8() {
-        let a = StaticString::<8>::new("");
-        let b = StaticString::<8>::new("abc");
-        let c = StaticString::<8>::new("abcdefgh");
-        let d = StaticString::<8>::new("lmnopqrstuvw");
-
-        assert_eq!(a.str(), "");
-        assert_eq!(b.str(), "abc");
-        assert_eq!(c.str(), "abcdefgh");
-        assert_eq!(d.str(), "lmnopqrs");
-    }
-}
-
 #[cfg(feature = "serde")]
 impl<const L: usize> serde::Serialize for StaticString<L> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -102,5 +84,23 @@ impl<'de, const L: usize> serde::Deserialize<'de> for StaticString<L> {
         }
 
         deserializer.deserialize_str(StaticStringVisitor::<L>)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn str_8() {
+        let a = StaticString::<8>::new("");
+        let b = StaticString::<8>::new("abc");
+        let c = StaticString::<8>::new("abcdefgh");
+        let d = StaticString::<8>::new("lmnopqrstuvw");
+
+        assert_eq!(a.str(), "");
+        assert_eq!(b.str(), "abc");
+        assert_eq!(c.str(), "abcdefgh");
+        assert_eq!(d.str(), "lmnopqrs");
     }
 }
