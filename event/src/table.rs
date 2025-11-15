@@ -1,4 +1,5 @@
 use crate::event::Event;
+extern crate tiny_sort;
 
 /// Table of events that occur in a specific cue.
 #[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
