@@ -254,6 +254,11 @@ impl Cue {
 
         self.beats = new_beats;
     }
+
+    /// Is this cue an empty cue slot in the show, or is it populated with actual cue data?
+    pub fn is_null(&self) -> bool {
+        self.beats[0].is_null()
+    }
 }
 
 #[cfg(test)]
