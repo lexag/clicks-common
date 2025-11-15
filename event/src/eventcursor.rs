@@ -79,6 +79,11 @@ impl<'a> EventCursor<'a> {
     pub fn goto(&mut self, idx: u8) {
         self.cursor = idx;
     }
+
+    /// Get the currently pointed at index
+    pub fn cursor_idx(&self) -> u8 {
+        self.cursor
+    }
 }
 
 #[cfg(test)]
