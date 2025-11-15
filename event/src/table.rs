@@ -54,7 +54,7 @@ impl EventTable {
     /// Sort this table in order of event location.
     /// Unpopulated events (null-events) will be at the end of the table
     pub fn sort(&mut self) {
-        unimplemented!()
+        tiny_sort::stable::sort_by_key(&mut self.table, |e: &Event| e.location);
     }
 
     /// Add an event to this table.
