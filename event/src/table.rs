@@ -30,6 +30,16 @@ impl EventTable {
         }
     }
 
+    /// Get a mut ref to the event at idx, returning a null-event if idx is out of bounds.
+    pub fn get_mut(&mut self, idx: u8) -> Option<&Event> {
+        let e = self.table.get_mut(idx as usize)?;
+        if e.is_null() {
+            None
+        } else {
+            Some(e)
+        }
+    }
+
     /// Set the event value at idx.
     /// Returns boolean success.
     pub fn set(&mut self, idx: u8, event: Event) -> bool {
