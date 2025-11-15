@@ -6,5 +6,6 @@ edition = "2024"
 [dependencies]
 bincode = { version = "2.0.1", features = ["derive"] }
 mem = { path = "../mem" }
+tiny_sort = "1.0.5"
 
 [features]
