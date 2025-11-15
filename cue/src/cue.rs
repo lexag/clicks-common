@@ -50,9 +50,9 @@ impl CueSkeleton {
 #[derive(Clone, Debug, Default, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct CueMetadata {
     /// Name of the cue, usually a song name or description of what happens on stage
-    pub name: StaticString<32>,
+    pub name: StaticString<16>,
     /// Human readable identifier, such as an index, letter, or an alternative cue name
-    pub human_ident: StaticString<32>,
+    pub human_ident: StaticString<8>,
 }
 
 impl CueMetadata {
