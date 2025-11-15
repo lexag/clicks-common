@@ -1,5 +1,4 @@
 use crate::event::Event;
-extern crate tiny_sort;
 
 /// Table of events that occur in a specific cue.
 #[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
@@ -78,5 +77,24 @@ impl EventTable {
         self.set(idx, Event::null());
         self.sort();
         Some(e)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sort() {
+        let mut t = EventTable::empty();
+        t.push(Event::new(12, crate::EventDescription::TimecodeStopEvent));
+        t.push(Event::new(10, crate::EventDescription::TimecodeStopEvent));
+        t.push(Event::new(4, crate::EventDescription::TimecodeStopEvent));
+        t.push(Event::new(16, crate::EventDescription::TimecodeStopEvent));
+        assert_eq!(t.table[0].location, 4);
+        assert_eq!(t.table[1].location, 10);
+        assert_eq!(t.table[2].location, 12);
+        assert_eq!(t.table[3].location, 16);
+        assert_eq!(t.table[4].location, 65535);
     }
 }
