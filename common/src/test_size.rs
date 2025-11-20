@@ -21,6 +21,7 @@ mod tests {
         print_size_of!(crate::cue::ShowSkeleton);
         print_size_of!(crate::event::Event);
         print_size_of!(crate::event::EventDescription);
+        print_size_of!(crate::event::EventTable);
         print_size_of!(crate::local::config::AudioConfiguration);
         print_size_of!(crate::local::config::ChannelConfiguration);
         print_size_of!(crate::local::config::JACKClientConfiguration);
