@@ -1,4 +1,5 @@
 use crate::message::heartbeat::Heartbeat;
+use event::EventDescription;
 use local::status::{BeatState, TransportState};
 use mem::typeflags::MessageType;
 
@@ -20,6 +21,8 @@ pub enum SmallMessage {
     /// Sent every few seconds to all clients, reporting core status and making sure the connection
     /// is alive
     Heartbeat(Heartbeat),
+    /// A playback timeline event just occured
+    EventOccured(EventDescription),
 }
 
 impl SmallMessage {
@@ -30,6 +33,7 @@ impl SmallMessage {
             Self::BeatData(..) => MessageType::BeatData,
             Self::ShutdownOccured => MessageType::ShutdownOccured,
             Self::Heartbeat(..) => MessageType::Heartbeat,
+            Self::EventOccured(..) => MessageType::EventOccured,
         }
     }
 }

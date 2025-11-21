@@ -21,6 +21,8 @@ bitflags::bitflags! {
         const ShutdownOccured = 0x80;
         /// Heartbeat
         const Heartbeat = 0x100;
+        /// Event occured
+        const EventOccured = 0x200;
     }
 }
 
