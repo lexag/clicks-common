@@ -1,7 +1,9 @@
+use core::fmt;
+
 #[cfg(feature = "serde")]
 extern crate serde;
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug, Copy, bincode::Encode, bincode::Decode)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, bincode::Encode, bincode::Decode)]
 pub struct StaticString<const L: usize> {
     pub content: [u8; L],
 }
@@ -41,6 +43,18 @@ impl<const L: usize> StaticString<L> {
 
     pub fn is_empty(self) -> bool {
         self.len() == 0
+    }
+}
+
+impl<const L: usize> fmt::Debug for StaticString<L> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_fmt(format_args!("\"{}\"", self.str()))
+    }
+}
+
+impl<const L: usize> fmt::Display for StaticString<L> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.str())
     }
 }
 
