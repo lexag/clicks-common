@@ -1,0 +1,16 @@
+[package]
+name = "cue"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+beat = { path = "../beat" }
+bincode = { version = "2.0.1", features = ["derive"] }
+event = { path = "../event" }
+mem = { path = "../mem" }
+serde = { version = "1.0.228", features = ["derive"], optional = true }
+serde_json = { version = "1.0.145", optional = true }
+
+[features]
+std = []
+serde = ["dep:serde", "dep:serde_json"]

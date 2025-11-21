@@ -1,0 +1,12 @@
+[package]
+name = "beat"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bincode = { version = "2.0.1", features = ["derive"] }
+serde = { version = "1.0.228", optional = true }
+serde_json = { version = "1.0.145", optional = true }
+
+[features]
+serde = ["dep:serde", "dep:serde_json"]

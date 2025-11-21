@@ -1,0 +1,19 @@
+[package]
+name = "protocol"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+beat = { path = "../beat" }
+event = { path = "../event" }
+cue = { path = "../cue" }
+mem = { path = "../mem" }
+local = { path = "../local" }
+bitflags = { version = "2.10.0" }
+bincode = { version = "2.0.1", features = ["derive"] }
+serde = { version = "1.0.228", optional = true }
+serde_json = { version = "1.0.145", optional = true }
+
+[features]
+serde = ["dep:serde", "dep:serde_json", "std"]
+std = []
