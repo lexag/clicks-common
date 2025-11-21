@@ -2,6 +2,10 @@
 #[cfg(feature = "std")]
 use crate::show::Show;
 
+#[cfg(feature = "serde")]
+extern crate serde;
+#[cfg(feature = "serde")]
+extern crate serde_json;
 #[cfg(feature = "std")]
 extern crate std;
 
@@ -31,6 +35,7 @@ impl ShowBuilder {
 
     /// Load a [Show] from a show.json file
     /// Returns an error if the file can't be read or if the json is invalid utf8
+    #[cfg(feature = "serde")]
     pub fn from_json_file(
         path: std::path::PathBuf,
     ) -> Result<(Show, usize), serde_json::error::Error> {
