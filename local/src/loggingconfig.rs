@@ -2,6 +2,7 @@ use core::fmt;
 
 bitflags::bitflags! {
     /// Bitflag for different types of logs
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
     #[derive(Default, Debug, Clone, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
     pub struct LogKind: u8 {
         /// Error, something has gone wrong
@@ -59,6 +60,7 @@ impl fmt::Display for LogKind {
 
 bitflags::bitflags! {
     /// Bitflag for various contexts from which log messages can source
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
     #[derive(Default, Debug, Clone, Hash, Eq, PartialEq, PartialOrd, Ord, Copy)]
     pub struct LogContext: u8 {
         /// The logging device itself
@@ -118,6 +120,7 @@ impl LogContext {
 }
 
 /// Wrapper configuration for the logging device
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct LoggerConfiguration {
     /// Which log-kinds to log. Ignores all others.

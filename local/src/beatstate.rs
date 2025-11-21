@@ -2,6 +2,7 @@ use beat::Beat;
 use event::JumpModeChange;
 
 /// Current timing state of the metronome
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct BeatState {
     /// Current beat idx

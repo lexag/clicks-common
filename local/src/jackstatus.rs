@@ -1,6 +1,7 @@
 use mem::str::StaticString;
 
 /// Description of a system audio device
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct AudioDevice {
     /// Id string of this device
@@ -35,6 +36,7 @@ impl AudioDevice {
 /// JACK audio status. Contains both some server specific and some client specific data, as the
 /// line between client and server is blurred on an integrated system with its own JACK-server and
 /// a single client.
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, Default, Copy, bincode::Encode, bincode::Decode)]
 pub struct JACKStatus {
     /// Before starting the audio processing, the first 8 available devices to connect the JACK server to.

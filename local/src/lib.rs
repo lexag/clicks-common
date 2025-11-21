@@ -6,7 +6,9 @@ mod audioconfig;
 mod audiosource;
 mod beatstate;
 mod channelconfig;
+#[cfg(feature = "std")]
 mod combinedstatus;
+#[cfg(feature = "std")]
 mod cuestate;
 mod jackstatus;
 mod loggingconfig;
@@ -37,7 +39,9 @@ pub mod status {
     //! playback
     pub use super::audiosource::AudioSourceState;
     pub use super::beatstate::BeatState;
+    #[cfg(feature = "std")]
     pub use super::combinedstatus::CombinedStatus;
+    #[cfg(feature = "std")]
     pub use super::cuestate::CueState;
     pub use super::jackstatus::AudioDevice;
     pub use super::jackstatus::JACKStatus;

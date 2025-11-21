@@ -46,6 +46,7 @@ mod tests {
         print_size_of!(crate::mem::str::StaticString<8>);
         print_size_of!(crate::mem::typeflags::MessageType);
         print_size_of!(crate::protocol::message::Heartbeat);
-        print_size_of!(crate::protocol::message::Message);
+        print_size_of!(crate::protocol::message::LargeMessage);
+        print_size_of!(crate::protocol::message::SmallMessage);
     }
 }

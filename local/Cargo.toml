@@ -10,5 +10,9 @@ cue = { path = "../cue" }
 mem = { path = "../mem" }
 bitflags = { version = "2.10.0" }
 bincode = { version = "2.0.1", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"], optional = true }
+serde_json = { version = "1.0.145", optional = true }
 
 [features]
+serde = ["dep:serde", "dep:serde_json", "std"]
+std = []

@@ -1,32 +1,33 @@
+#[cfg(feature = "std")]
 use crate::cue::{Cue, CueSkeleton};
 use mem::str::StaticString;
 
+#[cfg(feature = "std")]
+extern crate std;
+#[cfg(feature = "std")]
+use std::vec::Vec;
+
 /// A Show represents a collection of Cues for semi-linear sequential playback
-#[derive(Debug, Clone, PartialEq, Copy, bincode::Decode, bincode::Encode)]
+#[cfg(feature = "std")]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Default, Debug, Clone, PartialEq, bincode::Decode, bincode::Encode)]
 pub struct Show {
     /// Metadata for this show
     pub metadata: ShowMetadata,
     /// Cue table for this show.
-    pub cues: [Cue; Show::NUM_CUES],
+    pub cues: Vec<Cue>,
 }
 
+#[cfg(feature = "std")]
 impl Show {
     /// Number of slots for cues this type contains.
     pub const NUM_CUES: usize = 64;
 }
 
-impl Default for Show {
-    fn default() -> Self {
-        Self {
-            metadata: ShowMetadata::default(),
-            cues: [Cue::default(); Show::NUM_CUES],
-        }
-    }
-}
-
 /// Metadata for a Show instance. Like with [crate::cue::CueMetadata], anything that is human readable and
 /// might be of interest to anyone without in-depth technical knowledge about the inner workings
 /// of ClicKS should be in ShowMetadata in a human readable format.
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Default, Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct ShowMetadata {
     /// Name of this show. Usually the name of the production
@@ -37,20 +38,22 @@ pub struct ShowMetadata {
 }
 
 /// Lightweight shadow of [Show] for network and uC purposes, see [CueSkeleton]
-#[derive(Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
+#[cfg(feature = "std")]
+#[derive(Debug, Clone, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct ShowSkeleton {
     /// Metadata for this show
     pub metadata: ShowMetadata,
     /// Cue table for this show.
-    pub cues: [CueSkeleton; Show::NUM_CUES],
+    pub cues: Vec<CueSkeleton>,
 }
 
+#[cfg(feature = "std")]
 impl ShowSkeleton {
     /// Create a new ShowSkeleton from a full show
     pub fn new(show: Show) -> Self {
         Self {
             metadata: show.metadata,
-            cues: show.cues.map(CueSkeleton::new),
+            cues: show.cues.into_iter().map(CueSkeleton::new).collect(),
         }
     }
 
@@ -58,7 +61,7 @@ impl ShowSkeleton {
     pub fn to_show(self) -> Show {
         Show {
             metadata: self.metadata,
-            cues: self.cues.map(|c| c.to_cue()),
+            cues: self.cues.into_iter().map(|c| c.to_cue()).collect(),
         }
     }
 }

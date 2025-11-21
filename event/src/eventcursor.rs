@@ -30,7 +30,7 @@ impl<'a> EventCursor<'a> {
         if self.location() > location {
             self.cursor = 0;
         }
-        while self.location() < location && self.cursor < EventTable::SIZE as u8 {
+        while self.location() < location && self.cursor < self.table.len() as u8 {
             self.cursor += 1;
         }
     }
@@ -92,7 +92,7 @@ mod tests {
 
     fn make_dummy_table() -> EventTable {
         let mut c = EventTable::empty();
-        for i in 0..EventTable::SIZE as u8 {
+        for i in 0..64 {
             c.set(
                 i,
                 Event {

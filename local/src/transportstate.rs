@@ -1,6 +1,7 @@
 use mem::smpte::TimecodeInstant;
 
 /// Status of current transport location and state
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, Copy, bincode::Encode, bincode::Decode)]
 pub struct TransportState {
     /// Time left to next beat in us

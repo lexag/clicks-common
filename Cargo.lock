@@ -7,6 +7,8 @@ name = "beat"
 version = "0.1.0"
 dependencies = [
  "bincode",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -68,6 +70,8 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "mem",
+ "serde",
+ "serde_json",
  "tiny_sort",
 ]
 
@@ -87,6 +91,8 @@ dependencies = [
  "cue",
  "event",
  "mem",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -124,6 +130,8 @@ dependencies = [
  "event",
  "local",
  "mem",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

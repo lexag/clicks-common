@@ -1,16 +1,25 @@
 #![warn(missing_docs)]
 #![no_std]
 //! Definitions of cue and show
+#[cfg(feature = "std")]
 mod cue;
-pub use cue::Cue;
-pub use cue::CueMetadata;
-pub use cue::CueSkeleton;
-
+mod cuemetadata;
+#[cfg(feature = "std")]
 mod show;
-pub use show::Show;
-pub use show::ShowMetadata;
-pub use show::ShowSkeleton;
-
 mod showbuilder;
+mod showmetadata;
+
+#[cfg(feature = "std")]
+pub use cue::Cue;
+#[cfg(feature = "std")]
+pub use cue::CueSkeleton;
+pub use cuemetadata::CueMetadata;
+
+#[cfg(feature = "std")]
+pub use show::Show;
+#[cfg(feature = "std")]
+pub use show::ShowSkeleton;
+pub use showmetadata::ShowMetadata;
+
 #[cfg(feature = "std")]
 pub use showbuilder::ShowBuilder;

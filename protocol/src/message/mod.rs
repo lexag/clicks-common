@@ -1,5 +1,9 @@
 mod heartbeat;
-mod systemmessage;
+#[cfg(feature = "std")]
+mod largemessage;
+mod smallmessage;
 
 pub use heartbeat::Heartbeat;
-pub use systemmessage::Message;
+#[cfg(feature = "std")]
+pub use largemessage::LargeMessage;
+pub use smallmessage::SmallMessage;

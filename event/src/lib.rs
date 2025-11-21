@@ -12,4 +12,5 @@ mod eventcursor;
 pub use eventcursor::EventCursor;
 
 mod table;
+#[cfg(feature = "std")]
 pub use table::EventTable;

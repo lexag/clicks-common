@@ -11,5 +11,9 @@ mem = { path = "../mem" }
 local = { path = "../local" }
 bitflags = { version = "2.10.0" }
 bincode = { version = "2.0.1", features = ["derive"] }
+serde = { version = "1.0.228", optional = true }
+serde_json = { version = "1.0.145", optional = true }
 
 [features]
+serde = ["dep:serde", "dep:serde_json", "std"]
+std = []

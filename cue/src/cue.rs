@@ -1,15 +1,19 @@
 use beat::Beat;
 use event::{Event, EventCursor, EventDescription, EventTable, JumpModeChange, JumpRequirement};
-use mem::str::StaticString;
+
+extern crate std;
+use crate::CueMetadata;
+use std::vec::Vec;
 
 /// A Cue represents a musical or technical "cue", in the meaning semi-linear timeline progression
 /// with a clearly defined start and end, which may be followed or preceded by other cues.
-#[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[derive(Clone, Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct Cue {
     /// Metadata for this cue
     pub metadata: CueMetadata,
     /// Table of beats in this cue
-    pub beats: [Beat; Cue::LENGTH],
+    pub beats: Vec<Beat>,
     /// Table of events that will/can occur during this cue
     pub events: EventTable,
 }
@@ -17,7 +21,7 @@ pub struct Cue {
 /// Shadow-type of Cue, without a Beat-table. Used for lightweight network communication with
 /// clients that do not care about knowing all beat details for the cue, but may still need
 /// information about events and metadata
-#[derive(Clone, Debug, PartialEq, Copy, bincode::Encode, bincode::Decode)]
+#[derive(Clone, Debug, PartialEq, bincode::Encode, bincode::Decode)]
 pub struct CueSkeleton {
     /// Metadata for this cue
     pub metadata: CueMetadata,
@@ -27,7 +31,7 @@ pub struct CueSkeleton {
 
 impl CueSkeleton {
     /// Create a new CueSkeleton from a full cue
-    pub const fn new(cue: Cue) -> Self {
+    pub fn new(cue: Cue) -> Self {
         Self {
             metadata: cue.metadata,
             events: cue.events,
@@ -44,27 +48,6 @@ impl CueSkeleton {
     }
 }
 
-/// Cue metadata, for all information (mostly strings) regarding a cue that is not specifically
-/// playback-data such as beats and events. As a rule, everything that someone not familiar with
-/// ClicKS inner working may want to know should be in metadata
-#[derive(Clone, Debug, Default, PartialEq, Copy, bincode::Encode, bincode::Decode)]
-pub struct CueMetadata {
-    /// Name of the cue, usually a song name or description of what happens on stage
-    pub name: StaticString<16>,
-    /// Human readable identifier, such as an index, letter, or an alternative cue name
-    pub human_ident: StaticString<8>,
-}
-
-impl CueMetadata {
-    /// Compile time constant empty default function
-    pub const fn const_default() -> Self {
-        Self {
-            name: StaticString::empty(),
-            human_ident: StaticString::empty(),
-        }
-    }
-}
-
 impl Default for Cue {
     fn default() -> Cue {
         Cue::empty()
@@ -72,22 +55,12 @@ impl Default for Cue {
 }
 
 impl Cue {
-    /// Number of beats in the beat table.
-    ///
-    /// Cue is const-size to handle network communication with uC control or monitoring devices,
-    /// and must therefore be compile-time-sized.
-    ///
-    /// 512 beats is 128 measures of 4/4 which is generally enough.
-    /// If a cue needs to be more than 512 beats, automatically stepping to the next cue and
-    /// playing seamlessly should be possible.
-    pub const LENGTH: usize = 512;
-
     /// Create an empty cue containing no beats.
     /// The cue is valid for playback
     pub const fn empty() -> Cue {
         Cue {
             events: EventTable::empty(),
-            beats: [Beat::empty(); Self::LENGTH],
+            beats: Vec::new(),
             metadata: CueMetadata::const_default(),
         }
     }
@@ -97,11 +70,11 @@ impl Cue {
     pub fn example() -> Cue {
         let mut br = Cue::empty();
         for i in 0..100 {
-            br.beats[i] = Beat {
+            br.beats.push(Beat {
                 count: i as u8 % 4 + 1,
                 bar_number: i as u8 / 4 + 1,
                 length: 500,
-            };
+            });
         }
         br.events.set(
             0,
@@ -121,11 +94,11 @@ impl Cue {
     pub fn example_loop() -> Cue {
         let mut br = Cue::empty();
         for i in 0..8 {
-            br.beats[i] = Beat {
+            br.beats.push(Beat {
                 count: i as u8 % 4 + 1,
                 bar_number: i as u8 / 4 + 1,
                 length: 500,
-            };
+            });
         }
         br.events.set(
             0,
@@ -157,15 +130,15 @@ impl Cue {
     /// Returns None if idx is more than the length of this cue, or if the indexed beat is not
     /// populated.
     pub fn get_beat(&self, idx: u16) -> Option<Beat> {
-        if self.beats[idx as usize].length == 0 || Self::LENGTH <= idx as usize {
+        if self.beats.len() <= idx as usize || self.beats[idx as usize].length == 0 {
             return None;
         }
         Some(self.beats[idx as usize])
     }
 
     /// Get a copy of the beat table
-    pub fn get_beats(&self) -> [Beat; Self::LENGTH] {
-        self.beats
+    pub fn get_beats(&self) -> Vec<Beat> {
+        self.beats.clone()
     }
 
     /// Reorder all this Cue's beats' bar numbers and beat numbers, starting from m1b1-m1b2-etc
@@ -217,7 +190,7 @@ impl Cue {
         let mut beats_left_in_change: u16 = 0;
         let mut accelerator: f32 = 0.0;
 
-        let mut new_beats = self.beats;
+        let mut new_beats = self.beats.clone();
         let mut cursor = EventCursor::new(&self.events);
 
         for beat in &mut new_beats {
@@ -282,18 +255,18 @@ mod tests {
             }
         }
         let mut c = Cue::empty();
-        c.beats[0] = make_dummy_beat(1, 1);
-        c.beats[1] = make_dummy_beat(1, 2);
-        c.beats[2] = make_dummy_beat(1, 2);
-        c.beats[3] = make_dummy_beat(1, 3);
-        c.beats[4] = make_dummy_beat(3, 4);
-        c.beats[5] = make_dummy_beat(3, 2);
-        c.beats[6] = make_dummy_beat(3, 3);
-        c.beats[7] = make_dummy_beat(3, 4);
-        c.beats[8] = make_dummy_beat(3, 1);
-        c.beats[9] = make_dummy_beat(3, 2);
-        c.beats[10] = make_dummy_beat(3, 5);
-        c.beats[11] = make_dummy_beat(3, 4);
+        c.beats.push(make_dummy_beat(1, 1));
+        c.beats.push(make_dummy_beat(1, 2));
+        c.beats.push(make_dummy_beat(1, 2));
+        c.beats.push(make_dummy_beat(1, 3));
+        c.beats.push(make_dummy_beat(3, 4));
+        c.beats.push(make_dummy_beat(3, 2));
+        c.beats.push(make_dummy_beat(3, 3));
+        c.beats.push(make_dummy_beat(3, 4));
+        c.beats.push(make_dummy_beat(3, 1));
+        c.beats.push(make_dummy_beat(3, 2));
+        c.beats.push(make_dummy_beat(3, 5));
+        c.beats.push(make_dummy_beat(3, 4));
 
         c.reorder_numbers();
 
@@ -309,15 +282,6 @@ mod tests {
         assert_eq!(c.beats[9], make_dummy_beat(3, 2));
         assert_eq!(c.beats[10], make_dummy_beat(3, 3));
         assert_eq!(c.beats[11], make_dummy_beat(3, 4));
-        // Unpopulated beats must be left alone
-        assert_eq!(
-            c.beats[37],
-            Beat {
-                count: 0,
-                bar_number: 0,
-                length: 0
-            }
-        );
     }
 
     #[test]
@@ -332,7 +296,5 @@ mod tests {
         assert_eq!(c.beats[0].length, 480000);
         assert_eq!(c.beats[1].length, 480000);
         assert_eq!(c.beats[3].length, 480000);
-        // Unpopulated beats must be left alone
-        assert_eq!(c.beats[124].length, 0);
     }
 }

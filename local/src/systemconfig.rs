@@ -5,6 +5,7 @@ use crate::{
 use mem::str::StaticString;
 
 /// Wrapper configuration type for system configuration
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone, PartialEq, Copy, bincode::Encode, bincode::Decode)]
 pub struct SystemConfiguration {
     /// Audio configuration values
